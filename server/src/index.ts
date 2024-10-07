@@ -7,7 +7,7 @@ import Replicate from "replicate";
 
 const app = express()
 app.use(cors({
-    origin: process.env.FRONTEND_URL ?? 'http://localhost:5173'
+    origin: 'https://ideogram-model.vercel.app'
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
