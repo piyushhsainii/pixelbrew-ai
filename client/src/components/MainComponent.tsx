@@ -14,7 +14,7 @@ const MainComponent = () => {
     const textareaRef = useRef(null);
     const [Response, setResponse] = useState<ApiResponse | null>(null)
 
-    const BACKEND_URL = 'https://ideogram-model.onrender.com'
+    const BACKEND_URL = 'http://localhost:8000'
 
     const autoResizeTextarea = () => {
         const textarea = textareaRef.current;
@@ -33,8 +33,9 @@ const MainComponent = () => {
                 model_version: ModelVersion,
                 style_type: styleType,
             })
-            setResponse(data)
+            autoResizeTextarea()
             setisLoading(false)
+            setResponse(data)
         } catch (error) {
             setisLoading(false)
         }
@@ -44,7 +45,7 @@ const MainComponent = () => {
     console.log(styleType)
     useEffect(() => {
         autoResizeTextarea(); // Initialize resize on mount
-    }, []);
+    }, [Input]);
     const handleInputChange = (e) => {
         setInput(e.target.value);
         autoResizeTextarea();
