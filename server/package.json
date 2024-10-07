@@ -14,7 +14,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "replicate": "^0.34.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

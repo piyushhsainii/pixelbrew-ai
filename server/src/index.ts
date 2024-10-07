@@ -2,6 +2,8 @@ import dotenv from "dotenv"
 dotenv.config()
 import express, { Request, Response } from "express"
 import cors from 'cors'
+import Replicate from "replicate";
+
 
 const app = express()
 app.use(cors({
@@ -9,7 +11,9 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-
+const replicate = new Replicate({
+    auth: process.env.REPLICATION_TOKEN,
+})
 app.post('/generate', async (req: Request, res: any) => {
     const body = req.body
     try {
@@ -35,13 +39,40 @@ app.post('/generate', async (req: Request, res: any) => {
             }),
         });
         const result = await response.json();
-        console.log(result);
-        return res.json(result)
+        if (result.data && result.data.length > 0) {
+            const output = await replicate.run(
+                "cdingram/face-swap:d1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111",
+                {
+                    input: {
+                        swap_image: process.env.HARKIRAT_IMG_URL,
+                        input_image: result.data[0].url
+                    }
+                }
+            );
+            result.data[0].url = output;
+            return res.json(result)
+        }
     }
     catch (error) {
         console.error(error);
         return res.json(error).status(400)
     }
+})
+
+app.post('/test', async (req, res: any) => {
+    const output = await replicate.run(
+        "cdingram/face-swap:d1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111",
+        {
+            input: {
+                swap_image: process.env.HARKIRAT_IMG_URL,
+                input_image: "https://replicate.delivery/pbxt/LPsGWYhFW03GN2y21RDRlat7YBCVPupkwyEg3Ca0YxcFWYNE/images.jpeg"
+            }
+        }
+    );
+    console.log(output);
+    return res.json({
+        output
+    })
 })
 
 app.listen(8000, () => {

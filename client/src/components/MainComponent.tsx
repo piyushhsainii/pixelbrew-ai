@@ -1,8 +1,8 @@
-import { useState } from "react"
-import PulsatingButton from "./ui/pulsating-button"
+import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { ApiResponse } from "../lib/interface"
-import { Download } from "lucide-react"
+import { Copy, Download } from "lucide-react"
+import { HashLoader } from "react-spinners"
 
 const MainComponent = () => {
 
@@ -11,11 +11,21 @@ const MainComponent = () => {
     const [ModelVersion, setModelVersion] = useState<string>('V_2')
     const [AspectRatio, setAspectRatio] = useState<string>('ASPECT_16_9')
     const [isLoading, setisLoading] = useState(false)
+    const textareaRef = useRef(null);
     const [Response, setResponse] = useState<ApiResponse | null>(null)
 
     const BACKEND_URL = 'http://localhost:8000'
 
+    const autoResizeTextarea = () => {
+        const textarea = textareaRef.current;
+        textarea.style.height = 'auto'; // Reset height to auto to recalculate
+        textarea.style.height = `${textarea.scrollHeight}px`; // Set height to scrollHeight
+    };
+
     const generateImage = async () => {
+        if (Input == "") return
+        setisLoading(true)
+        setInput("")
         try {
             const { data } = await axios.post(`${BACKEND_URL}/generate`, {
                 input: Input,
@@ -24,20 +34,27 @@ const MainComponent = () => {
                 style_type: styleType,
             })
             setResponse(data)
+            setisLoading(false)
         } catch (error) {
-
+            setisLoading(false)
         }
     }
     // @ts-ignore
     const createdAt = new Date(Response?.created)
     console.log(styleType)
+    useEffect(() => {
+        autoResizeTextarea(); // Initialize resize on mount
+    }, []);
+    const handleInputChange = (e) => {
+        setInput(e.target.value);
+        autoResizeTextarea();
+    };
     return (
-        <div className='flex justify-stretch bg-primmaryColor h-screen '>
-            <div className='w-[250px] border-r border-secondaryColor mt-8 flex flex-col p-4 gap-5'>
+        <div className='flex justify-stretch bg-primmaryColor min-h-[100vh] h-full '>
+            <div className='w-[250px] hidden border-r border-secondaryColor mt-8 md:flex flex-col p-4 gap-5'>
                 <div className="text-gray-400 font-sans text-center ">
                     MODIFY PARAMETERS
                 </div>
-                <label htmlFor="" className="text-gray-300 text-center font-sans"> STYLE TYPE</label>
                 <select
                     className='p-2 bg-primmaryColor text-gray-300 border border-secondaryColor rounded-xl px-2 pl-4 font-sans text-sm'
                     value={styleType}
@@ -77,44 +94,50 @@ const MainComponent = () => {
                     <option className="text-gray-200" value="ASPECT_9_16">ASPECT_9_16</option>
                 </select>
             </div>
-            <div className='bg-primmaryColor  h-[100vh] w-[100%] p-4  '>
-                <div className='border-blue-600 border border-opacity-40 rounded-2xl py-[0.95px] w-[70%] m-auto flex justify-between my-4'>
-
-
-                    <input
-                        type="text"
-                        className='bg-primmaryColor w-[100%] pl-3 rounded-2xl font-sans focus:outline-none active:outline-none text-gray-400'
-                        placeholder='Describe what you want to see'
+            <div className='bg-primmaryColor   w-[100%] p-4  '>
+                <div className='border-blue-600 border border-opacity-60 rounded-3xl py-[0.95px] w-[75%] m-auto flex flex-col  md:flex-row justify-between my-4'>
+                    <textarea
+                        className='bg-primmaryColor w-[100%] pl-3 rounded-3xl font-sans focus:outline-none active:outline-none text-gray-300
+                         p-3 resize-none'
+                        ref={textareaRef}
+                        placeholder='Describe what you want to see...'
                         value={Input}
-                        onChange={(e) => { setInput(e.target.value) }}
-                    />
-                    <PulsatingButton
-                        className='bg-gradient-to-r font-semibold text-white font-CeraPro
-                         from-primmaryColor to-purple-600 px-4 py-[0.5rem] rounded-3xl
-                         hover:scale-110 transition-all duration-200 active:scale-90 font-sans
+                        rows={1}
+                        onChange={handleInputChange}
+                    ></textarea>
+                    <button
+                        className='bg-gradient-to-r  max-h-[55px] font-semibold text-white font-CeraPro
+                         from-blue-600 to-purple-600 px-10  rounded-3xl py-2
+                         hover:scale-110 transition-all duration-200 active:scale-90 font-sans text-lg
                          '
                         onClick={generateImage}
+                        disabled={isLoading ? true : false}
                     >
-                        Generate
-                    </PulsatingButton>
+                        {isLoading ? "Generating..." : "Generate"}
+                    </button>
                 </div>
-                {/* {
-                    isLoading && 
-
-                } */}
+                {
+                    isLoading &&
+                    <div className="flex justify-center items-center h-[60vh]" >
+                        <HashLoader className="w-20 " color="#152243" size={150} />
+                    </div>
+                }
                 {
                     Response?.data && !isLoading &&
-                    <div className="flex justify-evenly border p-5 border-secondaryColor border-opacity-25">
-                        <div>
+                    <div className="flex flex-col md:flex-row flex-wrap justify-evenly  p-5 bg-primmaryColor ">
+                        <div className="max-w-[600px] max-h-[450px]">
                             <img
-                                src="https://ideogram.ai/api/images/ephemeral/fY_rCB-uQX2bMDwVZ7Syzw.png?exp=1728341066&sig=afe9313d96d5443896f17b89d887b5f39c9e02a0dd35bec26ffbbc520eeb3adf"
+                                src={Response.data[0].url}
                                 alt="img"
-                                className="border border-gray-600 max-w-[600px]" />
+                                className="border border-gray-600 " />
                         </div>
-                        <div className="text-gray-300 font-sans w-[40%] flex flex-col">
+                        <div className="text-gray-300 font-sans w-[100%] md:w-[40%] flex flex-col border border-gray-700 border-opacity-40 p-2">
                             <div>
-                                <div className="bg-secondaryColor bg-opacity-80 p-2 font-semibold" > Prompt </div>
-                                <div className="bg-secondaryColor bg-opacity-40 p-2 text-gray-300 text-sm">
+                                <div className="flex justify-between bg-secondaryColor bg-opacity-80 items-center px-2 rounded-lg">
+                                    <div className="p-2 font-semibold" > Prompt </div>
+                                    <div className="mr-2 cursor-pointer" > <Copy width={17} /></div>
+                                </div>
+                                <div className="bg-secondaryColor bg-opacity-40 p-4 text-gray-400 text-sm ">
                                     {
                                         Response.data[0].prompt
                                     }
@@ -123,10 +146,10 @@ const MainComponent = () => {
                             <div className="flex flex-col gap-4 mt-3 ">
                                 <div className="w-full">
                                     <div className="flex ">
-                                        <div className="bg-secondaryColor bg-opacity-80 p-2 font-semibold  w-[50%] "  >
+                                        <div className="bg-secondaryColor rounded-lg bg-opacity-80 p-2 font-semibold  w-[50%] "  >
                                             Model
                                         </div>
-                                        <div className="bg-secondaryColor bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center  ">
+                                        <div className="bg-secondaryColor rounded-lg bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center  ">
                                             Ideogram
                                         </div>
                                     </div>
@@ -162,16 +185,18 @@ const MainComponent = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="bg-green-700  w-[30%] text-center text-white rounded-md p-4 py-2 m-3 ml-0 flex items-center justify-evenly gap-1
+                            <a href={Response.data[0].url} download={Response.data[0].url} target="blank">
+                                <div className="bg-green-700 w-[50%]  md:w-[30%] text-center text-white rounded-md p-4 py-2 m-3 ml-0 flex items-center justify-evenly gap-1
                 cursor-pointer hover:scale-110 transition-all duration-200 active:scale-90
                 ">
-                                <Download width={19} />  Download
-                            </div>
+                                    <Download width={19} />  Download
+                                </div>
+                            </a>
                         </div>
                     </div>
                 }
             </div>
-        </div>
+        </div >
     )
 }
 
