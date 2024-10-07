@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -19,7 +20,7 @@ const cors_1 = __importDefault(require("cors"));
 const replicate_1 = __importDefault(require("replicate"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173'
+    origin: (_a = process.env.FRONTEND_URL) !== null && _a !== void 0 ? _a : 'http://localhost:5173'
 }));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
