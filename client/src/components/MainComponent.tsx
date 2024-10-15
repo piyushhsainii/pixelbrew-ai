@@ -14,7 +14,7 @@ const MainComponent = () => {
     const textareaRef = useRef(null);
     const [Response, setResponse] = useState<ApiResponse | null>(null)
 
-    const BACKEND_URL = 'https://ideogram-model.onrender.com'
+    const BACKEND_URL = 'http://localhost:8000'
 
     const autoResizeTextarea = () => {
         const textarea = textareaRef.current;
