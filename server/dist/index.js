@@ -11,22 +11,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const prisma_session_store_1 = require("@quixo3/prisma-session-store");
+const express_session_1 = __importDefault(require("express-session"));
 const replicate_1 = __importDefault(require("replicate"));
+const cloudinary_1 = require("cloudinary");
+const multer = require('multer');
+const passport_1 = __importDefault(require("passport"));
+const db_1 = __importDefault(require("./db"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: (_a = process.env.FRONTEND_URL) !== null && _a !== void 0 ? _a : 'http://localhost:5173'
+    origin: '*'
 }));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 const replicate = new replicate_1.default({
     auth: process.env.REPLICATION_TOKEN,
 });
+app.use((0, express_session_1.default)({
+    cookie: {
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        path: "/",
+        priority: "high",
+        sameSite: "lax",
+        secure: false,
+    },
+    secret: process.env.SESSION_SECRET || "",
+    resave: false,
+    saveUninitialized: true,
+    store: new prisma_session_store_1.PrismaSessionStore(db_1.default, {
+        checkPeriod: 6 * 1000,
+        dbRecordIdFunction: undefined,
+        dbRecordIdIsSessionId: true,
+    }),
+}));
+app.use(passport_1.default.session());
+app.use(passport_1.default.authenticate("session"));
+const upload = multer({ dest: 'uploads/' });
 app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
     try {
@@ -42,23 +68,30 @@ app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* 
             },
             body: JSON.stringify({
                 "image_request": {
-                    "prompt": input,
+                    "prompt": `YouTube thumbnail: ${input}. 16:9 aspect ratio, bold text, eye-catching design, vibrant`,
                     "aspect_ratio": aspect_ratio,
                     "model": model_version,
                     "style_type": style_type,
-                    "magic_prompt_option": "AUTO",
+                    "magic_prompt_option": "ON",
                 }
             }),
         });
         const result = yield response.json();
+        console.log(result, 'ideogram api');
         if (result.data && result.data.length > 0) {
-            const output = yield replicate.run("cdingram/face-swap:d1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111", {
-                input: {
-                    swap_image: process.env.HARKIRAT_IMG_URL,
-                    input_image: result.data[0].url
-                }
-            });
-            result.data[0].url = output;
+            try {
+                const output = yield replicate.run("cdingram/face-swap:d1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111", {
+                    input: {
+                        swap_image: process.env.HARKIRAT_IMG_URL,
+                        input_image: result.data[0].url
+                    }
+                });
+                result.data[0].url = output;
+                console.log(output, "replicate response");
+            }
+            catch (error) {
+                console.log(error);
+            }
             return res.json(result);
         }
     }
@@ -77,6 +110,24 @@ app.post('/test', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(output);
     return res.json({
         output
+    });
+}));
+app.post('/uploadToCloud', upload.single('file'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield cloudinary_1.v2.uploader
+            .upload("my_image.jpg");
+        return res.json({
+            result
+        }).status(200);
+    }
+    catch (error) {
+        return res.json({ error }).status(400);
+    }
+}));
+app.post('/file', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body.file);
+    return res.json({
+        success: "success"
     });
 }));
 app.listen(8000, () => {

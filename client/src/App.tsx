@@ -4,6 +4,9 @@ import './App.css'
 import MainComponent from './components/MainComponent'
 import Navbar from './components/Navbar'
 import { useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ProfileSetup from './components/screens/ProfileSetup';
+import { VortexDemo } from './components/screens/HomeScreen';
 
 function App() {
   const [file, setFile] = useState<File | null>(null)
@@ -52,15 +55,19 @@ function App() {
 
   return (
     <>
-      <Navbar />
-      <MainComponent />
-      <input type="file" onChange={handleImage} accept="image/*" />
-      <button className='bg-red-600 text-white px-3'
-        onClick={uploadToCloudinary}
-      >
-        Upload to Cloudinary
-      </button>
-      <img src={Image} alt="" />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<VortexDemo />} />
+          <Route path='/generate' element={
+            <>
+              <Navbar />
+              <MainComponent />
+            </>
+          }
+          />
+          <Route path='/profileSetup' element={<ProfileSetup />} />
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }

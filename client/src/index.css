@@ -4,11 +4,9 @@
 
 body {
   font-family: 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji';
-  background: '#0c0f1a';
+  background-color: '#0c0f1a';
 
 }
-
-
 
 @font-face {
   font-family: "CeraPro";
