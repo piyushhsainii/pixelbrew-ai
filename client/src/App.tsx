@@ -7,6 +7,9 @@ import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProfileSetup from './components/screens/ProfileSetup';
 import { VortexDemo } from './components/screens/HomeScreen';
+import LoginPage from './components/screens/LoginPage';
+import { RecoilRoot } from 'recoil';
+import ProtectedRoute from './components/screens/ProtectedRoute';
 
 function App() {
   const [file, setFile] = useState<File | null>(null)
@@ -52,22 +55,27 @@ function App() {
       }
     }
   }
-
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<VortexDemo />} />
-          <Route path='/generate' element={
-            <>
-              <Navbar />
-              <MainComponent />
-            </>
-          }
-          />
-          <Route path='/profileSetup' element={<ProfileSetup />} />
-        </Routes>
-      </BrowserRouter>
+      <RecoilRoot>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path='/' element={<VortexDemo />} />
+            <Route element={<ProtectedRoute />} >
+              <Route path='/generate' element={
+                <>
+                  <MainComponent />
+                </>
+              }
+              />
+            </Route>
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/profileSetup' element={<ProfileSetup />} />
+          </Routes>
+        </BrowserRouter>
+      </RecoilRoot>
+
     </>
   )
 }

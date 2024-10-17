@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
 import { Vortex } from "../ui/vortex";
-import Navbar from "../Navbar";
+import { useRecoilValue } from "recoil";
+import { authUser } from "../../atoms/atoms";
 
 export function VortexDemo() {
+
+    const user = useRecoilValue(authUser)
+    console.log(user)
     return (
-        <div className="w-screen mx-auto  h-screen overflow-hidden">
-            <Navbar />
+        <div className="w-FULL  h-screen overflow-hidden">
             <Vortex
                 backgroundColor="black"
                 className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full"
@@ -22,9 +25,16 @@ export function VortexDemo() {
                             Try it now
                         </button>
                     </Link>
-                    <Link to={'/'}>
-                        <button className="px-4 py-2 font-sans text-white ">Log In</button>
-                    </Link>
+                    {
+                        user == null ?
+                            <Link to={'/login'}>
+                                <button className="px-4 py-2 font-sans text-white ">
+                                    Log In
+                                </button>
+                            </Link>
+                            :
+                            null
+                    }
                 </div>
             </Vortex>
             <div>

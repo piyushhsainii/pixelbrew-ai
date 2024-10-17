@@ -1,22 +1,51 @@
-import { createClient } from '@supabase/supabase-js'
+import { useRecoilState } from 'recoil'
+import { authUser } from '../../atoms/atoms'
+import { useEffect } from 'react'
+import { supabase } from '../../lib/supabase'
 
 const LoginPage = () => {
 
-    const supabase = createClient("https://fnjoaxjxnwdiiqiobgjy.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuam9heGp4bndkaWlxaW9iZ2p5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjgyODcxOTcsImV4cCI6MjA0Mzg2MzE5N30.lkOR4zq7CelacThjS7xslB9ZsfbACB1MkKO90zLcmCo")
+    const [user, setUser] = useRecoilState(authUser)
 
+    async function getSession() {
+        const user = await supabase.auth.getSession()
+        setUser(user.data.session.user)
+        return user
+    }
+    const logoutHandler = async () => {
+        const { error } = await supabase.auth.signOut()
+        if (!error) {
+            setUser(null)
+        }
+    }
+
+    useEffect(() => {
+        getSession()
+    }, [])
+    console.log(user)
     return (
-        <div className='flex justify-center items-center'>
-            <button
-                onClick={async () => {
-                    await supabase.auth.signInWithOAuth({
-                        provider: 'google',
-                        options: {
-                            redirectTo: `http://localhost:8000/auth/callback`,
-                        },
-                    })
 
-                }}
-            >LOG IN</button>
+        <div className='flex justify-center items-center bg-black h-screen '>
+            <button
+                className='bg-white p-2 text-black font-bold font-sans rounded-lg m-5'>
+                {user == null ?
+                    <div
+                        onClick={async () => {
+                            await supabase.auth.signInWithOAuth({
+                                provider: 'google',
+
+                            })
+                            const user = await supabase.auth.getSession()
+                            setUser(user.data.session.user)
+                        }}
+                    >
+                        LOGIN
+                    </div> :
+                    <div onClick={logoutHandler} >
+                        LOGOUT
+                    </div>
+                }
+            </button>
         </div>
     )
 }

@@ -4,8 +4,8 @@ import express, { Request, Response } from "express"
 import cors from 'cors'
 import Replicate from "replicate";
 import { v2 as cloudinary } from 'cloudinary'
+import auth from "./auth"
 const multer = require('multer')
-
 const app = express()
 app.use(cors({
     origin: '*'
@@ -16,9 +16,9 @@ const replicate = new Replicate({
     auth: process.env.REPLICATION_TOKEN,
 })
 
-
 const upload = multer({ dest: 'uploads/' })
 
+app.use('/auth', auth)             //handles the google auth
 
 app.post('/generate', async (req: Request, res: any) => {
     const body = req.body

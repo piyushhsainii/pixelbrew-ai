@@ -12,25 +12,37 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "../ui/tooltip"
+import { supabase } from "../../lib/supabase"
+import { useRecoilState } from "recoil"
+import { authUser } from "../../atoms/atoms"
 
 
 
 export default function ProfileSetup() {
+
     const [name, setName] = useState("")
     const [about, setAbout] = useState("")
     const [image, setImage] = useState<File | null>(null)
+    const [user, setUser] = useRecoilState(authUser)
+
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         // Handle form submission here
         console.log({ name, about, image })
     }
-
+    // const getSession = async () => {
+    //     const user = await supabase.auth.getSession()
+    //     const getUser = await supabase.auth.getUser(user.data.session.access_token)
+    //     console.log(getUser)
+    // }
+    // getSession()
+    console.log(user)
     return (
         <>
-            <Navbar />
             <div className=" flex items-center justify-center bg-primmaryColor p-3 font-sans">
-                <Card className="w-full max-w-4xl max-h-[800px] bg-secondaryColor bg-opacity-50 text-white overflow-hidden flex flex-col">
+                <Card className="w-full max-w-4xl max-h-[800px] bg-black bg-opacity-50 text-white overflow-hidden flex flex-col">
                     <CardHeader className="flex-shrink-0">
                         <CardTitle className="text-3xl font-bold">Profile Setup</CardTitle>
                         <CardDescription className="text-gray-300">

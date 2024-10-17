@@ -3,6 +3,10 @@ import axios from "axios"
 import { ApiResponse } from "../lib/interface"
 import { Copy, Download } from "lucide-react"
 import { HashLoader } from "react-spinners"
+import { supabase } from "../lib/supabase"
+import { useRecoilState } from "recoil"
+import { authUser } from "../atoms/atoms"
+import { redirect } from "react-router-dom"
 
 const MainComponent = () => {
 
@@ -12,6 +16,7 @@ const MainComponent = () => {
     const [AspectRatio, setAspectRatio] = useState<string>('ASPECT_16_9')
     const [isLoading, setisLoading] = useState(false)
     const textareaRef = useRef(null);
+    const [user, setUser] = useRecoilState(authUser)
     const [Response, setResponse] = useState<ApiResponse | null>(null)
 
     const BACKEND_URL = 'http://localhost:8000'
@@ -21,7 +26,6 @@ const MainComponent = () => {
         textarea.style.height = 'auto'; // Reset height to auto to recalculate
         textarea.style.height = `${textarea.scrollHeight}px`; // Set height to scrollHeight
     };
-
     const generateImage = async () => {
         if (Input == "") return
         setisLoading(true)
@@ -42,7 +46,7 @@ const MainComponent = () => {
     }
     // @ts-ignore
     const createdAt = new Date(Response?.created)
-    console.log(styleType)
+
     useEffect(() => {
         autoResizeTextarea(); // Initialize resize on mount
     }, [Input]);
@@ -51,13 +55,13 @@ const MainComponent = () => {
         autoResizeTextarea();
     };
     return (
-        <div className='flex justify-stretch bg-primmaryColor min-h-[100vh] h-full '>
-            <div className='w-[250px] hidden border-r border-secondaryColor mt-8 md:flex flex-col p-4 gap-5'>
+        <div className='flex justify-stretch bg-black min-h-[100vh] h-full '>
+            <div className='w-[250px] hidden border-r border-secondaryColor border-opacity-45 mt-8 md:flex flex-col p-4 gap-5'>
                 <div className="text-gray-400 font-sans text-center ">
                     MODIFY PARAMETERS
                 </div>
                 <select
-                    className='p-2 bg-primmaryColor text-gray-300 border border-secondaryColor rounded-xl px-2 pl-4 font-sans text-sm'
+                    className='p-2 bg-primmaryColor text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
                     value={styleType}
                     onChange={(e) => setstyleType(e.target.value)}
                 >
@@ -68,7 +72,7 @@ const MainComponent = () => {
                     <option value="ANIME">ANIME</option>
                 </select>
                 <select
-                    className='p-2 bg-primmaryColor text-gray-300 border border-secondaryColor rounded-xl px-2 pl-4 font-sans text-sm'
+                    className='p-2 bg-primmaryColor text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
                     value={ModelVersion}
                     onChange={(e) => setModelVersion(e.target.value)}
                 >
@@ -78,7 +82,7 @@ const MainComponent = () => {
                     <option value="V_2_TURBO">V_2_TURBO</option>
                 </select>
                 <select
-                    className='p-2 bg-primmaryColor text-gray-200 border border-secondaryColor rounded-xl px-2 pl-4 font-sans text-sm'
+                    className='p-2 bg-primmaryColor text-gray-200 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
                     value={AspectRatio}
                     onChange={(e) => setAspectRatio(e.target.value)}
                 >
@@ -95,10 +99,10 @@ const MainComponent = () => {
                     <option className="text-gray-200" value="ASPECT_9_16">ASPECT_9_16</option>
                 </select>
             </div>
-            <div className='bg-primmaryColor   w-[100%] p-4  '>
-                <div className='border-blue-600 border border-opacity-60 rounded-3xl py-[0.95px] w-[75%] m-auto flex flex-col  md:flex-row justify-between my-4'>
+            <div className='bg-black    w-[100%] p-4  '>
+                <div className='border-purple-800 border border-opacity-60 rounded-3xl py-[0.95px] w-[75%] m-auto flex flex-col  md:flex-row justify-between my-4'>
                     <textarea
-                        className='bg-primmaryColor w-[100%] pl-3 rounded-3xl font-sans focus:outline-none active:outline-none text-gray-300
+                        className='bg-black  w-[100%] pl-3 rounded-3xl font-sans focus:outline-none active:outline-none text-gray-300
                          p-3 resize-none'
                         ref={textareaRef}
                         placeholder='Describe what you want to see...'
@@ -107,13 +111,14 @@ const MainComponent = () => {
                         onChange={handleInputChange}
                     ></textarea>
                     <button
-                        className='bg-gradient-to-r  max-h-[55px] font-semibold text-white font-CeraPro
-                         from-blue-600 to-purple-600 px-10  rounded-3xl py-2
-                         hover:scale-110 transition-all duration-200 active:scale-90 font-sans text-lg
-                         '
+                        className='bg-gradient-to-r  max-h-[55px] font-semibold text-white 
+                    from-blue-600 to-purple-600 px-10  rounded-3xl py-2 hover:scale-x-[120%]
+                    hover:scale-110 transition-all duration-200 active:scale-90 font-sans text-lg border
+                     border-blue-800
+                    '
                         onClick={generateImage}
-                        disabled={isLoading ? true : false}
                     >
+
                         {isLoading ? "Generating..." : "Generate"}
                     </button>
                 </div>

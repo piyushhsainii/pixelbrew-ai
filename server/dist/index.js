@@ -16,13 +16,10 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const prisma_session_store_1 = require("@quixo3/prisma-session-store");
-const express_session_1 = __importDefault(require("express-session"));
 const replicate_1 = __importDefault(require("replicate"));
 const cloudinary_1 = require("cloudinary");
+const auth_1 = __importDefault(require("./auth"));
 const multer = require('multer');
-const passport_1 = __importDefault(require("passport"));
-const db_1 = __importDefault(require("./db"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     origin: '*'
@@ -32,27 +29,8 @@ app.use(express_1.default.urlencoded({ extended: true }));
 const replicate = new replicate_1.default({
     auth: process.env.REPLICATION_TOKEN,
 });
-app.use((0, express_session_1.default)({
-    cookie: {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        path: "/",
-        priority: "high",
-        sameSite: "lax",
-        secure: false,
-    },
-    secret: process.env.SESSION_SECRET || "",
-    resave: false,
-    saveUninitialized: true,
-    store: new prisma_session_store_1.PrismaSessionStore(db_1.default, {
-        checkPeriod: 6 * 1000,
-        dbRecordIdFunction: undefined,
-        dbRecordIdIsSessionId: true,
-    }),
-}));
-app.use(passport_1.default.session());
-app.use(passport_1.default.authenticate("session"));
 const upload = multer({ dest: 'uploads/' });
+app.use('/auth', auth_1.default); //handles the google auth
 app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
     try {
