@@ -3,17 +3,28 @@ import axios from 'axios'
 import './App.css'
 import MainComponent from './components/MainComponent'
 import Navbar from './components/Navbar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProfileSetup from './components/screens/ProfileSetup';
-import { VortexDemo } from './components/screens/HomeScreen';
+import { LandingPage } from './components/screens/HomeScreen';
 import LoginPage from './components/screens/LoginPage';
-import { RecoilRoot } from 'recoil';
+import { useRecoilState } from 'recoil';
 import ProtectedRoute from './components/screens/ProtectedRoute';
+import { authUser } from './atoms/atoms';
+import { supabase } from './lib/supabase';
 
 function App() {
   const [file, setFile] = useState<File | null>(null)
   const [Image, setImage] = useState(null)
+
+
+  const [user, setUser] = useRecoilState(authUser)
+
+  async function getSession() {
+    const user = await supabase.auth.getSession()
+    setUser(user.data.session.user)
+    return user
+  }
 
   const handleImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -55,27 +66,25 @@ function App() {
       }
     }
   }
-  return (
-    <>
-      <RecoilRoot>
-        <BrowserRouter>
-          <Navbar />
-          <Routes>
-            <Route path='/' element={<VortexDemo />} />
-            <Route element={<ProtectedRoute />} >
-              <Route path='/generate' element={
-                <>
-                  <MainComponent />
-                </>
-              }
-              />
-            </Route>
-            <Route path='/login' element={<LoginPage />} />
-            <Route path='/profileSetup' element={<ProfileSetup />} />
-          </Routes>
-        </BrowserRouter>
-      </RecoilRoot>
 
+  useEffect(() => {
+    getSession()
+  }, [])
+
+  return (
+
+    <>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<LandingPage />} />
+          <Route element={<ProtectedRoute />} >
+            <Route path='/generate' element={<MainComponent />} />
+          </Route>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/profileSetup' element={<ProfileSetup />} />
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }

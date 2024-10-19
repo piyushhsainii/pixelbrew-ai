@@ -19,6 +19,7 @@ const cors_1 = __importDefault(require("cors"));
 const replicate_1 = __importDefault(require("replicate"));
 const cloudinary_1 = require("cloudinary");
 const auth_1 = __importDefault(require("./auth"));
+const db_1 = __importDefault(require("./db"));
 const multer = require('multer');
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
@@ -107,6 +108,33 @@ app.post('/file', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.json({
         success: "success"
     });
+}));
+app.post('/setupProfile', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const name = req.body.name;
+    const email = req.body.email;
+    const about = req.body.about;
+    const trainingImg = req.body.trainingImg;
+    const avatar_url = req.body.avatar_url;
+    const provider = req.body.provider;
+    try {
+        const response = yield db_1.default.user.create({
+            data: {
+                name,
+                email,
+                about,
+                trainingImg,
+                avatar_url,
+                provider,
+            }
+        });
+        return res.json({
+            success: true,
+            response
+        }).status(200);
+    }
+    catch (error) {
+        return res.json({ error }).status(400);
+    }
 }));
 app.listen(8000, () => {
     console.log("server started");

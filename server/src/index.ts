@@ -5,6 +5,7 @@ import cors from 'cors'
 import Replicate from "replicate";
 import { v2 as cloudinary } from 'cloudinary'
 import auth from "./auth"
+import prisma from "./db";
 const multer = require('multer')
 const app = express()
 app.use(cors({
@@ -106,7 +107,33 @@ app.post('/file', async (req: Request, res: any) => {
     })
 })
 
+app.post('/setupProfile', async (req: Request, res: any) => {
+    const name = req.body.name
+    const email = req.body.email
+    const about = req.body.about
+    const trainingImg = req.body.trainingImg
+    const avatar_url = req.body.avatar_url
+    const provider = req.body.provider
 
+    try {
+        const response = await prisma.user.create({
+            data: {
+                name,
+                email,
+                about,
+                trainingImg,
+                avatar_url,
+                provider,
+            }
+        })
+        return res.json({
+            success: true,
+            response
+        }).status(200)
+    } catch (error) {
+        return res.json({ error }).status(400)
+    }
+})
 
 app.listen(8000, () => {
     console.log("server started")

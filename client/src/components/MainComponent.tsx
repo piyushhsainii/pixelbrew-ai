@@ -7,6 +7,7 @@ import { supabase } from "../lib/supabase"
 import { useRecoilState } from "recoil"
 import { authUser } from "../atoms/atoms"
 import { redirect } from "react-router-dom"
+import { BACKEND_URL } from "../lib/url"
 
 const MainComponent = () => {
 
@@ -19,7 +20,6 @@ const MainComponent = () => {
     const [user, setUser] = useRecoilState(authUser)
     const [Response, setResponse] = useState<ApiResponse | null>(null)
 
-    const BACKEND_URL = 'http://localhost:8000'
 
     const autoResizeTextarea = () => {
         const textarea = textareaRef.current;
