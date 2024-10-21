@@ -1,7 +1,7 @@
 import imageCompression from 'browser-image-compression';
 import axios from 'axios'
 import './App.css'
-import MainComponent from './components/MainComponent'
+import ImageGenerationComponent from './components/ImageGenerationComponent'
 import Navbar from './components/Navbar'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -79,10 +79,10 @@ function App() {
         <Routes>
           <Route path='/' element={<LandingPage />} />
           <Route element={<ProtectedRoute />} >
-            <Route path='/generate' element={<MainComponent />} />
+            <Route path='/generate' element={<ImageGenerationComponent />} />
+            <Route path='/profileSetup' element={<ProfileSetup />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
-          <Route path='/profileSetup' element={<ProfileSetup />} />
         </Routes>
       </BrowserRouter>
     </>

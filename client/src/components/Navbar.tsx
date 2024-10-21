@@ -1,11 +1,13 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { useRecoilState } from "recoil"
 import { authUser } from "../atoms/atoms"
 import { supabase } from "../lib/supabase"
+import { useToast } from "../hooks/use-toast"
 
 const Navbar = () => {
-
+    const navigate = useNavigate()
+    const { toast } = useToast()
     const [user, setUser] = useRecoilState(authUser)
 
     const logoutHandler = async () => {
@@ -13,6 +15,13 @@ const Navbar = () => {
         if (!error) {
             setUser(null)
         }
+        toast({
+            title: "Successfully logged out!",
+            variant: "default",
+            className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+
+        });
+        navigate('/')
     }
 
     return (
@@ -42,7 +51,7 @@ const Navbar = () => {
                         <DropdownMenuContent className="bg-black border-none" >
                             <DropdownMenu aria-label="Static Actions" >
                                 <Link to={'/profileSetup'} >
-                                    <DropdownMenuItem className="cursor-pointer font-semibold p-0 bg-black text-white px-4 py-2 border-opacity-40 font-sans border-purple-700 border" key="new">
+                                    <DropdownMenuItem className="cursor-pointer font-semibold p-0 bg-black hover:bg-gray-800 text-white px-4 py-2 border-opacity-40 font-sans border-purple-700 border" key="new">
                                         Profile
                                     </DropdownMenuItem>
                                 </Link>

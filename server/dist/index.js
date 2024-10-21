@@ -39,6 +39,7 @@ app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const aspect_ratio = body.aspect_ratio;
         const model_version = body.model_version;
         const style_type = body.style_type;
+        const image_url = body.face_swap;
         const response = yield fetch("https://api.ideogram.ai/generate", {
             method: "POST",
             headers: {
@@ -61,7 +62,7 @@ app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* 
             try {
                 const output = yield replicate.run("cdingram/face-swap:d1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111", {
                     input: {
-                        swap_image: process.env.HARKIRAT_IMG_URL,
+                        swap_image: image_url,
                         input_image: result.data[0].url
                     }
                 });
@@ -134,6 +135,71 @@ app.post('/setupProfile', (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
     catch (error) {
         return res.json({ error }).status(400);
+    }
+}));
+app.post('/getUserDetails', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    try {
+        const user = yield db_1.default.user.findFirst({
+            where: {
+                email: email
+            }
+        });
+        return res.json({
+            user
+        }).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(400);
+    }
+}));
+app.post('/savePrompts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const prompt = req.body.prompt;
+    const ImageUrl = req.body.image;
+    const userEmail = req.body.email;
+    try {
+        const saveDataToPromptTable = yield db_1.default.prompt.create({
+            data: {
+                prompt: prompt,
+                url: ImageUrl,
+                user: {
+                    connect: { email: userEmail }
+                }
+            },
+            include: { user: true },
+        });
+        return res.json({
+            saveDataToPromptTable
+        }).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(400);
+    }
+}));
+app.post('/updateProfile', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    const username = req.body.username;
+    const about = req.body.about;
+    const trainingImg = req.body.trainingImg;
+    try {
+        const updateProfie = yield db_1.default.user.update({
+            data: {
+                name: username,
+                about: about,
+                trainingImg: trainingImg
+            },
+            where: {
+                email: email
+            }
+        });
+        return res.json({
+            updateProfie
+        }).status(200);
+    }
+    catch (error) {
+        return res.json({
+            error
+        }).status(400);
     }
 }));
 app.listen(8000, () => {
