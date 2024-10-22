@@ -226,6 +226,8 @@ app.post('/getPrompts', async (req: Request, res: any) => {
     }
 })
 
+app.get("/", (req: Request, res: any) => res.send("Congratulation 🎉🎉! Our Express server is Running on Vercel"));
+
 app.listen(8000, () => {
     console.log("server started")
 })
