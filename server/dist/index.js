@@ -202,6 +202,30 @@ app.post('/updateProfile', (req, res) => __awaiter(void 0, void 0, void 0, funct
         }).status(400);
     }
 }));
+app.post('/getPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    try {
+        const getPrompt = yield db_1.default.prompt.findFirst({
+            where: {
+                user: {
+                    email: email
+                }
+            },
+            include: {
+                user: {
+                    select: {
+                        trainingImg: true,
+                        Prompt: true
+                    }
+                }
+            }
+        });
+        return res.json(getPrompt).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(400);
+    }
+}));
 app.listen(8000, () => {
     console.log("server started");
 });

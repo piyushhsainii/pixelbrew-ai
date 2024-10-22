@@ -17,3 +17,8 @@ export const userAbout = atom({
     key: "userAbout",
     default: null
 })
+
+export const promptInfo = atom({
+    key: "promptInfo",
+    default: null
+})

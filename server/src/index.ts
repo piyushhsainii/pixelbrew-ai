@@ -202,6 +202,30 @@ app.post('/updateProfile', async (req: Request, res: any) => {
     }
 })
 
+app.post('/getPrompts', async (req: Request, res: any) => {
+    const email = req.body.email
+    try {
+        const getPrompt = await prisma.prompt.findFirst({
+            where: {
+                user: {
+                    email: email
+                }
+            },
+            include: {
+                user: {
+                    select: {
+                        trainingImg: true,
+                        Prompt: true
+                    }
+                }
+            }
+        })
+        return res.json(getPrompt).status(200)
+    } catch (error) {
+        return res.json(error).status(400)
+    }
+})
+
 app.listen(8000, () => {
     console.log("server started")
 })

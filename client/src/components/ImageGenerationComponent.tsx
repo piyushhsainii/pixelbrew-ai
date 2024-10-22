@@ -85,7 +85,7 @@ const ImageGenerationComponent = () => {
                 model_version: ModelVersion,
                 style_type: styleType,
                 face_swap: FaceImageUrl,
-                magic_Prompt: isMagicPromptOn
+                magic_prompt: isMagicPromptOn
 
             })
             autoResizeTextarea()

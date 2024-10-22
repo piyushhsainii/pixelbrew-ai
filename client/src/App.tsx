@@ -12,6 +12,7 @@ import { useRecoilState } from 'recoil';
 import ProtectedRoute from './components/screens/ProtectedRoute';
 import { authUser } from './atoms/atoms';
 import { supabase } from './lib/supabase';
+import MyImagesPage from './components/screens/MyImagesPage';
 
 function App() {
   const [file, setFile] = useState<File | null>(null)
@@ -81,6 +82,7 @@ function App() {
           <Route element={<ProtectedRoute />} >
             <Route path='/generate' element={<ImageGenerationComponent />} />
             <Route path='/profileSetup' element={<ProfileSetup />} />
+            <Route path='/myImages' element={<MyImagesPage />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
         </Routes>
