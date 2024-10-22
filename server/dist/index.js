@@ -40,6 +40,7 @@ app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const model_version = body.model_version;
         const style_type = body.style_type;
         const image_url = body.face_swap;
+        const magic_Prompt = body.magic_prompt; //enum - ON | OFF | AUTO
         const response = yield fetch("https://api.ideogram.ai/generate", {
             method: "POST",
             headers: {
@@ -48,16 +49,15 @@ app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* 
             },
             body: JSON.stringify({
                 "image_request": {
-                    "prompt": `YouTube thumbnail: ${input}. 16:9 aspect ratio, bold text, eye-catching design, vibrant`,
+                    "prompt": `${input}vibrant`,
                     "aspect_ratio": aspect_ratio,
                     "model": model_version,
                     "style_type": style_type,
-                    "magic_prompt_option": "ON",
+                    "magic_prompt_option": magic_Prompt,
                 }
             }),
         });
         const result = yield response.json();
-        console.log(result, 'ideogram api');
         if (result.data && result.data.length > 0) {
             try {
                 const output = yield replicate.run("cdingram/face-swap:d1d6ea8c8be89d664a07a457526f7128109dee7030fdac424788d762c71ed111", {

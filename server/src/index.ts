@@ -29,6 +29,7 @@ app.post('/generate', async (req: Request, res: any) => {
         const model_version = body.model_version
         const style_type = body.style_type
         const image_url = body.face_swap
+        const magic_Prompt = body.magic_prompt                      //enum - ON | OFF | AUTO
 
         const response = await fetch("https://api.ideogram.ai/generate", {
             method: "POST",
@@ -38,17 +39,16 @@ app.post('/generate', async (req: Request, res: any) => {
             },
             body: JSON.stringify({
                 "image_request": {
-                    "prompt": `YouTube thumbnail: ${input}. 16:9 aspect ratio, bold text, eye-catching design, vibrant`,
+                    "prompt": `${input}vibrant`,
                     "aspect_ratio": aspect_ratio,
                     "model": model_version,
                     "style_type": style_type,
-                    "magic_prompt_option": "ON",
+                    "magic_prompt_option": magic_Prompt,
 
                 }
             }),
         });
         const result = await response.json();
-        console.log(result, 'ideogram api')
         if (result.data && result.data.length > 0) {
             try {
                 const output = await replicate.run(

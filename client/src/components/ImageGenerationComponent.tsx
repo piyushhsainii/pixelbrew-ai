@@ -4,10 +4,14 @@ import { ApiResponse } from "../lib/interface"
 import { Copy, Download } from "lucide-react"
 import { HashLoader } from "react-spinners"
 import { useRecoilState } from "recoil"
-import { authUser, userImageLink, userUsername } from "../atoms/atoms"
+import { authUser, userImageLink } from "../atoms/atoms"
 import { BACKEND_URL } from "../lib/url"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../hooks/use-toast"
+import { Switch } from "./ui/switch"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
+
+type MagicPrompt = "ON" | "OFF" | "AUTO"
 
 const ImageGenerationComponent = () => {
 
@@ -15,6 +19,7 @@ const ImageGenerationComponent = () => {
     const [styleType, setstyleType] = useState<string>('GENERAL')
     const [ModelVersion, setModelVersion] = useState<string>('V_2')
     const [AspectRatio, setAspectRatio] = useState<string>('ASPECT_16_9')
+    const [isMagicPromptOn, setIsMagicPromptOn] = useState<MagicPrompt>('OFF')
     const [isLoading, setisLoading] = useState(false)
     const [FaceImageUrl, setFaceImageUrl] = useState<string | null>(null)
     const textareaRef = useRef(null);
@@ -22,20 +27,8 @@ const ImageGenerationComponent = () => {
     const [isCopied, setisCopied] = useState(false)
     const [savingDataToDb, setsavingDataToDb] = useState(false)
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
-    const [Response, setResponse] = useState<ApiResponse | null>({
-        "created": "2024-10-19T14:05:23.042408+00:00",
-        "data": [
-            {
-                "is_image_safe": true,
-                "prompt": "A portrait-style YouTube thumbnail with a 16:9 aspect ratio. A boy with a shock of red hair is eating a burger. The background is a vibrant blue. Above the boy's head, the bold text reads \"Taste Test: The Best Burger in Town!\".",
-                "resolution": "1312x736",
-                "seed": 2032974802,
-                "style_type": "GENERAL",
-                "url": "https://replicate.delivery/yhqm/m8a73TIb0mblL9K50S6dynWbBLbDTNAMeemvLHJf6nVG5tQnA/1729346851.jpg"
-            }
-        ]
-    })
-
+    const [Response, setResponse] = useState<ApiResponse | null>(null)
+    console.log(isMagicPromptOn)
     const { toast } = useToast()
     const navigate = useNavigate();
     const autoResizeTextarea = () => {
@@ -44,10 +37,41 @@ const ImageGenerationComponent = () => {
         textarea.style.height = `${textarea.scrollHeight}px`; // Set height to scrollHeight
     };
 
-    const savePromptsToDb = async () => {
-        const { data } = await axios.post(`${BACKEND_URL}/savePrompts`, {
+    const savePromptsToDb = async (imageUrl: string) => {
 
-        })
+        try {
+            const formData = new FormData();
+            formData.append('file', imageUrl)
+            formData.append('upload_preset', 'ideogram')
+            const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/dzow59kgu/image/upload`,
+                formData,
+                {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                }
+            );
+            if (response) {
+                const { data } = await axios.post(`${BACKEND_URL}/savePrompts`, {
+                    prompt: Input,
+                    image: response.data.secure_url,
+                    email: user.email,
+                })
+            }
+            toast({
+                title: "Added the Image to Gallery",
+                description: <div>View Gallery</div>,
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
+        }
+
+        catch {
+            toast({
+                title: "Something went wrong while adding image to gallery",
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
+        }
     }
 
     const generateImage = async () => {
@@ -60,11 +84,17 @@ const ImageGenerationComponent = () => {
                 aspect_ratio: AspectRatio,
                 model_version: ModelVersion,
                 style_type: styleType,
-                face_swap: FaceImageUrl
+                face_swap: FaceImageUrl,
+                magic_Prompt: isMagicPromptOn
+
             })
             autoResizeTextarea()
             setisLoading(false)
             setResponse(data)
+            console.log(data.data.url)
+            console.log(data.data[0].url)
+            const imageUrl = data.data[0].url
+            savePromptsToDb(imageUrl)
         } catch (error) {
             setisLoading(false)
         }
@@ -88,12 +118,33 @@ const ImageGenerationComponent = () => {
         setFaceImageUrl(userDetails.data.user.trainingImg)
     }
 
-    const copyPrompt = async (prompt: string) => {
+    const copyPrompt = async ({ prompt }: { prompt: string }) => {
         setisCopied(true)
         await navigator.clipboard.writeText(prompt)
         setTimeout(() => {
             setisCopied(false)
         }, 1500)
+    }
+
+    const toggleMagicPromptState = () => {
+        if (isMagicPromptOn == "OFF") {
+            setIsMagicPromptOn("ON")
+            toast({
+                title: "Magic Prompt is On",
+                description: "turning this on will enhance your prompt with pixelbrew AI",
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
+        }
+        if (isMagicPromptOn == "ON") {
+            setIsMagicPromptOn("OFF")
+            toast({
+                title: "Magic Prompt is Off",
+                description: "turning this on will enhance your prompt with pixelbrew AI",
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
+        }
     }
 
     useEffect(() => {
@@ -152,8 +203,27 @@ const ImageGenerationComponent = () => {
                     <option className="text-gray-200" value="ASPECT_9_16">ASPECT_9_16</option>
                 </select>
             </div>
-            <div className='bg-black    w-[100%] p-4  '>
-                <div className='border-purple-800 border border-opacity-60 rounded-3xl py-[0.95px] w-[75%] m-auto flex flex-col  md:flex-row justify-between my-4'>
+            <div className='bg-black w-[100%] p-4  '>
+                <div className='border-purple-800 border border-opacity-60 rounded-3xl py-[0.95px] w-[85%] m-auto flex flex-col  md:flex-row justify-between my-4'>
+                    <div className=" flex items-center mx-3">
+                        <TooltipProvider>
+                            <Tooltip delayDuration={200}>
+                                <TooltipTrigger>
+                                    <div className="text-[0.77rem] flex gap-1 items-center text-gray-400"
+                                        onClick={toggleMagicPromptState}
+                                    >
+                                        <Switch />
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent className="h-[90px] w-[180px] bg-slate-100 border-white border border-opacity-30">
+                                    <div className="text-primmaryColor font-sans text-center font-bold text-[0.900rem]"> MAGIC PROMPT </div>
+                                    <div className="text-primmaryColor font-sans text-center my-2 mb-4">
+                                        turning this on will enhance your prompt with <span className="font-mono">pixelbrew AI</span>
+                                    </div>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
                     <textarea
                         className='bg-black  w-[100%] pl-3 rounded-3xl font-sans focus:outline-none active:outline-none text-gray-300
                          p-3 resize-none'
@@ -194,7 +264,8 @@ const ImageGenerationComponent = () => {
                             <div>
                                 <div className="flex justify-between bg-blue-950 bg-opacity-80 items-center px-2 rounded-lg">
                                     <div className="p-2 font-semibold" > Prompt </div>
-                                    <div className="mr-2 cursor-pointer" onClick={copyPrompt} >
+                                    {/* @ts-ignore */}
+                                    <div className="mr-2 cursor-pointer" onClick={() => copyPrompt(Response.data[0].prompt as string)} >
                                         {isCopied ? 'Text copied!' : <Copy width={17} />}
                                     </div>
                                 </div>
