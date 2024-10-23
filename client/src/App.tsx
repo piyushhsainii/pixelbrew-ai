@@ -13,6 +13,7 @@ import ProtectedRoute from './components/screens/ProtectedRoute';
 import { authUser } from './atoms/atoms';
 import { supabase } from './lib/supabase';
 import MyImagesPage from './components/screens/MyImagesPage';
+import { BACKEND_URL } from './lib/url';
 
 function App() {
   const [file, setFile] = useState<File | null>(null)
@@ -71,6 +72,12 @@ function App() {
   useEffect(() => {
     getSession()
   }, [])
+
+  setInterval(() => {
+    fetch(`${BACKEND_URL}/`, {
+      method: 'GET'
+    })
+  }, 150000)
 
   return (
 
