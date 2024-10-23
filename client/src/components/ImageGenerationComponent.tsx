@@ -84,7 +84,7 @@ const ImageGenerationComponent = () => {
                 aspect_ratio: AspectRatio,
                 model_version: ModelVersion,
                 style_type: styleType,
-                face_swap: ImageLink,
+                face_swap: FaceImageUrl,
                 magic_prompt: isMagicPromptOn
 
             })
@@ -102,7 +102,6 @@ const ImageGenerationComponent = () => {
     // @ts-ignore
     const createdAt = new Date(Response?.created)
     const getUserDetails = async () => {
-        if (ImageLink) return;
         const userDetails = await axios.post(`${BACKEND_URL}/getUserDetails`, {
             email: user.user_metadata.email
         })
