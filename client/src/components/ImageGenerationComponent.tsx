@@ -84,7 +84,7 @@ const ImageGenerationComponent = () => {
                 aspect_ratio: AspectRatio,
                 model_version: ModelVersion,
                 style_type: styleType,
-                face_swap: FaceImageUrl,
+                face_swap: ImageLink,
                 magic_prompt: isMagicPromptOn
 
             })
