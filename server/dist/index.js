@@ -226,6 +226,7 @@ app.post('/getPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function
         return res.json(error).status(400);
     }
 }));
+app.get("/", (req, res) => res.send("Congratulation 🎉🎉! Our Express server is Running on Vercel"));
 app.listen(8000, () => {
     console.log("server started");
 });
