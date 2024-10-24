@@ -41,6 +41,22 @@ app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const style_type = body.style_type;
         const image_url = body.face_swap;
         const magic_Prompt = body.magic_prompt; //enum - ON | OFF | AUTO
+        const email = body.email;
+        const userDetail = yield db_1.default.user.findUnique({
+            where: {
+                email: email
+            }
+        });
+        if (userDetail == null) {
+            return res.json({
+                error: "Failed to fetch user"
+            }).status(400);
+        }
+        if (userDetail.balance == 0) {
+            return res.json({
+                error: "Please buy credits to generate Images"
+            }).status(400);
+        }
         const response = yield fetch("https://api.ideogram.ai/generate", {
             method: "POST",
             headers: {
@@ -49,7 +65,7 @@ app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* 
             },
             body: JSON.stringify({
                 "image_request": {
-                    "prompt": `${input}vibrant`,
+                    "prompt": `${input}`,
                     "aspect_ratio": aspect_ratio,
                     "model": model_version,
                     "style_type": style_type,
@@ -72,7 +88,18 @@ app.post('/generate', (req, res) => __awaiter(void 0, void 0, void 0, function* 
             catch (error) {
                 console.log(error);
             }
-            return res.json(result);
+            const updateBalance = yield db_1.default.user.update({
+                where: {
+                    email: email
+                },
+                data: {
+                    balance: userDetail.balance - 1
+                }
+            });
+            return res.json({
+                result,
+                balance: updateBalance.balance
+            });
         }
     }
     catch (error) {
@@ -218,7 +245,12 @@ app.post('/getPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function
                         Prompt: true
                     }
                 }
-            }
+            },
+            orderBy: [
+                {
+                    prompt: "asc"
+                }
+            ]
         });
         return res.json(getPrompt).status(200);
     }
