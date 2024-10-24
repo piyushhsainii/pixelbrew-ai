@@ -10,68 +10,49 @@ import { LandingPage } from './components/screens/HomeScreen';
 import LoginPage from './components/screens/LoginPage';
 import { useRecoilState } from 'recoil';
 import ProtectedRoute from './components/screens/ProtectedRoute';
-import { authUser } from './atoms/atoms';
+import { authUser, Balance } from './atoms/atoms';
 import { supabase } from './lib/supabase';
 import MyImagesPage from './components/screens/MyImagesPage';
 import { BACKEND_URL } from './lib/url';
+import MyAccount from './components/screens/MyAccount';
+import { useToast } from './hooks/use-toast';
 
 function App() {
-  const [file, setFile] = useState<File | null>(null)
-  const [Image, setImage] = useState(null)
-
-
   const [user, setUser] = useRecoilState(authUser)
+  const [userBalance, setBalance] = useRecoilState(Balance)
+  const { toast } = useToast()
 
   async function getSession() {
     const user = await supabase.auth.getSession()
     setUser(user.data.session.user)
     return user
   }
-
-  const handleImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (files && files.length > 0) {
-      const imageFile = files[0]
-
-      try {
-        const options = {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true
-        }
-        const compressedFile = await imageCompression(imageFile, options)
-        setFile(compressedFile)
-      } catch (error) {
-        console.error('Error compressing image:', error)
+  const fetchUserDetails = async () => {
+    try {
+      const { data } = await axios.post(`${BACKEND_URL}/getUserDetails`, {
+        email: user.user_metadata.email
+      })
+      if (data) {
+        setBalance(data.user.balance)
       }
+      // }
+    } catch (error) {
+      toast({
+        title: "Could not fetch balance",
+        variant: "default",
+        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+      });
     }
   }
-
-  const uploadToCloudinary = async () => {
-    if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'ideogram');
-
-      try {
-        const response = await axios.post(
-          `https://api.cloudinary.com/v1_1/dzow59kgu/image/upload`,
-          formData,
-          {
-            headers: { 'Content-Type': 'multipart/form-data' }
-          }
-        );
-        setImage(response.data.secure_url)
-        return response.data.secure_url;
-      } catch (error) {
-        console.error('Error uploading to Cloudinary:', error);
-      }
-    }
-  }
-
   useEffect(() => {
     getSession()
-  }, [])
+  }, []) // First useEffect to get session
+
+  useEffect(() => {
+    if (user && user.user_metadata?.email) {
+      fetchUserDetails()
+    }
+  }, [user])
 
   setInterval(() => {
     fetch(`${BACKEND_URL}/`, {
@@ -83,12 +64,13 @@ function App() {
 
     <>
       <BrowserRouter>
-        <Navbar />
+        <Navbar balance={userBalance} />
         <Routes>
           <Route path='/' element={<LandingPage />} />
           <Route element={<ProtectedRoute />} >
             <Route path='/generate' element={<ImageGenerationComponent />} />
             <Route path='/profileSetup' element={<ProfileSetup />} />
+            <Route path='/profile' element={<MyAccount />} />
             <Route path='/myImages' element={<MyImagesPage />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />

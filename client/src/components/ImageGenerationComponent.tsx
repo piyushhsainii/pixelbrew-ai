@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { ApiResponse } from "../lib/interface"
-import { Copy, Download } from "lucide-react"
+import { Copy, Download, Info } from "lucide-react"
 import { HashLoader } from "react-spinners"
 import { useRecoilState } from "recoil"
-import { authUser, userImageLink } from "../atoms/atoms"
+import { authUser, Balance, userImageLink } from "../atoms/atoms"
 import { BACKEND_URL } from "../lib/url"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../hooks/use-toast"
@@ -23,14 +23,15 @@ const ImageGenerationComponent = () => {
     const [isLoading, setisLoading] = useState(false)
     const [FaceImageUrl, setFaceImageUrl] = useState<string | null>(null)
     const textareaRef = useRef(null);
+    const [balance, setBalance] = useRecoilState(Balance)
     const [user, setUser] = useRecoilState(authUser)
     const [isCopied, setisCopied] = useState(false)
     const [savingDataToDb, setsavingDataToDb] = useState(false)
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
     const [Response, setResponse] = useState<ApiResponse | null>(null)
-    console.log(isMagicPromptOn)
     const { toast } = useToast()
     const navigate = useNavigate();
+
     const autoResizeTextarea = () => {
         const textarea = textareaRef.current;
         textarea.style.height = 'auto'; // Reset height to auto to recalculate
@@ -75,7 +76,14 @@ const ImageGenerationComponent = () => {
     }
 
     const generateImage = async () => {
-        if (Input == "") return
+        if (Input == "") {
+            return toast({
+                title: "Describe what you want to see!",
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+
+            });
+        }
         setisLoading(true)
         setInput("")
         try {
@@ -85,17 +93,32 @@ const ImageGenerationComponent = () => {
                 model_version: ModelVersion,
                 style_type: styleType,
                 face_swap: FaceImageUrl,
-                magic_prompt: isMagicPromptOn
+                magic_prompt: isMagicPromptOn,
+                email: user.email
 
             })
+            if (data.error) {
+                setisLoading(false)
+                return toast({
+                    title: data.error,
+                    variant: "destructive",
+                    className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+
+                });
+            }
             autoResizeTextarea()
             setisLoading(false)
-            setResponse(data)
-            console.log(data.data.url)
-            console.log(data.data[0].url)
-            const imageUrl = data.data[0].url
+            setResponse(data.result)
+            setBalance(data.balance)
+            const imageUrl = data.result.data[0].url
             savePromptsToDb(imageUrl)
         } catch (error) {
+            toast({
+                title: error,
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+
+            });
             setisLoading(false)
         }
     }
@@ -156,7 +179,7 @@ const ImageGenerationComponent = () => {
 
     useEffect(() => {
         getUserDetails()
-    }, [])
+    }, [Response])
     return (
         <div className='flex justify-stretch bg-black min-h-[100vh] h-full '>
             <div className='w-[250px] hidden border-r border-secondaryColor border-opacity-45 mt-8 md:flex flex-col p-4 gap-5'>
@@ -208,10 +231,10 @@ const ImageGenerationComponent = () => {
                         <TooltipProvider>
                             <Tooltip delayDuration={200}>
                                 <TooltipTrigger>
-                                    <div className="text-[0.77rem] flex gap-1 items-center text-gray-400"
+                                    <div className="text-[0.77rem] flex gap-1 items-baseline text-gray-400 relative"
                                         onClick={toggleMagicPromptState}
                                     >
-                                        <Switch />
+                                        <Switch className=" mr-3" />    <Info size={14} className="absolute mt-[0.35rem] ml-10" />
                                     </div>
                                 </TooltipTrigger>
                                 <TooltipContent className="h-[90px] w-[180px] bg-slate-100 border-white border border-opacity-30">

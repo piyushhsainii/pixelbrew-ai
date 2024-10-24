@@ -17,6 +17,7 @@ import axios from "axios"
 import imageCompression from 'browser-image-compression';
 import { BACKEND_URL } from "../../lib/url"
 import { useToast } from "../../hooks/use-toast"
+import { useNavigate } from "react-router-dom"
 
 export default function ProfileSetup() {
     const [username, setUsername] = useRecoilState(userUsername)
@@ -24,12 +25,14 @@ export default function ProfileSetup() {
     const [userabout, setUserAbout] = useRecoilState(userAbout)
     const [name, setName] = useState(username ?? "")
     const [about, setAbout] = useState(userabout ?? "")
-    const [image, setImage] = useState<File | null>(null)
+    const [image, setImage] = useState<string | null>(null)
     const [CloudinaryURL, setCloudinaryURL] = useState<null | string>(ImageLink ?? null)
     const [isImageUploading, setisImageUploading] = useState(false)
     const [updatingProfile, setupdatingProfile] = useState(false)
     const [user, setUser] = useRecoilState(authUser)
     const { toast } = useToast()
+
+    const navigate = useNavigate()
 
     const uploadToCloudinary = async (file) => {
         if (file) {
@@ -46,6 +49,7 @@ export default function ProfileSetup() {
                         headers: { 'Content-Type': 'multipart/form-data' }
                     }
                 );
+                console.log(response.data.secure_url, "this is url")
                 setImage(response.data.secure_url)
                 setisImageUploading(false)
                 return response.data.secure_url;
@@ -105,6 +109,7 @@ export default function ProfileSetup() {
                 className: "bg-primmaryColor text-white font-sans border-gray-800 border",
 
             });
+            navigate('/generate')
         } catch (error) {
             setupdatingProfile(false)
         }
@@ -118,7 +123,7 @@ export default function ProfileSetup() {
                 email: user.user_metadata.email,
                 username: name,
                 about: about,
-                trainingImg: ImageLink,
+                trainingImg: image,
             })
             if (updateProfile) {
                 setUsername(updateProfile.data.updateProfie.name)
@@ -133,6 +138,7 @@ export default function ProfileSetup() {
                 className: "bg-primmaryColor text-white font-sans border-gray-800 border",
 
             });
+            navigate('/generate')
         } catch (error) {
             setupdatingProfile(false)
             toast({
@@ -148,6 +154,7 @@ export default function ProfileSetup() {
             const { data } = await axios.post(`${BACKEND_URL}/getUserDetails`, {
                 email: user.user_metadata.email
             })
+            console.log(data)
             if (data) {
                 setUsername(data.user.name)
                 setImageLink(data.user.trainingImg)
@@ -162,7 +169,6 @@ export default function ProfileSetup() {
                 title: "Setup your profile to use Pixelbrew AI",
                 variant: "default",
                 className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-
             });
         }
     }
@@ -249,13 +255,7 @@ export default function ProfileSetup() {
                             }
                         </form>
                         <div className="bg-primmaryColor w-full md:w-[130px] h-[100px] md:h-[100px] flex-shrink-0">
-                            {
-                                ImageLink == null ?
-
-                                    <img src={'https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_1.png'} alt="pfp" className="w-full h-full object-cover" />
-                                    :
-                                    CloudinaryURL && <img src={CloudinaryURL} alt="pfp" className="w-full h-full object-cover rounded-3xl" />
-                            }
+                            <img src={image ?? ImageLink} alt="pfp" className="w-full h-full object-cover rounded-3xl" />
                         </div>
                     </CardContent>
                 </Card>
