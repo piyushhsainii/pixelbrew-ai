@@ -22,3 +22,8 @@ export const promptInfo = atom({
     key: "promptInfo",
     default: null
 })
+
+export const Balance = atom({
+    key: "balance",
+    default: null
+})

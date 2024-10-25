@@ -5,8 +5,9 @@ import { authUser } from "../atoms/atoms"
 import { supabase } from "../lib/supabase"
 import { useToast } from "../hooks/use-toast"
 import MyImages from "./MyImages"
+import Balance from "./BalanceComponent"
 
-const Navbar = () => {
+const Navbar = ({ balance }: { balance: Number }) => {
     const navigate = useNavigate()
     const { toast } = useToast()
     const [user, setUser] = useRecoilState(authUser)
@@ -37,6 +38,7 @@ const Navbar = () => {
                     </div>
                 </Link>
                 <div className="flex items-center">
+                    <Balance balance={balance} />
                     <MyImages />
                     {
                         user == null ?
@@ -54,14 +56,19 @@ const Navbar = () => {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="bg-black border-none" >
                                     <DropdownMenu aria-label="Static Actions" >
+                                        <Link to={'/profile'} >
+                                            <DropdownMenuItem className="cursor-pointer font-semibold p-0 bg-black hover:bg-gray-800 text-white px-4 py-2 border-opacity-40 font-sans border-purple-700 border" key="new">
+                                                My Account
+                                            </DropdownMenuItem>
+                                        </Link>
                                         <Link to={'/profileSetup'} >
                                             <DropdownMenuItem className="cursor-pointer font-semibold p-0 bg-black hover:bg-gray-800 text-white px-4 py-2 border-opacity-40 font-sans border-purple-700 border" key="new">
-                                                Profile
+                                                Manage Profile
                                             </DropdownMenuItem>
                                         </Link>
                                         <DropdownMenuItem
                                             onClick={logoutHandler}
-                                            className="cursor-pointer font-semibold p-0 bg-black text-white px-4 py-2 border-opacity-40 font-sans border-purple-700 border" key="copy">
+                                            className="cursor-pointer font-semibold p-0 bg-black text-white px-4 py-2 hover:bg-gray-800 border-opacity-40 font-sans border-purple-700 border" key="copy">
                                             Logout
                                         </DropdownMenuItem>
                                     </DropdownMenu>

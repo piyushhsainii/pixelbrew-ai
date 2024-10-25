@@ -39,6 +39,7 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
     const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
     const [prompt, setPrompt] = useRecoilState(promptInfo)
+    const [ReverseMap, setReverseMap] = useState([])
     const [user, setUser] = useRecoilState(authUser)
     const { toast } = useToast()
 
@@ -53,19 +54,19 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
             console.error('Failed to copy text:', err)
         }
     }
+    let promptArray = []
 
     const truncatePrompt = (prompt: string, maxLength: number = 300) => {
         if (prompt.length <= maxLength) return prompt
         return prompt.slice(0, maxLength - 3) + '...'
     }
-
     const getPrompts = async () => {
         try {
             const { data } = await axios.post(`${BACKEND_URL}/getPrompts`, {
                 email: user.email
             })
-            setPrompt(data.prompt)
-            setUser(data.url)
+            setPrompt(data.user.Prompt)
+            reverseMap(data.user.Prompt)
         } catch (error) {
             toast({
                 title: "Could not fetch user prompts",
@@ -75,7 +76,15 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
             });
         }
     }
-    console.log(prompt, user)
+    const reverseMap = (data) => {
+        if (data) {
+            for (let i = 0; i < data.length; i++) {
+                const reverseLen = data.length - 1 - i
+                promptArray.push(data[reverseLen])
+            }
+            setReverseMap(promptArray)
+        }
+    }
     useEffect(() => {
         if (prompt == null) {
             getPrompts()
@@ -86,11 +95,11 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
         <div className="min-h-screen bg-black text-purple-300 p-5 font-sans">
             <h1 className="text-4xl font-bold text-purple-500 mb-8 text-center select-none">Your Pixel Brew AI Gallery</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {imagePairs.map((pair, index) => (
+                {ReverseMap && ReverseMap.map((pair, index) => (
                     <div key={index} className="bg-gray-900 rounded-lg overflow-hidden shadow-lg">
                         <div className="relative h-64">
                             <img
-                                src={pair.imageUrl}
+                                src={pair.url}
                                 alt={`Generated image ${index + 1}`}
                                 className="object-cover h-full w-full"
                             />
