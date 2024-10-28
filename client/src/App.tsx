@@ -4,7 +4,7 @@ import './App.css'
 import ImageGenerationComponent from './components/ImageGenerationComponent'
 import Navbar from './components/Navbar'
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import ProfileSetup from './components/screens/ProfileSetup';
 import { LandingPage } from './components/screens/HomeScreen';
 import LoginPage from './components/screens/LoginPage';
@@ -21,6 +21,7 @@ function App() {
   const [user, setUser] = useRecoilState(authUser)
   const [userBalance, setBalance] = useRecoilState(Balance)
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   async function getSession() {
     const user = await supabase.auth.getSession()
@@ -32,11 +33,16 @@ function App() {
       const { data } = await axios.post(`${BACKEND_URL}/getUserDetails`, {
         email: user.user_metadata.email
       })
+      console.log('10')
       if (data) {
         setBalance(data.user.balance)
       }
-      // }
     } catch (error) {
+      // if (window.location.href !== '/profileSetup') {
+      //   window.location.href = '/profileSetup'
+      // }
+      navigate('/profileSetup')
+      console.log('loladad')
       toast({
         title: "Could not fetch balance",
         variant: "default",
@@ -63,19 +69,17 @@ function App() {
   return (
 
     <>
-      <BrowserRouter>
-        <Navbar balance={userBalance} />
-        <Routes>
-          <Route path='/' element={<LandingPage />} />
-          <Route element={<ProtectedRoute />} >
-            <Route path='/generate' element={<ImageGenerationComponent />} />
-            <Route path='/profileSetup' element={<ProfileSetup />} />
-            <Route path='/profile' element={<MyAccount />} />
-            <Route path='/myImages' element={<MyImagesPage />} />
-          </Route>
-          <Route path='/login' element={<LoginPage />} />
-        </Routes>
-      </BrowserRouter>
+      <Navbar balance={userBalance} />
+      <Routes>
+        <Route path='/' element={<LandingPage />} />
+        <Route element={<ProtectedRoute />} >
+          <Route path='/generate' element={<ImageGenerationComponent />} />
+          <Route path='/profileSetup' element={<ProfileSetup />} />
+          <Route path='/profile' element={<MyAccount />} />
+          <Route path='/myImages' element={<MyImagesPage />} />
+        </Route>
+        <Route path='/login' element={<LoginPage />} />
+      </Routes>
     </>
   )
 }
