@@ -16,6 +16,7 @@ import MyImagesPage from './components/screens/MyImagesPage';
 import { BACKEND_URL } from './lib/url';
 import MyAccount from './components/screens/MyAccount';
 import { useToast } from './hooks/use-toast';
+import PayButton from './components/razorpay/PayButtons';
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -77,6 +78,7 @@ function App() {
           <Route path='/profileSetup' element={<ProfileSetup />} />
           <Route path='/profile' element={<MyAccount />} />
           <Route path='/myImages' element={<MyImagesPage />} />
+          <Route path='/shop' element={<PayButton />} />
         </Route>
         <Route path='/login' element={<LoginPage />} />
       </Routes>

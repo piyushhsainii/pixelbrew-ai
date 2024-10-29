@@ -38,7 +38,10 @@ const Navbar = ({ balance }: { balance: Number }) => {
                     </div>
                 </Link>
                 <div className="flex items-center">
-                    <Balance balance={balance} />
+                    {
+                        balance &&
+                        <Balance balance={balance} />
+                    }
                     <MyImages />
                     {
                         user == null ?
@@ -64,6 +67,12 @@ const Navbar = ({ balance }: { balance: Number }) => {
                                         <Link to={'/profileSetup'} >
                                             <DropdownMenuItem className="cursor-pointer font-semibold p-0 bg-black hover:bg-gray-800 text-white px-4 py-2 border-opacity-40 font-sans border-purple-700 border" key="new">
                                                 Manage Profile
+                                            </DropdownMenuItem>
+                                        </Link>
+                                        <Link to={'/shop'} >
+                                            <DropdownMenuItem
+                                                className="cursor-pointer font-semibold p-0 bg-black text-white px-4 py-2 hover:bg-gray-800 border-opacity-40 font-sans border-purple-700 border" key="copy">
+                                                Shop
                                             </DropdownMenuItem>
                                         </Link>
                                         <DropdownMenuItem
