@@ -2,6 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+::-webkit-scrollbar {
+  @apply bg-black w-2;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-700;
+}
+
 body {
   font-family: 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji';
   background-color: '#0c0f1a';
@@ -82,4 +111,14 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer base {
+
+  /* Enable smooth scrolling for the entire document */
+  html {
+    scroll-behavior: smooth;
+  }
+
+
 }

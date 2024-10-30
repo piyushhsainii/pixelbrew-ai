@@ -304,13 +304,56 @@ app.post('/verifyOrder', (req, res) => __awaiter(void 0, void 0, void 0, functio
 }));
 app.post('/fetchPayments', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Creating the order
-    const orderId = req.body.orderId;
+    const payemtnID = req.body.paymentID;
     try {
-        const response = yield RazorpayInstance.payments.fetch('pay_PEqvBtVk3juSim');
+        const response = yield RazorpayInstance.payments.fetch(payemtnID);
         return res.json({
             success: true,
             response
         }).status(200);
+    }
+    catch (error) {
+        console.log(error);
+        return res.json({
+            mmessage: "Error occured while fetching payments",
+            error: error
+        }).status(400);
+    }
+}));
+app.post('/fetchPaymentandAddToken', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Creating the order
+    const payemtnID = req.body.paymentID;
+    const email = req.body.email;
+    try {
+        const response = yield RazorpayInstance.payments.fetch(payemtnID);
+        if (response.status == "captured") {
+            // const tokenAmount = Number(response.description[0])
+            function extractTokenAmount(description) {
+                // Use a regular expression to find numbers in the description
+                const match = description.match(/\b\d+\b/);
+                // If a match is found, convert it to a number; otherwise return 0 or an error value
+                return match ? Number(match[0]) : 0;
+            }
+            const tokenAmount = extractTokenAmount(response.description);
+            const rechargeTokens = yield db_1.default.user.update({
+                where: {
+                    email: email
+                },
+                data: {
+                    balance: {
+                        increment: tokenAmount
+                    }
+                },
+                select: {
+                    balance: true
+                }
+            });
+            return res.json({
+                success: true,
+                response,
+                tokenRechargeAmount: rechargeTokens
+            }).status(200);
+        }
     }
     catch (error) {
         console.log(error);
@@ -345,11 +388,23 @@ app.post('/verifySignature', (req, res) => __awaiter(void 0, void 0, void 0, fun
     const paymentId = req.body.paymentId;
     const signature = req.body.signature;
     const secret = process.env.KEY_SECRET;
+    const userEmail = req.body.email;
     try {
         const isVerified = (0, razorpay_utils_1.validatePaymentVerification)({ order_id: orderID, payment_id: paymentId }, signature, secret);
-        return res.json({
-            isVerified
-        }).status(200);
+        if (isVerified) {
+            const addPaymentEntry = yield db_1.default.payments.create({
+                data: {
+                    orderID: orderID,
+                    paymentId: paymentId,
+                    signature: signature,
+                    userEmail: userEmail
+                }
+            });
+            return res.json({
+                isVerified,
+                addPaymentEntry
+            }).status(200);
+        }
     }
     catch (error) {
         return res.json({

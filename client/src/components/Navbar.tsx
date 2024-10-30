@@ -39,21 +39,21 @@ const Navbar = ({ balance }: { balance: Number }) => {
                 </Link>
                 <div className="flex items-center">
                     {
-                        balance &&
+                        user?.email &&
                         <Balance balance={balance} />
                     }
                     <MyImages />
                     {
                         user == null ?
                             <Link to={'/login'}>
-                                <div className="cursor-pointer hover:scale-125 duration-150 transition-all">
+                                <div className="cursor-pointer duration-150 transition-all">
                                     <img src="https://github.com/shadcn.png" alt="" className='w-6 h-6 m-5 rounded-full' />
                                 </div>
                             </Link>
                             :
                             <DropdownMenu>
-                                <DropdownMenuTrigger className=" border-none outline-none">
-                                    <div className="cursor-pointer hover:scale-125 duration-150 transition-all mr-2 ">
+                                <DropdownMenuTrigger className=" border-none outline-none mr-5">
+                                    <div className="cursor-pointer  duration-150 transition-all ">
                                         <img src="https://github.com/shadcn.png" alt="" className='w-6 h-6 m-5 rounded-full border hover:bg-purple-700' />
                                     </div>
                                 </DropdownMenuTrigger>

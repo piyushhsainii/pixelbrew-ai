@@ -305,13 +305,56 @@ app.post('/verifyOrder', async (req: Request, res: any) => {
 })
 app.post('/fetchPayments', async (req: Request, res: any) => {
     // Creating the order
-    const orderId = req.body.orderId
+    const payemtnID = req.body.paymentID
     try {
-        const response = await RazorpayInstance.payments.fetch('pay_PEqvBtVk3juSim')
+        const response = await RazorpayInstance.payments.fetch(payemtnID)
         return res.json({
             success: true,
             response
         }).status(200)
+    } catch (error) {
+        console.log(error)
+        return res.json({
+            mmessage: "Error occured while fetching payments",
+            error: error
+        }).status(400)
+    }
+})
+app.post('/fetchPaymentandAddToken', async (req: Request, res: any) => {
+    // Creating the order
+    const payemtnID = req.body.paymentID
+    const email = req.body.email
+    try {
+        const response = await RazorpayInstance.payments.fetch(payemtnID)
+        if (response.status == "captured") {
+            // const tokenAmount = Number(response.description[0])
+            function extractTokenAmount(description) {
+                // Use a regular expression to find numbers in the description
+                const match = description.match(/\b\d+\b/);
+
+                // If a match is found, convert it to a number; otherwise return 0 or an error value
+                return match ? Number(match[0]) : 0;
+            }
+            const tokenAmount = extractTokenAmount(response.description)
+            const rechargeTokens = await prisma.user.update({           //Updating Tokens in the database
+                where: {
+                    email: email
+                },
+                data: {
+                    balance: {
+                        increment: tokenAmount
+                    }
+                },
+                select: {
+                    balance: true
+                }
+            })
+            return res.json({
+                success: true,
+                response,
+                tokenRechargeAmount: rechargeTokens
+            }).status(200)
+        }
     } catch (error) {
         console.log(error)
         return res.json({
@@ -339,17 +382,28 @@ app.post('/capturePayments', async (req: Request, res: any) => {
         }).status(400)
     }
 })
-
 app.post('/verifySignature', async (req: Request, res: any) => {
     const orderID = req.body.orderID
     const paymentId = req.body.paymentId
     const signature = req.body.signature
     const secret = process.env.KEY_SECRET
+    const userEmail = req.body.email
     try {
         const isVerified = validatePaymentVerification({ order_id: orderID, payment_id: paymentId }, signature, secret)
-        return res.json({
-            isVerified
-        }).status(200)
+        if (isVerified) {
+            const addPaymentEntry = await prisma.payments.create({
+                data: {
+                    orderID: orderID,
+                    paymentId: paymentId,
+                    signature: signature,
+                    userEmail: userEmail
+                }
+            })
+            return res.json({
+                isVerified,
+                addPaymentEntry
+            }).status(200)
+        }
     } catch (error) {
         return res.json({
             message: "Something went wrong",

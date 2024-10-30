@@ -14,6 +14,7 @@ interface Token {
     id: number
     name: string
     price: number
+    tokenAmt: number
 }
 declare global {
     interface Window {
@@ -24,9 +25,9 @@ interface CartItem extends Token {
     quantity: number
 }
 const availableTokens: Token[] = [
-    { id: 1, name: "Basic Token", price: 10 },
-    { id: 2, name: "Premium Token", price: 20 },
-    { id: 3, name: "Elite Token", price: 30 },
+    { id: 1, name: "Starter", price: 33, tokenAmt: 3 },
+    { id: 2, name: "Premium Token", price: 47, tokenAmt: 5 },
+    { id: 3, name: "Elite Token", price: 91, tokenAmt: 10 },
 ]
 
 export default function AddToCart() {
@@ -34,6 +35,7 @@ export default function AddToCart() {
     const [user, setUser] = useRecoilState(authUser)
     const [totalPrice, setTotalPrice] = useState<Number | null>(null)
     const [loading, setLoading] = useState(false);
+    const [TokenCount, setTokenCount] = useState<any>(0)
     const { toast } = useToast()
     const navigate = useNavigate()
 
@@ -75,7 +77,6 @@ export default function AddToCart() {
     }
     async function displayRazorpay() {
         setLoading(true);
-
         try {
             const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
 
@@ -83,47 +84,67 @@ export default function AddToCart() {
                 alert('Razorpay SDK failed to load');
                 return;
             }
-
             // Fetch order details from your backend
             const { data } = await axios.post(`${BACKEND_URL}/purchaseTokens`, {
                 amount: totalPrice
             });
-
-            console.log(data);
 
             const options = {
                 key: 'rzp_test_aSbweFTU6RDCFQ', // Enter the Key ID generated from the Dashboard
                 amount: data.response.amount, // Amount is in currency subunits
                 currency: "INR",
                 name: "Pixel Brew AI",
-                description: cart.map((cart) => cart.name && cart.quantity && cart.price),
+                description: TokenCount + " " + "Tokens Purchased:",
                 image: "https://example.com/your_logo",
                 app_name: "PixelBrew AI",
                 order_id: data.response.id, // Use the order ID from your backend response
-                // callback_url: "http://localhost:8000/verifyOrder",
                 handler: async function (response) {                //Handler Response
-                    // Handle the success callback      
                     // response.razorpay_payment_id   -- payment id if request was successfull
                     if (response) {
-                        const isVerified = await axios.post(`${BACKEND_URL}/verifySignature`, {
+                        const isVerified = await axios.post(`${BACKEND_URL}/verifySignature`, {         //verifying the authenticity of payment
                             orderID: data.response.id,
                             paymentId: response.razorpay_payment_id,
-                            signature: response.razorpay_signature
+                            signature: response.razorpay_signature,
+                            email: user.email
                         })
                         if (isVerified.data.isVerified == true) {         //if payment is authentic
-                            const res = await axios.post(`${BACKEND_URL}/capturePayments`, {
-                                paymentID: response.razorpay_payment_id,
-                                amount: data.response.amount,
-                                currency: "INR"
-                            })
-                            if (res.data.success) {
+                            // const res = await axios.post(`${BACKEND_URL}/capturePayments`, {        //capturing the payment
+                            //     paymentID: response.razorpay_payment_id,
+                            //     amount: data.response.amount,
+                            //     currency: "INR"
+                            // })
+                            // if (res.data.success) {                             // if payment is sucessfull
+                            toast({
+                                title: `Credit Purchase sucessfull`,
+                                variant: "default",
+                                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                            });
+                            try {
+                                const res = await axios.post(`${BACKEND_URL}/fetchPaymentandAddToken`, {    //recharging token in balance
+                                    paymentID: response.razorpay_payment_id,
+                                    email: user.email
+                                })
+                                if (res) {
+                                    toast({
+                                        title: `${res.data.tokenRechargeAmount} credits added to your wallet! `,
+                                        variant: "default",
+                                        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                                    });
+                                }
 
+                            } catch (error) {
                                 toast({
-                                    title: "Token purchase successfull",
+                                    title: "Error occured while fetching payments",
                                     variant: "default",
                                     className: "bg-primmaryColor text-white font-sans border-gray-800 border",
                                 });
                             }
+                            toast({
+                                title: "Token purchase successfull",
+                                variant: "default",
+                                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                            });
+                            // }
                         }
                     }
 
@@ -138,7 +159,8 @@ export default function AddToCart() {
                 },
                 theme: {
                     color: "#3399cc"
-                }
+                },
+
             };
             // Create a new instance using the window.Razorpay
             const razorpayInstance = new window.Razorpay(options);
@@ -160,7 +182,6 @@ export default function AddToCart() {
     useEffect(() => {
         setTotalPrice(cart.reduce((sum, item) => sum + item.price * item.quantity, 0))
     }, [cart])
-    console.log(cart.reduce((sum, item) => sum + item.price * item.quantity, 0))
     return (
         <div className="min-h-screen bg-black text-white p-8 font-sans">
             <div className="max-w-4xl mx-auto">
@@ -173,15 +194,30 @@ export default function AddToCart() {
                         {availableTokens.map((token) => (
                             <Card key={token.id} className="mb-4 bg-gray-800 border-purple-600">
                                 <CardHeader>
-                                    <CardTitle className="text-purple-300">{token.name}</CardTitle>
+                                    <CardTitle className="text-purple-300">{token.name} {'('} {token.tokenAmt} {')'}</CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex justify-between">
                                     <p className="text-gray-300 font-semibold">Price:</p>
-                                    <p className="text-gray-300 font-semibold" > ${token.price}</p>
+                                    <p className="text-gray-300 font-semibold" > ₹{token.price}</p>
                                 </CardContent>
                                 <CardFooter>
                                     <Button
-                                        onClick={() => addToCart(token)}
+                                        onClick={() => {
+                                            addToCart(token)
+                                            setTokenCount((tokenCount) => {
+                                                let newTokenCount = tokenCount;
+                                                if (token.id == 1) {
+                                                    newTokenCount = tokenCount + 3
+                                                }
+                                                if (token.id == 2) {
+                                                    newTokenCount = tokenCount + 5
+                                                }
+                                                if (token.id == 3) {
+                                                    newTokenCount = tokenCount + 10
+                                                }
+                                                return newTokenCount
+                                            })
+                                        }}
                                         className="w-full bg-purple-600 hover:bg-purple-700  active:scale-95
                                         hover:scale-110 transition-all duration-200
                                         ">
@@ -205,13 +241,28 @@ export default function AddToCart() {
                                 ) : (
                                     <ul>
                                         {cart.map((item, index) => (
-                                            <>
+                                            <div key={index} >
                                                 <li key={index} className="flex justify-between items-center mb-2 text-white">
                                                     <span>{item.name} (x{item.quantity})</span>
                                                     <div>
-                                                        <span className="mr-4">${item.price * item.quantity}</span>
+                                                        <span className="mr-4">₹{item.price * item.quantity}</span>
                                                         <Button
-                                                            onClick={() => removeFromCart(item.id)}
+                                                            onClick={() => {
+                                                                removeFromCart(item.id)
+                                                                setTokenCount((tokenCount) => {
+                                                                    let newTokenCount = tokenCount;
+                                                                    if (item.id == 1) {
+                                                                        newTokenCount = tokenCount - 3
+                                                                    }
+                                                                    if (item.id == 2) {
+                                                                        newTokenCount = tokenCount - 5
+                                                                    }
+                                                                    if (item.id == 3) {
+                                                                        newTokenCount = tokenCount - 10
+                                                                    }
+                                                                    return newTokenCount
+                                                                })
+                                                            }}
                                                             variant="outline"
                                                             size="icon"
                                                             className="h-8 w-8 border-purple-500 bg-purple-700 hover:bg-purple-900"
@@ -220,7 +271,7 @@ export default function AddToCart() {
                                                         </Button>
                                                     </div>
                                                 </li>
-                                            </>
+                                            </div>
                                         ))}
                                         <div className="flex justify-end text-sm text-purple-400 underline cursor-pointer"
                                             onClick={() => setCart([])}
@@ -232,14 +283,14 @@ export default function AddToCart() {
                             </CardContent>
                             <CardFooter className="flex justify-between items-center text-white bg-white  rounded-md ">
                                 <div className="flex items-center mt-5 font-semibold text-gray-800">Total:</div>
-                                <div className="flex items-center mt-5 font-semibold text-gray-800">${totalPrice?.toString()}</div>
+                                <div className="flex items-center mt-5 font-semibold text-gray-800">₹{totalPrice?.toString()}</div>
                             </CardFooter>
                         </Card>
                         <Button
                             onClick={displayRazorpay}
                             disabled={totalPrice == 0 ? true : false}
                             className={`w-full mt-4 ${totalPrice == 0 ? "bg-gray-500 " : "bg-purple-600"} hover:bg-purple-700" onClick={displayRazorpay`} >
-                            Checkout (${totalPrice?.toString()})
+                            Checkout ₹{totalPrice?.toString()} ({TokenCount} {" "} Tokens)
                         </Button>
                     </div>
                 </div>
