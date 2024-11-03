@@ -26,6 +26,7 @@ const Navbar = ({ balance }: { balance: Number }) => {
         navigate('/')
     }
 
+
     return (
         <>
             <div
@@ -38,19 +39,22 @@ const Navbar = ({ balance }: { balance: Number }) => {
                     </div>
                 </Link>
                 <div className="flex items-center">
-                    <Balance balance={balance} />
+                    {
+                        user?.email &&
+                        <Balance balance={balance} />
+                    }
                     <MyImages />
                     {
                         user == null ?
                             <Link to={'/login'}>
-                                <div className="cursor-pointer hover:scale-125 duration-150 transition-all">
+                                <div className="cursor-pointer duration-150 transition-all">
                                     <img src="https://github.com/shadcn.png" alt="" className='w-6 h-6 m-5 rounded-full' />
                                 </div>
                             </Link>
                             :
                             <DropdownMenu>
-                                <DropdownMenuTrigger className=" border-none outline-none">
-                                    <div className="cursor-pointer hover:scale-125 duration-150 transition-all mr-2 ">
+                                <DropdownMenuTrigger className=" border-none outline-none mr-5">
+                                    <div className="cursor-pointer  duration-150 transition-all ">
                                         <img src="https://github.com/shadcn.png" alt="" className='w-6 h-6 m-5 rounded-full border hover:bg-purple-700' />
                                     </div>
                                 </DropdownMenuTrigger>
@@ -66,6 +70,12 @@ const Navbar = ({ balance }: { balance: Number }) => {
                                                 Manage Profile
                                             </DropdownMenuItem>
                                         </Link>
+                                        {/* <Link to={'/shop'} >
+                                            <DropdownMenuItem
+                                                className="cursor-pointer font-semibold p-0 bg-black text-white px-4 py-2 hover:bg-gray-800 border-opacity-40 font-sans border-purple-700 border" key="copy">
+                                                Shop
+                                            </DropdownMenuItem>
+                                        </Link> */}
                                         <DropdownMenuItem
                                             onClick={logoutHandler}
                                             className="cursor-pointer font-semibold p-0 bg-black text-white px-4 py-2 hover:bg-gray-800 border-opacity-40 font-sans border-purple-700 border" key="copy">

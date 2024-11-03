@@ -1,4 +1,3 @@
-import imageCompression from 'browser-image-compression';
 import axios from 'axios'
 import './App.css'
 import ImageGenerationComponent from './components/ImageGenerationComponent'
@@ -16,10 +15,13 @@ import MyImagesPage from './components/screens/MyImagesPage';
 import { BACKEND_URL } from './lib/url';
 import MyAccount from './components/screens/MyAccount';
 import { useToast } from './hooks/use-toast';
+import PayButton from './components/razorpay/PayButtons';
+import Lenis from "lenis"
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
   const [userBalance, setBalance] = useRecoilState(Balance)
+  const lenis = new Lenis();
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -50,6 +52,18 @@ function App() {
       });
     }
   }
+
+  lenis.on('scroll', (e) => {
+  });
+
+  // Use requestAnimationFrame to continuously update the scroll
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+
+  requestAnimationFrame(raf);
+
   useEffect(() => {
     getSession()
   }, []) // First useEffect to get session
@@ -77,6 +91,7 @@ function App() {
           <Route path='/profileSetup' element={<ProfileSetup />} />
           <Route path='/profile' element={<MyAccount />} />
           <Route path='/myImages' element={<MyImagesPage />} />
+          {/* <Route path='/shop' element={<PayButton />} /> */}
         </Route>
         <Route path='/login' element={<LoginPage />} />
       </Routes>

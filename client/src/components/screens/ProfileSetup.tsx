@@ -109,7 +109,9 @@ export default function ProfileSetup() {
                 className: "bg-primmaryColor text-white font-sans border-gray-800 border",
 
             });
-            navigate('/generate')
+            window.location.reload()
+            setTimeout(() => { navigate('/generate') }, 1200)
+
         } catch (error) {
             setupdatingProfile(false)
         }
@@ -163,7 +165,6 @@ export default function ProfileSetup() {
                 setImage(data.user.trainingImg)
                 setAbout(data.user.about)
             }
-            // }
         } catch (error) {
             toast({
                 title: "Setup your profile to use Pixelbrew AI",
@@ -220,8 +221,11 @@ export default function ProfileSetup() {
                                                     <Info width={12} color="grey" className="pt-[0.25rem]" />
                                                 </div>
                                             </TooltipTrigger>
-                                            <TooltipContent className="h-[170px] w-[170px] bg-primmaryColor border-white border border-opacity-30">
-                                                {/* Tooltip content remains the same */}
+                                            <TooltipContent className="h-[170px] w-[170px] flex flex-col bg-primmaryColor border-white border border-opacity-30 text-white">
+                                                <div className="text-center my-2"> NOTE: </div>
+                                                <li> Upload high quality images </li>
+                                                <li> Your face should be clearly visible </li>
+                                                <li> The AI response highly depends on your training Image </li>
                                             </TooltipContent>
                                         </Tooltip>
                                     </TooltipProvider>

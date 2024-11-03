@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom"
 import { useToast } from "../hooks/use-toast"
 import { Switch } from "./ui/switch"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
+import DownloadButton from "./DownloadBtn"
 
 type MagicPrompt = "ON" | "OFF" | "AUTO"
 
@@ -21,7 +22,7 @@ const ImageGenerationComponent = () => {
     const [AspectRatio, setAspectRatio] = useState<string>('ASPECT_16_9')
     const [isMagicPromptOn, setIsMagicPromptOn] = useState<MagicPrompt>('OFF')
     const [isLoading, setisLoading] = useState(false)
-    const [FaceImageUrl, setFaceImageUrl] = useState<string | null>(null)
+    const [FaceImageUrl, setFaceImageUrl] = useState<string | null>()
     const textareaRef = useRef(null);
     const [balance, setBalance] = useRecoilState(Balance)
     const [user, setUser] = useRecoilState(authUser)
@@ -140,7 +141,8 @@ const ImageGenerationComponent = () => {
         setFaceImageUrl(userDetails.data.user.trainingImg)
     }
 
-    const copyPrompt = async ({ prompt }: { prompt: string }) => {
+    const copyPrompt = async (prompt: string) => {
+        console.log(prompt)
         setisCopied(true)
         await navigator.clipboard.writeText(prompt)
         setTimeout(() => {
@@ -340,10 +342,15 @@ const ImageGenerationComponent = () => {
                                 </div>
                             </div>
                             <a href={Response.data[0].url} download={Response.data[0].url} target="blank">
-                                <div className="bg-green-700 w-[50%]  md:w-[30%] text-center text-white rounded-md p-4 py-2 m-3 ml-0 flex items-center justify-evenly gap-1
-                                    cursor-pointer hover:scale-110 transition-all duration-200 active:scale-90
-                                    ">
-                                    <Download width={19} />  Download
+                                <div >
+                                    <DownloadButton
+                                        url={Response.data[0].url}
+                                        data={Response.data[0].url}
+                                        filename="pixelbrew_ai.jpeg"
+                                        className="bg-green-700   text-center text-white rounded-md p-4 py-2 m-3 ml-0 flex items-center justify-evenly gap-1
+                                        cursor-pointer hover:scale-110 transition-all duration-200 active:scale-90
+                                        "
+                                    />
                                 </div>
                             </a>
                         </div>

@@ -2,6 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* 
+::-webkit-scrollbar {
+  @apply bg-black w-2;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-700;
+} */
+
+/* Hide scrollbar by default but maintain functionality */
+::-webkit-scrollbar {
+  @apply w-0 bg-transparent transition-all duration-300;
+}
+
+/* Show scrollbar on hover and while scrolling */
+:hover::-webkit-scrollbar,
+::-webkit-scrollbar:hover {
+  @apply w-2 bg-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-700 rounded-full opacity-0 transition-opacity duration-300;
+}
+
+/* Show thumb on hover and while scrolling */
+:hover::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover {
+  @apply opacity-100;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: none;
+}
+
+*:hover {
+  scrollbar-width: thin;
+  scrollbar-color: #6b21a8 #000000;
+}
+
 body {
   font-family: 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji';
   background-color: '#0c0f1a';
@@ -82,4 +143,14 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer base {
+
+  /* Enable smooth scrolling for the entire document */
+  html {
+    scroll-behavior: smooth;
+  }
+
+
 }
