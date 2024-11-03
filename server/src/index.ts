@@ -250,7 +250,10 @@ app.post('/getPrompts', async (req: Request, res: any) => {
                 user: {
                     select: {
                         trainingImg: true,
-                        Prompt: true
+                        Prompt: true,
+                        name: true,
+                        avatar_url: true,
+                        createdAt: true,
                     }
                 }
             },
@@ -261,6 +264,24 @@ app.post('/getPrompts', async (req: Request, res: any) => {
             ]
         })
         return res.json(getPrompt).status(200)
+    } catch (error) {
+        return res.json(error).status(400)
+    }
+})
+
+app.post('/switchVisibilityOfPrompts', async (req: Request, res: any) => {
+    const id = req.body.id
+    const Visibility = req.body.switch
+    try {
+        const switchVisibility = await prisma.prompt.update({
+            where: {
+                id: id
+            },
+            data: {
+                isPublic: Visibility
+            }
+        })
+        return res.json(switchVisibility).status(200)
     } catch (error) {
         return res.json(error).status(400)
     }
@@ -388,12 +409,14 @@ app.post('/verifySignature', async (req: Request, res: any) => {
     const signature = req.body.signature
     const secret = process.env.KEY_SECRET
     const userEmail = req.body.email
+    const tokenAmt = req.body.tokenAmt
     try {
         const isVerified = validatePaymentVerification({ order_id: orderID, payment_id: paymentId }, signature, secret)
         if (isVerified) {
             const addPaymentEntry = await prisma.payments.create({
                 data: {
                     orderID: orderID,
+                    tokensPurchased: Number(tokenAmt),
                     paymentId: paymentId,
                     signature: signature,
                     userEmail: userEmail

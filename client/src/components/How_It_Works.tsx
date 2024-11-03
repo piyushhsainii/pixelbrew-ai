@@ -17,13 +17,13 @@ export default function HowItWorks() {
                         <PenTool className="w-12 h-11 mb-3 text-purple-500" />
                         <h2 className="text-xl font-semibold  text-white">Step 2: Create Prompt</h2>
                         <p className="text-gray-400 mb-5">Craft a detailed text prompt describing the thumbnail you want to generate.</p>
-                        <ArrowRight className="w-6 h-6 mt-4 text-purple-400 hidden lg:block" />
+                        <Link to={'/generate'}><ArrowRight className="w-6 h-6 mt-4 text-purple-400 hidden lg:block" /></Link>
                     </div>
                     <div className="flex flex-col items-center text-center justify-between">
                         <Zap className="w-12 h-12 mb-4 text-purple-500" />
                         <h2 className="text-xl font-semibold mb-2 text-white">Step 3: Generate</h2>
                         <p className="text-gray-400">Let the AI process your prompt and create custom thumbnail options based on your profile and input.</p>
-                        <ArrowRight className="w-6 h-6 mt-4 text-purple-400 hidden lg:block" />
+                        <Link to={'/generate'}> <ArrowRight className="w-6 h-6 mt-4 text-purple-400 hidden lg:block" /></Link>
                     </div>
                     <div className="flex flex-col items-center text-center">
                         <Rocket className="w-12 h-12 mb-4 text-purple-500" />

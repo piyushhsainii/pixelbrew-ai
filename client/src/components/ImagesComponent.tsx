@@ -5,6 +5,7 @@ import { authUser, promptInfo } from '../atoms/atoms'
 import axios from 'axios'
 import { BACKEND_URL } from '../lib/url'
 import { useToast } from '../hooks/use-toast'
+import { Switch } from './ui/switch'
 
 type ImagePromptPair = {
     imageUrl: string
@@ -38,10 +39,17 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
 
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
     const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
+    const [copiedIndex2, setCopiedIndex2] = useState<number | null>(null)
+    const [isLoading, setisLoading] = useState(false)
     const [prompt, setPrompt] = useRecoilState(promptInfo)
+    const [userName, setuserName] = useState(null)
+    const [avatar, setAvatarUrl] = useState(null)
+    const [createdAt, setcreatedAt] = useState<string | null>(null)
+    const [refresh, setRefresh] = useState<any>()
     const [ReverseMap, setReverseMap] = useState([])
     const [user, setUser] = useRecoilState(authUser)
     const { toast } = useToast()
+
 
     const copyPrompt = async (prompt: string, index: number) => {
         try {
@@ -66,7 +74,10 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
                 email: user.email
             })
             setPrompt(data.user.Prompt)
+            setuserName(data.user.name)
+            setAvatarUrl(data.user.avatar_url)
             reverseMap(data.user.Prompt)
+            setcreatedAt(data.user.createdAt)
         } catch (error) {
             toast({
                 title: "Could not fetch user prompts",
@@ -85,57 +96,125 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
             setReverseMap(promptArray)
         }
     }
-    useEffect(() => {
-        if (prompt == null) {
-            getPrompts()
-        }
-    }, [])
 
+    const switchVisibility = async (index) => {
+        const id = prompt[index].id
+        setisLoading(true)
+        setCopiedIndex2(index)
+        try {
+            const updateVisibility = await axios.post(`${BACKEND_URL}/switchVisibilityOfPrompts`, {
+                id: id,
+                switch: prompt[index].isPublic == true ? false : true
+            })
+            setCopiedIndex2(null)
+            toast({
+                title: `Your Image is now ${updateVisibility.data.isPublic == true ? "Public" : "Private"}`,
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
+            setisLoading(false)
+            // window.location.reload()
+            setRefresh(updateVisibility)
+        } catch (error) {
+            setisLoading(false)
+
+        }
+    }
+    useEffect(() => {
+        getPrompts()
+    }, [copiedIndex2])
+    const formattedDate = new Date(createdAt).toLocaleDateString()
     return (
         <div className="min-h-screen bg-black text-purple-300 p-5 font-sans">
-            <h1 className="text-4xl font-bold text-purple-500 mb-8 text-center select-none">Your Pixel Brew AI Gallery</h1>
+            <h1 className="text-4xl font-bold text-purple-500 mb-8 text-center select-none">
+                Your Pixel Brew AI Gallery
+            </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {ReverseMap && ReverseMap.map((pair, index) => (
-                    <div key={index} className="bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-                        <div className="relative h-64">
+                {prompt && prompt.map((pair, index) => (
+                    <div key={index} className="flex flex-col bg-gray-900 rounded-lg overflow-hidden shadow-lg h-full">
+                        {/* Image Section */}
+                        <div className="h-64 w-full">
                             <img
                                 src={pair.url}
                                 alt={`Generated image ${index + 1}`}
-                                className="object-cover h-full w-full"
+                                className="object-cover w-full h-full"
                             />
                         </div>
-                        <div className="p-4">
-                            <div className="flex justify-between items-center">
-                                <p className="text-white mb-2 font-semibold">Prompt:</p>
-                                <div className="text-white mb-2 cursor-pointer min-w-[90px] text-right">
+
+                        {/* Content Section */}
+                        <div className="flex flex-col flex-grow p-4">
+                            {/* User Info */}
+                            <div className="flex items-center gap-2 mb-3">
+                                <img
+                                    src={avatar}
+                                    alt=""
+                                    className="rounded-full w-7 h-7"
+                                />
+                                <p className="text-white font-semibold">
+                                    {userName}
+                                </p>
+                            </div>
+
+                            {/* Prompt Text */}
+                            <div className="flex-grow">
+                                <p className="text-gray-300 font-sans text-sm">
+                                    {expandedIndex === index ? pair.prompt : truncatePrompt(pair.prompt)}
+                                </p>
+                                {pair.prompt.length > 300 && (
+                                    <button
+                                        className="mt-2 text-purple-500 hover:text-purple-400 transition-colors"
+                                        onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
+                                    >
+                                        {expandedIndex === index ? 'Show Less' : 'Show More'}
+                                    </button>
+                                )}
+                            </div>
+                            {
+                                <div className='text-white text-sm flex items-center gap-2 my-3'>
+                                    <Switch
+                                        checked={pair.isPublic}
+                                        onCheckedChange={() => switchVisibility(index)}
+                                    />
+
+                                    <div>
+                                        {
+                                            isLoading == true ?
+                                                index == copiedIndex2 ?
+                                                    "loader" :
+                                                    pair.isPublic == false ?
+                                                        "Try adding it to Explore Page!" :
+                                                        "Switch back to Private ?"
+                                                :
+                                                pair.isPublic == false ?
+                                                    "Try adding it to Explore Page!" :
+                                                    "Switch back to Private ?"
+                                        }
+                                    </div>
+
+                                </div>
+                            }
+                            {/* Footer Section */}
+                            <div className="flex justify-between items-center mt-4 text-sm text-white">
+                                <span>{formattedDate}</span>
+                                <button
+                                    className="flex items-center gap-2"
+                                    onClick={() => copyPrompt(pair.prompt, index)}
+                                >
                                     {copiedIndex === index ? (
-                                        "Text copied!"
+                                        <span>Text copied!</span>
                                     ) : (
                                         <Copy
                                             size={18}
-                                            onClick={() => copyPrompt(pair.prompt, index)}
-                                            className="hover:scale-125 duration-150 transition-all ml-auto"
+                                            className="hover:scale-125 duration-150 transition-all"
                                         />
                                     )}
-                                </div>
-                            </div>
-                            {expandedIndex === index ? (
-                                <p className="text-white text-base">{pair.prompt}</p>
-                            ) : (
-                                <p className="text-white text-base">{truncatePrompt(pair.prompt)}</p>
-                            )}
-                            {pair.prompt.length > 300 && (
-                                <button
-                                    className="mt-2 text-purple-500 hover:text-purple-400 transition-colors"
-                                    onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
-                                >
-                                    {expandedIndex === index ? 'Show Less' : 'Show More'}
                                 </button>
-                            )}
+                            </div>
                         </div>
                     </div>
                 ))}
             </div>
         </div>
     )
+
 }

@@ -248,7 +248,10 @@ app.post('/getPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function
                 user: {
                     select: {
                         trainingImg: true,
-                        Prompt: true
+                        Prompt: true,
+                        name: true,
+                        avatar_url: true,
+                        createdAt: true,
                     }
                 }
             },
@@ -259,6 +262,24 @@ app.post('/getPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function
             ]
         });
         return res.json(getPrompt).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(400);
+    }
+}));
+app.post('/switchVisibilityOfPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.body.id;
+    const Visibility = req.body.switch;
+    try {
+        const switchVisibility = yield db_1.default.prompt.update({
+            where: {
+                id: id
+            },
+            data: {
+                isPublic: Visibility
+            }
+        });
+        return res.json(switchVisibility).status(200);
     }
     catch (error) {
         return res.json(error).status(400);
@@ -389,12 +410,14 @@ app.post('/verifySignature', (req, res) => __awaiter(void 0, void 0, void 0, fun
     const signature = req.body.signature;
     const secret = process.env.KEY_SECRET;
     const userEmail = req.body.email;
+    const tokenAmt = req.body.tokenAmt;
     try {
         const isVerified = (0, razorpay_utils_1.validatePaymentVerification)({ order_id: orderID, payment_id: paymentId }, signature, secret);
         if (isVerified) {
             const addPaymentEntry = yield db_1.default.payments.create({
                 data: {
                     orderID: orderID,
+                    tokensPurchased: Number(tokenAmt),
                     paymentId: paymentId,
                     signature: signature,
                     userEmail: userEmail

@@ -26,6 +26,7 @@ const Navbar = ({ balance }: { balance: Number }) => {
         navigate('/')
     }
 
+
     return (
         <>
             <div

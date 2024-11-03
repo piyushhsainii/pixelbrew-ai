@@ -23,12 +23,44 @@ html.lenis body {
   pointer-events: none;
 }
 
+/* 
 ::-webkit-scrollbar {
   @apply bg-black w-2;
 }
 
 ::-webkit-scrollbar-thumb {
   @apply bg-purple-700;
+} */
+
+/* Hide scrollbar by default but maintain functionality */
+::-webkit-scrollbar {
+  @apply w-0 bg-transparent transition-all duration-300;
+}
+
+/* Show scrollbar on hover and while scrolling */
+:hover::-webkit-scrollbar,
+::-webkit-scrollbar:hover {
+  @apply w-2 bg-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-700 rounded-full opacity-0 transition-opacity duration-300;
+}
+
+/* Show thumb on hover and while scrolling */
+:hover::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover {
+  @apply opacity-100;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: none;
+}
+
+*:hover {
+  scrollbar-width: thin;
+  scrollbar-color: #6b21a8 #000000;
 }
 
 body {

@@ -38,7 +38,6 @@ export default function AddToCart() {
     const [TokenCount, setTokenCount] = useState<any>(0)
     const { toast } = useToast()
     const navigate = useNavigate()
-
     function loadScript(src) {
         return new Promise((resolve) => {
             const script = document.createElement('script');
@@ -105,7 +104,8 @@ export default function AddToCart() {
                             orderID: data.response.id,
                             paymentId: response.razorpay_payment_id,
                             signature: response.razorpay_signature,
-                            email: user.email
+                            email: user.email,
+                            tokenAmt: TokenCount
                         })
                         if (isVerified.data.isVerified == true) {         //if payment is authentic
                             // const res = await axios.post(`${BACKEND_URL}/capturePayments`, {        //capturing the payment
@@ -130,6 +130,7 @@ export default function AddToCart() {
                                         variant: "default",
                                         className: "bg-primmaryColor text-white font-sans border-gray-800 border",
                                     });
+                                    window.location.reload()
                                 }
 
                             } catch (error) {

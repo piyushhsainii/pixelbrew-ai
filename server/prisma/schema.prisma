@@ -22,20 +22,22 @@ model Prompt {
   userid    String
   prompt    String
   url       String
+  isPublic  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userid], references: [id])
 }
 
 model Payments {
-  id        String   @id @default(uuid())
-  userEmail String
-  orderID   String
-  paymentId String
-  signature String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userEmail], references: [email])
+  id              String   @id @default(uuid())
+  userEmail       String
+  tokensPurchased Int
+  orderID         String
+  paymentId       String
+  signature       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userEmail], references: [email])
 }
 
 datasource db {
