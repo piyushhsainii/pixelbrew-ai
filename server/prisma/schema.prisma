@@ -2,45 +2,45 @@ generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model User {
   id          String     @id @default(uuid())
   name        String
   email       String     @unique
-  about       String
-  trainingImg String
-  balance     Int        @default(2)
   avatar_url  String
-  provider    String
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  Prompt      Prompt[]
+  about       String
+  provider    String
+  trainingImg String
+  balance     Int        @default(2)
   Payments    Payments[]
+  Prompt      Prompt[]
 }
 
 model Prompt {
   id        String   @id @default(uuid())
-  userid    String
   prompt    String
   url       String
-  isPublic  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userid], references: [id])
+  userEmail String
+  isPublic  Boolean  @default(false)
+  user      User     @relation(fields: [userEmail], references: [email])
 }
 
 model Payments {
   id              String   @id @default(uuid())
-  userEmail       String
-  tokensPurchased Int
   orderID         String
   paymentId       String
   signature       String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  userEmail       String
+  tokensPurchased Int
   user            User     @relation(fields: [userEmail], references: [email])
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
 }

@@ -91,7 +91,7 @@ function App() {
           <Route path='/profileSetup' element={<ProfileSetup />} />
           <Route path='/profile' element={<MyAccount />} />
           <Route path='/myImages' element={<MyImagesPage />} />
-          {/* <Route path='/shop' element={<PayButton />} /> */}
+          <Route path='/shop' element={<PayButton />} />
         </Route>
         <Route path='/login' element={<LoginPage />} />
       </Routes>
