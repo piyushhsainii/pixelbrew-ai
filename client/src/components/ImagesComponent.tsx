@@ -96,7 +96,7 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
             setReverseMap(promptArray)
         }
     }
-
+    console.log(user)
     const switchVisibility = async (index) => {
         const id = prompt[index].id
         setisLoading(true)
@@ -146,7 +146,7 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
                             {/* User Info */}
                             <div className="flex items-center gap-2 mb-3">
                                 <img
-                                    src={avatar}
+                                    src={user.user_metadata.avatar_url}
                                     alt=""
                                     className="rounded-full w-7 h-7"
                                 />
