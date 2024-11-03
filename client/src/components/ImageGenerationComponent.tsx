@@ -29,19 +29,7 @@ const ImageGenerationComponent = () => {
     const [isCopied, setisCopied] = useState(false)
     const [savingDataToDb, setsavingDataToDb] = useState(false)
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
-    const [Response, setResponse] = useState<ApiResponse | null>({
-        "created": "2024-11-03T07:29:30.218111+00:00",
-        "data": [
-            {
-                "is_image_safe": true,
-                "prompt": "A photo of me playing chess with another person. We are both facing towards the camera. The chessboard is in the middle, with the pieces in motion. The background is a room with wooden furniture and a patterned rug.",
-                "resolution": "1312x736",
-                "seed": 2130521861,
-                "style_type": "REALISTIC",
-                "url": "https://replicate.delivery/yhqm/k27UOsWaby4OGFlIPHZHlQeTIJfmF2JpfvwG6up0QfWeSspdC/1730619031.jpg"
-            }
-        ]
-    })
+    const [Response, setResponse] = useState<ApiResponse | null>(null)
     const { toast } = useToast()
     const navigate = useNavigate();
 
