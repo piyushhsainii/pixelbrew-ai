@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase"
 import { useToast } from "../hooks/use-toast"
 import MyImages from "./MyImages"
 import Balance from "./BalanceComponent"
+import { Globe } from "lucide-react"
 
 const Navbar = ({ balance }: { balance: Number }) => {
     const navigate = useNavigate()
@@ -33,11 +34,18 @@ const Navbar = ({ balance }: { balance: Number }) => {
                 className=' flex justify-between w-full
             border-b border-secondaryColor border-opacity-40 bg-black'
             >
-                <Link to={'/'}>
-                    <div className='text-white  p-4 font-normal text-xl select-none font-mono'>
-                        Pixel Brew AI
-                    </div>
-                </Link>
+                <div className="flex items-center gap-12" >
+                    <Link to={'/'}>
+                        <div className='text-white  p-4 font-normal text-xl select-none font-mono'>
+                            Pixel Brew AI
+                        </div>
+                    </Link>
+                    <Link to={'/explore'} >
+                        <div className="text-white font-mono flex gap-2 cursor-pointer">
+                            <Globe color="purple" width={18} />  Explore
+                        </div>
+                    </Link>
+                </div>
                 <div className="flex items-center">
                     {
                         user?.email &&

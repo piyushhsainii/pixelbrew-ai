@@ -3,6 +3,7 @@ import { Vortex } from "../ui/vortex";
 import { useRecoilValue } from "recoil";
 import { authUser } from "../../atoms/atoms";
 import HowItWorks from "../How_It_Works";
+import { ArrowUpRight } from "lucide-react";
 
 export function LandingPage() {
 
@@ -22,6 +23,11 @@ export function LandingPage() {
                         Pixel Perfect Thumbnails, Brewed by AI.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
+                        <Link to={'/explore'}>
+                            <button className="px-4 py-2 flex items-center gap-1 justify-center bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-[0px_2px_0px_0px_#FFFFFF40_inset]">
+                                Explore <ArrowUpRight size={19} className="mt-1" />
+                            </button>
+                        </Link>
                         <Link to={'/generate'}>
                             <button className="px-4 py-2 bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-[0px_2px_0px_0px_#FFFFFF40_inset]">
                                 Try it now

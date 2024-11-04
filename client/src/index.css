@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
 html.lenis,
 html.lenis body {
   height: auto;
@@ -23,24 +28,18 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* 
-::-webkit-scrollbar {
-  @apply bg-black w-2;
-}
 
-::-webkit-scrollbar-thumb {
-  @apply bg-purple-700;
-} */
+
 
 /* Hide scrollbar by default but maintain functionality */
 ::-webkit-scrollbar {
-  @apply w-0 bg-transparent transition-all duration-300;
+  @apply bg-transparent transition-all duration-300;
 }
 
 /* Show scrollbar on hover and while scrolling */
 :hover::-webkit-scrollbar,
 ::-webkit-scrollbar:hover {
-  @apply w-2 bg-black;
+  @apply bg-black;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -59,7 +58,7 @@ html.lenis body {
 }
 
 *:hover {
-  scrollbar-width: thin;
+  scrollbar-width: initial;
   scrollbar-color: #6b21a8 #000000;
 }
 
@@ -145,12 +144,5 @@ body {
   }
 }
 
-@layer base {
 
-  /* Enable smooth scrolling for the entire document */
-  html {
-    scroll-behavior: smooth;
-  }
-
-
-}
+/* Enable smooth scrolling for the entire document */
