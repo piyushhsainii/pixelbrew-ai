@@ -36,9 +36,12 @@ const Navbar = ({ balance }: { balance: Number }) => {
             >
                 <div className="flex items-center gap-12" >
                     <Link to={'/'}>
-                        <div className='text-white  p-4 font-normal text-xl select-none font-mono'>
-                            Pixel Brew AI
+                        <div className="text-white p-4 font-normal text-xl select-none font-mono">
+                            <span className="inline-block transition-all duration-300 hover:shadow-[0_0_20px_rgba(125,34,190,0.6)]">
+                                Pixel Brew AI
+                            </span>
                         </div>
+
                     </Link>
                     <Link to={'/explore'} >
                         <div className="text-white font-mono flex gap-2 cursor-pointer hover:text-purple-400">

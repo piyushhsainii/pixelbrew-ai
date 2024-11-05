@@ -5,11 +5,10 @@ import { authUser } from "../../atoms/atoms";
 import HowItWorks from "../How_It_Works";
 import { ArrowUpRight } from "lucide-react";
 import { ReviewComponent } from "../ReviewComponent";
+import BlurIn from "../ui/blur-in";
 
 export function LandingPage() {
-
     const user = useRecoilValue(authUser)
-    console.log(user)
     return (
         <>
             <div className="w-FULL h-[85vh] md:h-screen overflow-hidden ">
@@ -17,9 +16,10 @@ export function LandingPage() {
                     backgroundColor="black"
                     className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full"
                 >
-                    <h2 className="text-white text-4xl md:text-6xl font-bold text-center font-sans select-none">
-                        PixelBrew AI
-                    </h2>
+                    <BlurIn
+                        word="PixelBrew AI"
+                        className="text-white text-4xl md:text-6xl font-bold text-center font-sans select-none"
+                    />
                     <p className="text-white text-lg md:text-2xl max-w-xl mt-6 text-center font-sans select-none">
                         Pixel Perfect Thumbnails, Brewed by AI.
                     </p>

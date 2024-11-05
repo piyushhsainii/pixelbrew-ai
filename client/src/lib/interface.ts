@@ -15,6 +15,7 @@ export interface ApiResponse {
 export interface AllImages {
     id: string,
     prompt: string,
+    Likes: number,
     url: string,
     createdAt: string,
     updatedAt: string,

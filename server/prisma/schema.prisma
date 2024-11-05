@@ -17,6 +17,7 @@ model User {
   about       String
   provider    String
   trainingImg String
+  postLiked   Json[]     @default([])
   balance     Int        @default(2)
   Payments    Payments[]
   Prompt      Prompt[]
@@ -28,6 +29,7 @@ model Prompt {
   url       String
   isPublic  Boolean  @default(false)
   Likes     Int      @default(0)
+  LikedBy   Json[]   @default([])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userEmail String
