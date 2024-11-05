@@ -186,6 +186,24 @@ app.post('/getUserDetails', (req, res) => __awaiter(void 0, void 0, void 0, func
         return res.json(error).status(400);
     }
 }));
+app.get('/getAllImages', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const AllImages = yield db_1.default.prompt.findMany({
+            where: {
+                isPublic: true
+            },
+            include: {
+                user: true
+            }
+        });
+        return res.json({
+            AllImages
+        }).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(400);
+    }
+}));
 app.post('/savePrompts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const prompt = req.body.prompt;
     const ImageUrl = req.body.image;

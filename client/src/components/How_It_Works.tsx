@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 export default function HowItWorks() {
     return (
-        <div className="bg-black min-h-[70vh] font-sans selection:select-none">
+        <div className="bg-black min-h-[60vh] font-sans selection:select-none">
             <div className="container mx-auto px-4 py-16">
                 <h1 className="text-4xl font-semibold text-center mb-12 text-white">HOW IT WORKS</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

@@ -18,10 +18,10 @@ const BalanceComponent = ({ balance }: { balance: Number }) => {
                         <div className='flex gap-2 mx-4 items-center rounded-2xl border-purple-700 border px-3 py-[0.15rem]
                                 hover:border-purple-400 cursor-pointer
                                 '>
-                            <div className='font-bold text-white font-sans text-lg '>
+                            <div className='font-bold text-white font-mono text-lg '>
                                 {balance?.toString()}
                             </div>
-                            <Zap color="#d84dff" />
+                            <Zap color="#d84dff" size={16} />
                         </div>
                     </div>
                 </TooltipTrigger>

@@ -188,6 +188,24 @@ app.post('/getUserDetails', async (req: Request, res: any) => {
     }
 })
 
+app.get('/getAllImages', async (req: Request, res: any) => {
+    try {
+        const AllImages = await prisma.prompt.findMany({
+            where: {
+                isPublic: true
+            },
+            include: {
+                user: true
+            }
+        })
+        return res.json({
+            AllImages
+        }).status(200)
+    } catch (error) {
+        return res.json(error).status(400)
+    }
+})
+
 app.post('/savePrompts', async (req: Request, res: any) => {
     const prompt = req.body.prompt
     const ImageUrl = req.body.image

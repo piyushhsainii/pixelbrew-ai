@@ -4,6 +4,7 @@ import { useRecoilValue } from "recoil";
 import { authUser } from "../../atoms/atoms";
 import HowItWorks from "../How_It_Works";
 import { ArrowUpRight } from "lucide-react";
+import { ReviewComponent } from "../ReviewComponent";
 
 export function LandingPage() {
 
@@ -39,6 +40,8 @@ export function LandingPage() {
                 </div>
             </div>
             <HowItWorks />
+            <div className="text-white bg-black flex justify-center items-center text-2xl font-sans"> WHAT USERS THINK ABOUT PIXEL BREW AI? </div>
+            <ReviewComponent />
         </>
     );
 }

@@ -6,7 +6,7 @@ import { supabase } from "../lib/supabase"
 import { useToast } from "../hooks/use-toast"
 import MyImages from "./MyImages"
 import Balance from "./BalanceComponent"
-import { Globe } from "lucide-react"
+import { Globe, IndianRupee } from "lucide-react"
 
 const Navbar = ({ balance }: { balance: Number }) => {
     const navigate = useNavigate()
@@ -41,10 +41,16 @@ const Navbar = ({ balance }: { balance: Number }) => {
                         </div>
                     </Link>
                     <Link to={'/explore'} >
-                        <div className="text-white font-mono flex gap-2 cursor-pointer">
+                        <div className="text-white font-mono flex gap-2 cursor-pointer hover:text-purple-400">
                             <Globe color="purple" width={18} />  Explore
                         </div>
                     </Link>
+                    <Link to={'/shop'} >
+                        <div className="text-white font-mono flex gap-2 cursor-pointer hover:text-purple-400">
+                            <IndianRupee color="purple" width={18} />  Pricing
+                        </div>
+                    </Link>
+
                 </div>
                 <div className="flex items-center">
                     {
