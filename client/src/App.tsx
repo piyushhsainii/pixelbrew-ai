@@ -15,9 +15,7 @@ import MyImagesPage from './components/screens/MyImagesPage';
 import { BACKEND_URL } from './lib/url';
 import MyAccount from './components/screens/MyAccount';
 import { useToast } from './hooks/use-toast';
-import PayButton from './components/razorpay/PayButtons';
 import Lenis from "lenis"
-import Explore from './components/screens/Explore'
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -74,7 +72,7 @@ function App() {
   }, [user])
 
   setInterval(() => {
-    axios.get('/')
+    axios.get(`${BACKEND_URL}`)
   }, 40000)
 
   return (
