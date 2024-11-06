@@ -72,7 +72,7 @@ const ImageCard = (
     useEffect(() => {
         isLikedOrNot()
     }, [])
-
+    console.log(userInfo)
     return (
         <Dialog>
             <div className='h-72 min-w-[300px]  max-w-[400px] border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
@@ -94,7 +94,7 @@ const ImageCard = (
                         </DialogTitle>
                     </DialogHeader>
                     <DialogDescription>
-                        <div className='flex justify-center items-center gap-3 '>
+                        <div className='flex justify-center items-center  '>
                             <div className='max-h-[20rem] max-w-[25rem] border-purple-700 cursor-pointer m-10'>
                                 <img
                                     src={url}
@@ -102,8 +102,8 @@ const ImageCard = (
                                     className='rounded-2xl object-fill border-purple-700 border-2'
                                 />
                             </div>
-                            <div className=' flex flex-col gap-9 text-white items-start text-left w-[50%] '>
-                                <div className='text-pretty text-base flex  justify-center items-center bg-gray-950 p-8 rounded-lg'>
+                            <div className=' flex flex-col text-white items-start text-left w-[50%] border-purple-700 border-2 p-5 rounded-xl'>
+                                <div className='text-pretty text-sm flex  justify-center items-center  m-3 rounded-lg '>
                                     {image.prompt}
                                 </div>
                                 <div className="flex justify-between w-full bg-gray-900 rounded-2xl px-3">

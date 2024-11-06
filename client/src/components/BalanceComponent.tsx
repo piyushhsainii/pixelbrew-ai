@@ -1,11 +1,5 @@
 import { Zap } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip'
-import { useRecoilState } from 'recoil'
-import { authUser, Balance } from '../atoms/atoms'
-import { useEffect } from 'react'
-import axios from 'axios'
-import { BACKEND_URL } from '../lib/url'
-import { useToast } from '../hooks/use-toast'
 
 const BalanceComponent = ({ balance }: { balance: Number }) => {
 
@@ -15,7 +9,7 @@ const BalanceComponent = ({ balance }: { balance: Number }) => {
                 <TooltipTrigger>
                     <div className="text-[0.77rem] flex gap-1 items-center text-gray-400"
                     >
-                        <div className='flex gap-2 mx-4 items-center rounded-2xl border-purple-700 border px-3 py-[0.15rem]
+                        <div className='flex gap-2  items-center rounded-2xl border-purple-900 border px-3 py-[0.15rem]
                                 hover:border-purple-400 cursor-pointer
                                 '>
                             <div className='font-bold text-white font-mono text-lg '>

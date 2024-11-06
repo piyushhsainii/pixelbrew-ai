@@ -1,17 +1,39 @@
 import { Link } from "react-router-dom";
 import { Vortex } from "../ui/vortex";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { authUser } from "../../atoms/atoms";
 import HowItWorks from "../How_It_Works";
 import { ArrowUpRight } from "lucide-react";
-import { ReviewComponent } from "../ReviewComponent";
+import { HighlightedPosts } from "../HighlightedPosts";
 import BlurIn from "../ui/blur-in";
+import ReviewComponent from "../ReviewComponent";
+import { useEffect, useState } from "react";
+import { BACKEND_URL } from "../../lib/url";
+import axios from "axios";
+import { AllReviews, TopPosts } from "../../lib/interface";
 
 export function LandingPage() {
-    const user = useRecoilValue(authUser)
+    const [user, setUser] = useRecoilState(authUser)
+    const [reviews, setReviews] = useState<AllReviews[] | null>(null)
+    const [topPosts, setTopPosts] = useState<TopPosts[] | null>(null)
+
+    const getHighlightedData = async () => {
+        try {
+            const { data } = await axios.get(`${BACKEND_URL}/getAllReviews`)
+            const topPosts = await axios.get(`${BACKEND_URL}/getTopPosts`)
+            setReviews(data)
+            setTopPosts(topPosts.data)
+        } catch (error) {
+
+        }
+    }
+
+    useEffect(() => {
+        getHighlightedData()
+    }, [])
     return (
         <>
-            <div className="w-FULL h-[85vh] md:h-screen overflow-hidden ">
+            <div className="w-full h-[85vh] md:h-[90vh] overflow-hidden ">
                 <Vortex
                     backgroundColor="black"
                     className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full"
@@ -39,9 +61,9 @@ export function LandingPage() {
                 <div>
                 </div>
             </div>
+            <HighlightedPosts reviews={reviews} topPosts={topPosts} />
             <HowItWorks />
-            <div className="text-white bg-black flex justify-center items-center text-2xl font-sans"> WHAT USERS THINK ABOUT PIXEL BREW AI? </div>
-            <ReviewComponent />
+            <ReviewComponent user={user} />
         </>
     );
 }

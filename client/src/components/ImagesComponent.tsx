@@ -71,6 +71,7 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
         return prompt.slice(0, maxLength - 3) + '...'
     }
     const getPrompts = async () => {
+        setisContentLoaded(true)
         try {
             const { data } = await axios.post(`${BACKEND_URL}/getPrompts`, {
                 email: user.email
@@ -80,7 +81,9 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
             setAvatarUrl(data.user.avatar_url)
             reverseMap(data.user.Prompt)
             setcreatedAt(data.user.createdAt)
+            setisContentLoaded(false)
         } catch (error) {
+            setisContentLoaded(false)
             toast({
                 title: "Could not fetch user prompts",
                 variant: "default",

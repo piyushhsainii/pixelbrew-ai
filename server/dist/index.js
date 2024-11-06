@@ -236,6 +236,55 @@ app.post('/switchVisibilityOfPrompts', (req, res) => __awaiter(void 0, void 0, v
         return res.json(error).status(400);
     }
 }));
+// review
+app.post('/addReview', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const review = req.body.review;
+    const review2 = req.body.review2;
+    const userEmail = req.body.email;
+    try {
+        const Reviews = yield db_1.default.reviews.create({
+            data: {
+                userEmail: userEmail,
+                review: review,
+                Improvement: review2
+            },
+            include: { user: { select: { name: true } } }
+        });
+        return res.json(Reviews).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(400);
+    }
+}));
+app.get('/getAllReviews', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const reviews = yield db_1.default.reviews.findMany({
+            include: { user: { select: { name: true, avatar_url: true } } }
+        });
+        return res.json(reviews).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(400);
+    }
+}));
+app.get('/getTopPosts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const topPosts = yield db_1.default.prompt.findMany({
+            include: { user: { select: { name: true, avatar_url: true } } },
+            orderBy: {
+                Likes: "desc"
+            },
+            where: {
+                isPublic: true
+            },
+            take: 10
+        });
+        return res.json(topPosts).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(400);
+    }
+}));
 app.get("/", (req, res) => res.send("Congratulation 🎉🎉! Our Express server is Running on Vercel"));
 app.listen(8000, () => {
     console.log("server started");

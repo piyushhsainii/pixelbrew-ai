@@ -34,3 +34,30 @@ export interface AllImages {
         balance: number
     }
 }[]
+
+export interface AllReviews {
+    Improvement: string,
+    review: string,
+    userEmail: string,
+    id: string,
+    user: {
+        name: string,
+        avatar_url: string
+    }
+}
+export interface TopPosts {
+    id: string;
+    prompt: string;
+    url: string;
+    isPublic: boolean;
+    Likes: number;
+    LikedBy: any
+    createdAt: Date;
+    updatedAt: Date;
+    userEmail: string;
+    user: {
+        name: string;
+        avatar_url: string;
+    };
+
+}

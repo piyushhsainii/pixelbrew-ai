@@ -1,98 +1,79 @@
-import { cn } from "../lib/utils";
-import { Marquee } from "../components/ui/Marquee";
+import React, { useState } from 'react'
+import { Textarea } from './ui/textarea'
+import axios from 'axios'
+import { BACKEND_URL } from '../lib/url'
+import { useToast } from '../hooks/use-toast'
 
-const reviews = [
-    {
-        name: "Jack",
-        username: "@jack",
-        body: "I've never seen anything like this before. It's amazing. I love it.",
-        img: "https://avatar.vercel.sh/jack",
-    },
-    {
-        name: "Jill",
-        username: "@jill",
-        body: "I don't know what to say. I'm speechless. This is amazing.",
-        img: "https://avatar.vercel.sh/jill",
-    },
-    {
-        name: "John",
-        username: "@john",
-        body: "I'm at a loss for words. This is amazing. I love it.",
-        img: "https://avatar.vercel.sh/john",
-    },
-    {
-        name: "Jane",
-        username: "@jane",
-        body: "I'm at a loss for words. This is amazing. I love it.",
-        img: "https://avatar.vercel.sh/jane",
-    },
-    {
-        name: "Jenny",
-        username: "@jenny",
-        body: "I'm at a loss for words. This is amazing. I love it.",
-        img: "https://avatar.vercel.sh/jenny",
-    },
-    {
-        name: "James",
-        username: "@james",
-        body: "I'm at a loss for words. This is amazing. I love it.",
-        img: "https://avatar.vercel.sh/james",
-    },
-];
+const ReviewComponent = ({ user }: { user: any }) => {
+    const [Review, setReview] = useState<string | null>(null)
+    const [Review2, setReview2] = useState<string | null>(null)
+    const { toast } = useToast()
 
-const firstRow = reviews.slice(0, reviews.length / 2);
-const secondRow = reviews.slice(reviews.length / 2);
+    const addReview = async (e) => {
+        e.preventDefault()
 
-const ReviewCard = ({
-    img,
-    name,
-    username,
-    body,
-}: {
-    img: string;
-    name: string;
-    username: string;
-    body: string;
-}) => {
+        if (user == null) {
+            return toast({
+                title: "You must be Logged In to Add Review",
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
+        }
+        try {
+            const { data } = await axios.post(`${BACKEND_URL}/addReview`, {
+                review: Review,
+                review2: Review2 ?? "",
+                email: user.email,
+            })
+            setReview(null)
+            setReview2(null)
+            toast({
+                title: "Thank you for your feedback!",
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
+        } catch (error) {
+            toast({
+                title: "Error adding feedback",
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
+        }
+    }
+
+
     return (
-        <>
-            <figure
-                className={cn(
-                    "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
-                    // Adjusted styles for black theme
-                    "border-gray-800 bg-purple-900 hover:bg-gray-800 text-white"
-                )}
-            >
-                <div className="flex flex-row items-center gap-2">
-                    <img className="rounded-full" width="32" height="32" alt="" src={img} />
-                    <div className="flex flex-col">
-                        <figcaption className="text-sm font-medium text-white">
-                            {name}
-                        </figcaption>
-                        <p className="text-xs font-medium text-gray-400">{username}</p>
+        <form onSubmit={addReview}>
+            <section className="bg-black py-5 h-[45vh] w-full flex justify-evenly items-center">
+                <div>
+                    <div className="text-white bg-black flex justify-center items-center text-2xl font-sans"> YOUR FEEDBACK TRULY MATTERS TO US </div>
+                    <button
+                        className="text-white m-auto px-8 py-2 rounded-xl mt-4 flex justify-center font-semibold hover:scale-110 active:scale-90 bg-purple-800 items-center text-pretty font-sans transition-all duration-200">
+                        ADD MY REVIEW
+                    </button>
+                </div>
+                <div className="flex flex-col text-white items-center justify-center font-sans text-pretty">
+                    <div className="">
+                        <div className='font-mono p-2'> Let us know what you think about Pixel Brew ai? </div>
+                        <Textarea
+                            required={true}
+                            placeholder='Let us know what you think about Pixel Brew ai? '
+                            onChange={(e) => setReview(e.target.value)}
+                            className="bg-black border max-w-[500px] hover:scale-100 text-white border-purple-800 resize-none rounded-2xl"
+                        />
+                        <div className='font-mono p-2'> How can we make it better? </div>
+                        <Textarea
+                            onChange={(e) => setReview2(e.target.value)}
+                            className="bg-black border max-w-[500px] hover:scale-100 text-white border-purple-800 resize-none rounded-2xl"
+                            placeholder='Your honest feedback truly matters to us!'
+                        />
+
                     </div>
                 </div>
-                <blockquote className="mt-2 text-sm text-gray-200">{body}</blockquote>
-            </figure>
-        </>
-    );
-};
 
-export function ReviewComponent() {
-    return (
-        <div className="relative flex h-[400px] w-full flex-col items-center justify-center overflow-hidden  bg-black md:shadow-xl">
-            <Marquee pauseOnHover className="[--duration:20s]">
-                {firstRow.map((review) => (
-                    <ReviewCard key={review.username} {...review} />
-                ))}
-            </Marquee>
-            {/* <Marquee reverse pauseOnHover className="[--duration:20s]">
-                {secondRow.map((review) => (
-                    <ReviewCard key={review.username} {...review} />
-                ))}
-            </Marquee> */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-black"></div>
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-black"></div>
-        </div>
-    );
+            </section>
+        </form >
+    )
 }
+
+export default ReviewComponent

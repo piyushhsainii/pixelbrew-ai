@@ -228,7 +228,53 @@ app.post('/switchVisibilityOfPrompts', async (req: Request, res: any) => {
     }
 })
 
+// review
+app.post('/addReview', async (req: Request, res: any) => {
+    const review = req.body.review
+    const review2 = req.body.review2
+    const userEmail = req.body.email
+    try {
+        const Reviews = await prisma.reviews.create({
+            data: {
+                userEmail: userEmail,
+                review: review,
+                Improvement: review2
+            },
+            include: { user: { select: { name: true } } }
+        })
+        return res.json(Reviews).status(200)
+    } catch (error) {
+        return res.json(error).status(400)
+    }
+})
 
+app.get('/getAllReviews', async (req: Request, res: any) => {
+    try {
+        const reviews = await prisma.reviews.findMany({
+            include: { user: { select: { name: true, avatar_url: true } } }
+        })
+        return res.json(reviews).status(200)
+    } catch (error) {
+        return res.json(error).status(400)
+    }
+})
+app.get('/getTopPosts', async (req: Request, res: any) => {
+    try {
+        const topPosts = await prisma.prompt.findMany({
+            include: { user: { select: { name: true, avatar_url: true } } },
+            orderBy: {
+                Likes: "desc"
+            },
+            where: {
+                isPublic: true
+            },
+            take: 10
+        })
+        return res.json(topPosts).status(200)
+    } catch (error) {
+        return res.json(error).status(400)
+    }
+})
 
 app.get("/", (req: Request, res: any) => res.send("Congratulation 🎉🎉! Our Express server is Running on Vercel"));
 
