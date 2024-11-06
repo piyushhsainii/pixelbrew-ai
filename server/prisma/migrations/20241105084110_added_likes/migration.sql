@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Prompt" ADD COLUMN     "Likes" INTEGER NOT NULL DEFAULT 0;

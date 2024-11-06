@@ -95,7 +95,7 @@ export default function ProfileSetup() {
         setupdatingProfile(true)
         try {
             const { data } = await axios.post(`${BACKEND_URL}/setupProfile`, {
-                name: user.user_metadata.full_name,
+                name: name,
                 email: user.user_metadata.email,
                 about: about,
                 trainingImg: image,

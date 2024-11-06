@@ -17,6 +17,9 @@ import MyAccount from './components/screens/MyAccount';
 import { useToast } from './hooks/use-toast';
 import PayButton from './components/razorpay/PayButtons';
 import Lenis from "lenis"
+import Explore from './components/screens/Explore'
+import Footer from './components/screens/Footer'
+import NotFound from './components/screens/NotFound'
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -35,7 +38,6 @@ function App() {
       const { data } = await axios.post(`${BACKEND_URL}/getUserDetails`, {
         email: user.user_metadata.email
       })
-      console.log('10')
       if (data) {
         setBalance(data.user.balance)
       }
@@ -44,7 +46,6 @@ function App() {
       //   window.location.href = '/profileSetup'
       // }
       navigate('/profileSetup')
-      console.log('loladad')
       toast({
         title: "Could not fetch balance",
         variant: "default",
@@ -75,10 +76,8 @@ function App() {
   }, [user])
 
   setInterval(() => {
-    fetch(`${BACKEND_URL}/`, {
-      method: 'GET'
-    })
-  }, 150000)
+    axios.get(`${BACKEND_URL}`)
+  }, 40000)
 
   return (
 
@@ -91,10 +90,12 @@ function App() {
           <Route path='/profileSetup' element={<ProfileSetup />} />
           <Route path='/profile' element={<MyAccount />} />
           <Route path='/myImages' element={<MyImagesPage />} />
-          <Route path='/shop' element={<PayButton />} />
         </Route>
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/explore' element={<Explore />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
+      <Footer />
     </>
   )
 }
