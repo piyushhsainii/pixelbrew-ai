@@ -11,6 +11,7 @@ import { useToast } from "../hooks/use-toast"
 import { Switch } from "./ui/switch"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
 import DownloadButton from "./DownloadBtn"
+import SuggestionCard from "./SuggestionCard"
 
 type MagicPrompt = "ON" | "OFF" | "AUTO"
 
@@ -140,7 +141,6 @@ const ImageGenerationComponent = () => {
         }
         setFaceImageUrl(userDetails.data.user.trainingImg)
     }
-
     const copyPrompt = async (prompt: string) => {
         console.log(prompt)
         setisCopied(true)
@@ -149,7 +149,6 @@ const ImageGenerationComponent = () => {
             setisCopied(false)
         }, 1500)
     }
-
     const toggleMagicPromptState = () => {
         if (isMagicPromptOn == "OFF") {
             setIsMagicPromptOn("ON")
@@ -269,6 +268,9 @@ const ImageGenerationComponent = () => {
                         {isLoading ? "Generating..." : "Generate"}
                     </button>
                 </div>
+                {
+                    <SuggestionCard generate={generateImage} setInput={setInput} />
+                }
                 {
                     isLoading &&
                     <div className="flex justify-center items-center h-[60vh]" >

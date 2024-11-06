@@ -18,6 +18,8 @@ import { useToast } from './hooks/use-toast';
 import PayButton from './components/razorpay/PayButtons';
 import Lenis from "lenis"
 import Explore from './components/screens/Explore'
+import Footer from './components/screens/Footer'
+import NotFound from './components/screens/NotFound'
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -88,11 +90,12 @@ function App() {
           <Route path='/profileSetup' element={<ProfileSetup />} />
           <Route path='/profile' element={<MyAccount />} />
           <Route path='/myImages' element={<MyImagesPage />} />
-          <Route path='/shop' element={<PayButton />} />
         </Route>
         <Route path='/login' element={<LoginPage />} />
         <Route path='/explore' element={<Explore />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
+      <Footer />
     </>
   )
 }
