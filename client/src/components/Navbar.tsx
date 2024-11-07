@@ -7,6 +7,7 @@ import { useToast } from "../hooks/use-toast"
 import Balance from "./BalanceComponent"
 import { Edit, Globe, Image, IndianRupee, LogOut, ShoppingCart, User } from "lucide-react"
 import MenuDropDown from "./MyImages"
+import { QuestionMarkIcon } from "@radix-ui/react-icons"
 
 const Navbar = ({ balance }: { balance: Number }) => {
     const navigate = useNavigate()
@@ -59,6 +60,11 @@ const Navbar = ({ balance }: { balance: Number }) => {
                             <IndianRupee color="purple" width={18} />  Pricing
                         </div>
                     </Link>
+                    <a href={'/#how-it-works'} >
+                        <div className="text-white font-mono flex gap-2 items-center cursor-pointer hover:text-purple-400">
+                            <QuestionMarkIcon color="purple" width={20} />  How it Works?
+                        </div>
+                    </a>
 
 
                 </div>
