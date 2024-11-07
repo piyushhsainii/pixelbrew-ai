@@ -8,20 +8,21 @@ datasource db {
 }
 
 model User {
-  id          String     @id @default(uuid())
-  name        String
-  email       String     @unique
-  avatar_url  String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  about       String
-  provider    String
-  trainingImg String
-  postLiked   Json[]     @default([])
-  balance     Int        @default(2)
-  Payments    Payments[]
-  Prompt      Prompt[]
-  Reviews     Reviews[]
+  id             String     @id @default(uuid())
+  name           String
+  email          String     @unique
+  avatar_url     String
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  about          String
+  provider       String
+  trainingImg    String
+  trainingImages String[]   @default([])
+  balance        Int        @default(2)
+  Payments       Payments[]
+  Prompt         Prompt[]
+  Reviews        Reviews[]
+  Likes          Likes[]
 }
 
 model Prompt {
@@ -30,11 +31,11 @@ model Prompt {
   url       String
   isPublic  Boolean  @default(false)
   Likes     Int      @default(0)
-  LikedBy   Json[]   @default([])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userEmail String
   user      User     @relation(fields: [userEmail], references: [email])
+  likes     Likes[]
 }
 
 model Payments {
@@ -55,4 +56,14 @@ model Reviews {
   review      String
   Improvement String
   user        User   @relation(fields: [userEmail], references: [email])
+}
+
+model Likes {
+  id        String  @id @default(uuid())
+  postID    String
+  userEmail String
+  url       String  @default("")
+  isLiked   Boolean
+  userid    User    @relation(fields: [userEmail], references: [email])
+  post      Prompt  @relation(fields: [postID], references: [id])
 }

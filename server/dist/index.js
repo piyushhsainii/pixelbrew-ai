@@ -77,6 +77,19 @@ app.post('/getUserDetails', (req, res) => __awaiter(void 0, void 0, void 0, func
         const user = yield db_1.default.user.findFirst({
             where: {
                 email: email
+            },
+            include: {
+                Payments: true,
+                Prompt: true,
+                Reviews: true,
+                Likes: {
+                    select: {
+                        isLiked: true,
+                        postID: true,
+                        userEmail: true,
+                        url: true
+                    }
+                }
             }
         });
         return res.json({
@@ -87,21 +100,29 @@ app.post('/getUserDetails', (req, res) => __awaiter(void 0, void 0, void 0, func
         return res.json(error).status(400);
     }
 }));
-app.get('/getAllImages', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/getAllImages', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
     try {
         const AllImages = yield db_1.default.prompt.findMany({
             where: {
                 isPublic: true
             },
             include: {
-                user: true
+                user: true,
+                likes: true
             },
             orderBy: {
                 Likes: "desc"
+            },
+        });
+        const userLikes = yield db_1.default.likes.findMany({
+            where: {
+                userEmail: email
             }
         });
         return res.json({
-            AllImages
+            AllImages,
+            userLikes
         }).status(200);
     }
     catch (error) {
@@ -112,11 +133,7 @@ app.post('/getPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function
     const email = req.body.email;
     try {
         const getPrompt = yield db_1.default.prompt.findFirst({
-            where: {
-                user: {
-                    email: email
-                }
-            },
+            where: { user: { email: email } },
             include: {
                 user: {
                     select: {
@@ -128,11 +145,7 @@ app.post('/getPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function
                     }
                 }
             },
-            orderBy: [
-                {
-                    prompt: "asc"
-                }
-            ]
+            orderBy: [{ prompt: "asc" }]
         });
         return res.json(getPrompt).status(200);
     }
@@ -190,26 +203,44 @@ app.post('/updateProfile', (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 }));
 app.put('/updateLikes', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const likesCount = req.body.likeCount;
-    const userid = req.body.id;
-    const userEmail = req.body.email;
-    const LikedBy = req.body.likedBy;
-    const postLiked = req.body.postLiked;
+    const likes = req.body.likes;
+    const liked = req.body.isLiked;
+    const postID = req.body.postID;
+    const userEmail = req.body.userEmail;
+    const url = req.body.url;
     try {
-        // updating likes in prompt table
-        const updateLikes = yield db_1.default.prompt.update({
-            where: { id: userid, },
-            data: { Likes: likesCount, LikedBy: { push: { LikedBy } } }
-        });
-        // updating likes in user table
-        const updateUserLikesList = yield db_1.default.user.update({
-            where: { email: userEmail },
-            data: { postLiked: { push: { postLiked } } }
-        });
-        return res.json({
-            updateLikes,
-            updateUserLikesList
-        }).status(200);
+        // delete the like
+        if (liked == true) {
+            yield db_1.default.likes.updateMany({
+                where: { postID: postID },
+                data: { isLiked: false }
+            });
+            console.log("update to false");
+        }
+        else {
+            yield db_1.default.likes.create({
+                data: {
+                    isLiked: true,
+                    postID: postID,
+                    url: url,
+                    userEmail: userEmail
+                }
+            });
+            console.log("create the like");
+        }
+        // updating likes of the post
+        yield db_1.default.prompt.update({ where: { id: postID }, data: { Likes: likes } });
+        return res.json({ success: true }).status(200);
+    }
+    catch (error) {
+        return res.json({ success: false, error }).status(400);
+    }
+}));
+app.put('/deleteLikes', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.body.id;
+    try {
+        const deleteLikes = yield db_1.default.likes.delete({ where: { id: id } });
+        return res.json({ deleteLikes }).status(200);
     }
     catch (error) {
         return res.json({

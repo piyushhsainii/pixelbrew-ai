@@ -70,9 +70,9 @@ export function HighlightedPosts({ reviews, topPosts }: { reviews: AllReviews[],
                         WHAT USERS THINK ABOUT PIXEL BREW AI?
                     </div>
 
-                    <Marquee pauseOnHover className="[--duration:6s]">
+                    <Marquee pauseOnHover className="[--duration:10s]">
                         {reviews?.map((review) => (
-                            <ReviewCard key={review.id} body={review.review} img={review.user.avatar_url} name={review.user.name} username={review.userEmail} />
+                            <ReviewCard key={review.id} body={review.review} img={review.user.avatar_url} name={review.user.name} username={""} />
                         ))}
                     </Marquee>
                 </>

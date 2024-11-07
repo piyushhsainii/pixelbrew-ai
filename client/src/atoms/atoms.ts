@@ -27,3 +27,8 @@ export const Balance = atom({
     key: "balance",
     default: null
 })
+
+export const userCompleteInfo = atom({
+    key: "completeINFO",
+    default: null
+})

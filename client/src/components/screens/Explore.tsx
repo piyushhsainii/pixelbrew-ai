@@ -3,21 +3,28 @@ import ImageCard from "../ImageCard"
 import { BACKEND_URL } from "../../lib/url"
 import axios from "axios"
 import { useToast } from "../../hooks/use-toast"
-import { AllImages } from "../../lib/interface"
+import { AllImages, userLikes } from "../../lib/interface"
 import { Link } from "react-router-dom"
 import Loader from "../Loader"
+import { useRecoilState } from "recoil"
+import { authUser } from "../../atoms/atoms"
 
 const Explore = () => {
     const { toast } = useToast()
     const [images, setImages] = useState<AllImages[] | null>(null)
+    const [userLikes, setUserLikes] = useState<userLikes[] | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [refresh, setRefresh] = useState<any>()
+    const [userInfo, setUserInfo] = useRecoilState(authUser)
 
     const getPublicImages = async () => {
         try {
             setIsLoading(true)
-            const response = await axios.get(`${BACKEND_URL}/getAllImages`)
+            const response = await axios.post(`${BACKEND_URL}/getAllImages`, {
+                email: userInfo?.email
+            })
             setImages(response.data.AllImages)
+            setUserLikes(response.data.userLikes)
         } catch (error) {
             toast({
                 title: "Something went wrong, please try again later.",
@@ -28,10 +35,9 @@ const Explore = () => {
             setIsLoading(false)
         }
     }
-
     useEffect(() => {
         getPublicImages()
-    }, [refresh])
+    }, [refresh, userInfo])
 
     return (
         <div className="relative min-h-screen w-full bg-black">
@@ -41,26 +47,27 @@ const Explore = () => {
                         <Loader />
                     </div>
                 ) : (
-                    <div className="flex justify-center  flex-wrap   max-w-[1600px] m-auto">
+                    <div className="flex justify-center  flex-wrap gap-3 my-10  max-w-[1600px] m-auto ">
                         {images?.map((image, index) => (
-                            <div key={index} className="">
+                            <div key={index} className="relative">
                                 <ImageCard
                                     image={image}
                                     url={image.url}
                                     userInfo={image.user}
-                                    likes={image.Likes}
-                                    email={image.userEmail}
+                                    likes={image.likes}
+                                    email={userInfo.email}
                                     setRefresh={setRefresh}
+                                    myLikes={userLikes}
                                 />
                             </div>
                         ))}
                     </div>
                 )}
-                <h2 className="text-white text-2xl md:text-4xl font-bold font-sans text-center mb-4 select-none">
+                <h2 className="text-white text-2xl md:text-4xl font-bold font-sans text-center mb-4 select-none" >
                     UNLEASH YOUR CREATIVITY!
                 </h2>
                 <Link to={'/generate'}>
-                    <div className="px-4 py-2 max-w-[200px] flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-[0px_2px_0px_0px_#FFFFFF40_inset]">
+                    <div className="px-4 py-2 max-w-[200px] shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
                         Try PixelBrew AI now!
                     </div>
                 </Link>

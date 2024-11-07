@@ -11,57 +11,34 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "../components/ui/dialog"
-
+import { userLikes } from '../lib/interface'
 
 
 const ImageCard = (
-    { image, url, userInfo, likes, email, setRefresh }:
-        { url: string, userInfo: any, likes: number, email: string, image: any, setRefresh: React.Dispatch<any> }) => {
+    { image, url, userInfo, likes, email, setRefresh, myLikes }:
+        { url: string, userInfo: any, likes: any, email: string, image: any, setRefresh: React.Dispatch<any>, myLikes: userLikes[] }) => {
 
-    const [isLiked, setisLiked] = useState<boolean | null>(null)
     const { toast } = useToast()
-    const formattedDate = new Date(image.createdAt).toLocaleString()
-    console.log(image)
-
-    const isLikedOrNot = () => {
-        const AlreadyLikedOrNot = userInfo.postLiked.filter((img) => (img.postLiked.createdBy == userInfo.name && likes > 0))   //checking if the user has already liked the post or not
-        console.log(AlreadyLikedOrNot)
-        if (AlreadyLikedOrNot.length > 0) {
-            setisLiked(true)
-        } else {
-            setisLiked(false)
-        }
-    }
-
-    const updateLikeCount = async () => {
-        const postLiked = {             //This field will be stored in user table
-            ImgID: image.id,
-            ImgUrl: image.url,
-            createdBy: userInfo.name
-        }
-        const likedBy = {
-            userName: userInfo.name,
-            userEmail: userInfo.email,
-
-        }
-        const likesCount = isLiked == false ? likes + 1 : likes - 1
+    const isPostLiked = myLikes.filter((like) => like.isLiked == true && like.postID == image.id)
+    const updateLikeCount = async (image, likes) => {
         try {
             const updateLikes = await axios.put(`${BACKEND_URL}/updateLikes`, {
-                likeCount: likesCount,
-                id: image.id,
-                email: userInfo.email,
-                likedBy,
-                postLiked
+                likes: isPostLiked.length > 0 ? image.Likes - 1 : image.Likes + 1,              //add like or remove like based on current status
+                isLiked: isPostLiked.length > 0 ? true : false,
+                postID: image.id,
+                userEmail: email,
+                url: image.url
             })
             if (updateLikes.status == 200) {
                 toast({
-                    title: "Updated your liked posts",
+                    title: "Added your liked posts",
                     variant: "default",
                     className: "bg-primmaryColor text-white font-sans border-gray-800 border",
                 });
                 setRefresh(updateLikes)
             }
         } catch (error) {
+            console.log(error)
             toast({
                 title: "Something went wrong, please try again",
                 variant: "default",
@@ -69,22 +46,19 @@ const ImageCard = (
             });
         }
     }
-    useEffect(() => {
-        isLikedOrNot()
-    }, [])
-    console.log(userInfo)
+    const formattedDate = new Date(image.createdAt).toLocaleString()
     return (
         <Dialog>
-            <div className='h-72 min-w-[300px]  max-w-[400px] border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
+            <div className='h-72 min-w-[300px] hover:mx-10 hover:my-5 hover:scale-105 duration-300 transition-all   max-w-[400px] shadow-[3px_7px_12px_[0.5]px_rgba(2,1,1,0.2)] shadow-purple-700 border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
                 <DialogTrigger className='cursor-pointer'>
                     <img
                         src={url}
                         alt=""
-                        className='h-[100%] object-cover'
+                        className='h-[100%] object-cover '
                     />
                 </DialogTrigger>
 
-                <DialogContent className='bg-black shadow-purple-700 shadow-[22px_17px_45px_-32px_rgba(0,0,0,0.3)] rounded-lg border-none text-white font-sans min-w-[40vw] max-w-[70vw] min-h-[45vh] max-h-[65vh]'>
+                <DialogContent className='bg-black   rounded-lg border-none text-white font-sans min-w-[40vw] max-w-[70vw] min-h-[45vh] max-h-[65vh]'>
                     <DialogHeader>
                         <DialogTitle>
                             <div className='flex items-center gap-3 select-none'>
@@ -125,13 +99,13 @@ const ImageCard = (
                         <div className='font-mono text-sm text-white pt-1'> {userInfo.name} </div>
                     </div>
                     <div className=' flex items-center  gap-2 cursor-pointer font-mono text-white'>
-                        <span className='text-base'> {likes.toString()}</span>
+                        <span className='text-base'> {image.Likes}</span>
                         <span>
                             <Heart
-                                onClick={updateLikeCount}
+                                onClick={() => updateLikeCount(image, likes)}
                                 size={17}
                                 color={` red `}
-                                className={`mt-[0.1rem]  duration-150 transition-all ${isLiked ? 'fill-red-600' : ''} hover:fill-red-600 hover:scale-105 active:scale-90 `} />
+                                className={`mt-[0.1rem]  duration-150 transition-all ${isPostLiked.length > 0 ? 'fill-red-600' : ''} hover:fill-red-600 hover:scale-105 active:scale-90 `} />
                         </span>
                     </div>
                 </div>

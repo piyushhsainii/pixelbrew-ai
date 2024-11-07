@@ -45,14 +45,14 @@ export function LandingPage() {
                     <p className="text-white text-lg md:text-2xl max-w-xl mt-6 text-center font-sans select-none">
                         Pixel Perfect Thumbnails, Brewed by AI.
                     </p>
-                    <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
+                    <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 relative">
                         <Link to={'/explore'}>
-                            <button className="px-4 py-2 flex items-center gap-1 justify-center bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-[0px_2px_0px_0px_#FFFFFF40_inset]">
+                            <button className="px-4 py-2 flex items-center gap-1 justify-center bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-white shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
                                 Explore <ArrowUpRight size={19} className="mt-1" />
                             </button>
                         </Link>
                         <Link to={'/generate'}>
-                            <button className="px-4 py-2 bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-[0px_2px_0px_0px_#FFFFFF40_inset]">
+                            <button className="px-4 py-2  bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-white  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
                                 Try it now
                             </button>
                         </Link>
