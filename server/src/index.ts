@@ -68,6 +68,18 @@ app.post('/getUserDetails', async (req: Request, res: any) => {
         const user = await prisma.user.findFirst({
             where: {
                 email: email
+            },
+            include: {
+                Payments: true,
+                Prompt: true,
+                Reviews: true,
+                Likes: {
+                    select: {
+                        isLiked: true,
+                        postID: true,
+                        userEmail: true
+                    }
+                }
             }
         })
         return res.json({
@@ -78,21 +90,30 @@ app.post('/getUserDetails', async (req: Request, res: any) => {
     }
 })
 
-app.get('/getAllImages', async (req: Request, res: any) => {
+app.post('/getAllImages', async (req: Request, res: any) => {
+    const email = req.body.email
     try {
         const AllImages = await prisma.prompt.findMany({
             where: {
                 isPublic: true
             },
             include: {
-                user: true
+                user: true,
+                likes: true
             },
             orderBy: {
                 Likes: "desc"
+            },
+
+        })
+        const userLikes = await prisma.likes.findMany({
+            where: {
+                userEmail: email
             }
         })
         return res.json({
-            AllImages
+            AllImages,
+            userLikes
         }).status(200)
     } catch (error) {
         return res.json(error).status(400)
@@ -103,11 +124,7 @@ app.post('/getPrompts', async (req: Request, res: any) => {
     const email = req.body.email
     try {
         const getPrompt = await prisma.prompt.findFirst({
-            where: {
-                user: {
-                    email: email
-                }
-            },
+            where: { user: { email: email } },
             include: {
                 user: {
                     select: {
@@ -119,11 +136,7 @@ app.post('/getPrompts', async (req: Request, res: any) => {
                     }
                 }
             },
-            orderBy: [
-                {
-                    prompt: "asc"
-                }
-            ]
+            orderBy: [{ prompt: "asc" }]
         })
         return res.json(getPrompt).status(200)
     } catch (error) {
@@ -181,26 +194,40 @@ app.post('/updateProfile', async (req: Request, res: any) => {
 })
 
 app.put('/updateLikes', async (req: Request, res: any) => {
-    const likesCount = req.body.likeCount
-    const userid = req.body.id
-    const userEmail = req.body.email
-    const LikedBy = req.body.likedBy
-    const postLiked = req.body.postLiked
+    const likes = req.body.likes
+    const liked = req.body.isLiked
+    const postID = req.body.postID
+    const userEmail = req.body.userEmail
     try {
-        // updating likes in prompt table
-        const updateLikes = await prisma.prompt.update({
-            where: { id: userid, },
-            data: { Likes: likesCount, LikedBy: { push: { LikedBy } } }
-        })
-        // updating likes in user table
-        const updateUserLikesList = await prisma.user.update({
-            where: { email: userEmail },
-            data: { postLiked: { push: { postLiked } } }
-        })
-        return res.json({
-            updateLikes,
-            updateUserLikesList
-        }).status(200)
+        // delete the like
+        if (liked == true) {
+            await prisma.likes.updateMany({
+                where: { postID: postID },
+                data: { isLiked: false }
+            })
+            console.log("update to false")
+        } else {
+            await prisma.likes.create({
+                data: {
+                    isLiked: true,
+                    postID: postID,
+                    userEmail: userEmail
+                }
+            })
+            console.log("create the like")
+        }
+        // updating likes of the post
+        await prisma.prompt.update({ where: { id: postID }, data: { Likes: likes } })
+        return res.json({ success: true }).status(200)
+    } catch (error) {
+        return res.json({ success: false, error }).status(400)
+    }
+})
+app.put('/deleteLikes', async (req: Request, res: any) => {
+    const id = req.body.id
+    try {
+        const deleteLikes = await prisma.likes.delete({ where: { id: id } })
+        return res.json({ deleteLikes }).status(200)
     } catch (error) {
         return res.json({
             success: false,
@@ -208,8 +235,6 @@ app.put('/updateLikes', async (req: Request, res: any) => {
         }).status(400)
     }
 })
-
-
 app.post('/switchVisibilityOfPrompts', async (req: Request, res: any) => {
     const id = req.body.id
     const Visibility = req.body.switch
@@ -227,7 +252,6 @@ app.post('/switchVisibilityOfPrompts', async (req: Request, res: any) => {
         return res.json(error).status(400)
     }
 })
-
 // review
 app.post('/addReview', async (req: Request, res: any) => {
     const review = req.body.review
@@ -247,7 +271,6 @@ app.post('/addReview', async (req: Request, res: any) => {
         return res.json(error).status(400)
     }
 })
-
 app.get('/getAllReviews', async (req: Request, res: any) => {
     try {
         const reviews = await prisma.reviews.findMany({

@@ -9,7 +9,7 @@ import { LandingPage } from './components/screens/HomeScreen';
 import LoginPage from './components/screens/LoginPage';
 import { useRecoilState } from 'recoil';
 import ProtectedRoute from './components/screens/ProtectedRoute';
-import { authUser, Balance } from './atoms/atoms';
+import { authUser, Balance, userCompleteInfo } from './atoms/atoms';
 import { supabase } from './lib/supabase';
 import MyImagesPage from './components/screens/MyImagesPage';
 import { BACKEND_URL } from './lib/url';
@@ -24,6 +24,7 @@ import NotFound from './components/screens/NotFound'
 function App() {
   const [user, setUser] = useRecoilState(authUser)
   const [userBalance, setBalance] = useRecoilState(Balance)
+  const [UserCompleteInfo, setUserCompleteInfo] = useRecoilState(userCompleteInfo)
   const lenis = new Lenis();
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -40,6 +41,7 @@ function App() {
       })
       if (data) {
         setBalance(data.user.balance)
+        setUserCompleteInfo(data)
       }
     } catch (error) {
       // if (window.location.href !== '/profileSetup') {

@@ -21,6 +21,12 @@ export interface AllImages {
     updatedAt: string,
     userEmail: string,
     isPublic: boolean,
+    likes: {
+        id: string
+        postID: string
+        userID: string
+        likes: number
+    }[]
     user: {
         id: string
         name: string
@@ -60,4 +66,11 @@ export interface TopPosts {
         avatar_url: string;
     };
 
+}
+
+export interface userLikes {
+    id: string,
+    isLiked: boolean,
+    postID: string,
+    userEmail: String
 }

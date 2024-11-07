@@ -3,21 +3,28 @@ import ImageCard from "../ImageCard"
 import { BACKEND_URL } from "../../lib/url"
 import axios from "axios"
 import { useToast } from "../../hooks/use-toast"
-import { AllImages } from "../../lib/interface"
+import { AllImages, userLikes } from "../../lib/interface"
 import { Link } from "react-router-dom"
 import Loader from "../Loader"
+import { useRecoilState } from "recoil"
+import { authUser, userCompleteInfo } from "../../atoms/atoms"
 
 const Explore = () => {
     const { toast } = useToast()
     const [images, setImages] = useState<AllImages[] | null>(null)
+    const [userLikes, setUserLikes] = useState<userLikes[] | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [refresh, setRefresh] = useState<any>()
+    const [userInfo, setUserInfo] = useRecoilState(authUser)
 
     const getPublicImages = async () => {
         try {
             setIsLoading(true)
-            const response = await axios.get(`${BACKEND_URL}/getAllImages`)
+            const response = await axios.post(`${BACKEND_URL}/getAllImages`, {
+                email: userInfo?.email
+            })
             setImages(response.data.AllImages)
+            setUserLikes(response.data.userLikes)
         } catch (error) {
             toast({
                 title: "Something went wrong, please try again later.",
@@ -28,10 +35,9 @@ const Explore = () => {
             setIsLoading(false)
         }
     }
-
     useEffect(() => {
         getPublicImages()
-    }, [refresh])
+    }, [refresh, userInfo])
 
     return (
         <div className="relative min-h-screen w-full bg-black">
@@ -48,9 +54,10 @@ const Explore = () => {
                                     image={image}
                                     url={image.url}
                                     userInfo={image.user}
-                                    likes={image.Likes}
-                                    email={image.userEmail}
+                                    likes={image.likes}
+                                    email={userInfo.email}
                                     setRefresh={setRefresh}
+                                    myLikes={userLikes}
                                 />
                             </div>
                         ))}
