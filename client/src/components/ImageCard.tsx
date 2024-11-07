@@ -20,9 +20,6 @@ const ImageCard = (
 
     const { toast } = useToast()
     const isPostLiked = myLikes.filter((like) => like.isLiked == true && like.postID == image.id)
-    // console.log(myLikes.filter((like) => like.isLiked == true && like.postID == image.id))
-    console.log(image)
-
     const updateLikeCount = async (image, likes) => {
         try {
             const updateLikes = await axios.put(`${BACKEND_URL}/updateLikes`, {
@@ -30,6 +27,7 @@ const ImageCard = (
                 isLiked: isPostLiked.length > 0 ? true : false,
                 postID: image.id,
                 userEmail: email,
+                url: image.url
             })
             if (updateLikes.status == 200) {
                 toast({
@@ -51,16 +49,16 @@ const ImageCard = (
     const formattedDate = new Date(image.createdAt).toLocaleString()
     return (
         <Dialog>
-            <div className='h-72 min-w-[300px]  max-w-[400px] border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
+            <div className='h-72 min-w-[300px] hover:mx-10 hover:my-5 hover:scale-105 duration-300 transition-all   max-w-[400px] shadow-[3px_7px_12px_[0.5]px_rgba(2,1,1,0.2)] shadow-purple-700 border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
                 <DialogTrigger className='cursor-pointer'>
                     <img
                         src={url}
                         alt=""
-                        className='h-[100%] object-cover'
+                        className='h-[100%] object-cover '
                     />
                 </DialogTrigger>
 
-                <DialogContent className='bg-black shadow-purple-700 shadow-[22px_17px_45px_-32px_rgba(0,0,0,0.3)] rounded-lg border-none text-white font-sans min-w-[40vw] max-w-[70vw] min-h-[45vh] max-h-[65vh]'>
+                <DialogContent className='bg-black   rounded-lg border-none text-white font-sans min-w-[40vw] max-w-[70vw] min-h-[45vh] max-h-[65vh]'>
                     <DialogHeader>
                         <DialogTitle>
                             <div className='flex items-center gap-3 select-none'>

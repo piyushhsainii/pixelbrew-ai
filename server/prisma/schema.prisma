@@ -61,6 +61,7 @@ model Likes {
   id        String  @id @default(uuid())
   postID    String
   userEmail String
+  url       String  @default("")
   isLiked   Boolean
   userid    User    @relation(fields: [userEmail], references: [email])
   post      Prompt  @relation(fields: [postID], references: [id])

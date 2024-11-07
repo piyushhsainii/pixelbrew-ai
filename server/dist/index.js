@@ -86,7 +86,8 @@ app.post('/getUserDetails', (req, res) => __awaiter(void 0, void 0, void 0, func
                     select: {
                         isLiked: true,
                         postID: true,
-                        userEmail: true
+                        userEmail: true,
+                        url: true
                     }
                 }
             }
@@ -206,6 +207,7 @@ app.put('/updateLikes', (req, res) => __awaiter(void 0, void 0, void 0, function
     const liked = req.body.isLiked;
     const postID = req.body.postID;
     const userEmail = req.body.userEmail;
+    const url = req.body.url;
     try {
         // delete the like
         if (liked == true) {
@@ -220,6 +222,7 @@ app.put('/updateLikes', (req, res) => __awaiter(void 0, void 0, void 0, function
                 data: {
                     isLiked: true,
                     postID: postID,
+                    url: url,
                     userEmail: userEmail
                 }
             });

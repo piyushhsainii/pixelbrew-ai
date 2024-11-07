@@ -19,7 +19,7 @@ export const TopPostCard = ({
                 className={cn(
                     "relative w-72 cursor-pointer overflow-hidden rounded-xl border p-4",
                     // Adjusted styles for black theme
-                    "border-gray-800 bg-purple-900 hover:bg-black text-white"
+                    "border-gray-800 bg-purple-900 hover:bg-black text-white shadow-md shadow-white"
                 )}
             >
                 <div className="flex flex-row items-center gap-2 font-sans">

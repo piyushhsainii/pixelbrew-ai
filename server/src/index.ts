@@ -77,7 +77,8 @@ app.post('/getUserDetails', async (req: Request, res: any) => {
                     select: {
                         isLiked: true,
                         postID: true,
-                        userEmail: true
+                        userEmail: true,
+                        url: true
                     }
                 }
             }
@@ -198,6 +199,7 @@ app.put('/updateLikes', async (req: Request, res: any) => {
     const liked = req.body.isLiked
     const postID = req.body.postID
     const userEmail = req.body.userEmail
+    const url = req.body.url
     try {
         // delete the like
         if (liked == true) {
@@ -211,6 +213,7 @@ app.put('/updateLikes', async (req: Request, res: any) => {
                 data: {
                     isLiked: true,
                     postID: postID,
+                    url: url,
                     userEmail: userEmail
                 }
             })
