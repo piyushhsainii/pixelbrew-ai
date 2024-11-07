@@ -16,7 +16,6 @@ import { BACKEND_URL } from './lib/url';
 import MyAccount from './components/screens/MyAccount';
 import { useToast } from './hooks/use-toast';
 import PayButton from './components/razorpay/PayButtons';
-import Lenis from "lenis"
 import Explore from './components/screens/Explore'
 import Footer from './components/screens/Footer'
 import NotFound from './components/screens/NotFound'
@@ -25,7 +24,6 @@ function App() {
   const [user, setUser] = useRecoilState(authUser)
   const [userBalance, setBalance] = useRecoilState(Balance)
   const [UserCompleteInfo, setUserCompleteInfo] = useRecoilState(userCompleteInfo)
-  const lenis = new Lenis();
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -56,16 +54,6 @@ function App() {
     }
   }
 
-  lenis.on('scroll', (e) => {
-  });
-
-  // Use requestAnimationFrame to continuously update the scroll
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-
-  requestAnimationFrame(raf);
 
   useEffect(() => {
     getSession()
