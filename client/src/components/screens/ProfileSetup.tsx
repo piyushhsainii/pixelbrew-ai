@@ -12,12 +12,13 @@ import {
     TooltipTrigger,
 } from "../ui/tooltip"
 import { useRecoilState } from "recoil"
-import { authUser, userAbout, userImageLink, userUsername } from "../../atoms/atoms"
+import { authUser, userAbout, userCompleteInfo, userImageLink, userUsername } from "../../atoms/atoms"
 import axios from "axios"
 import imageCompression from 'browser-image-compression';
 import { BACKEND_URL } from "../../lib/url"
 import { useToast } from "../../hooks/use-toast"
 import { useNavigate } from "react-router-dom"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel"
 
 export default function ProfileSetup() {
     const [username, setUsername] = useRecoilState(userUsername)
@@ -30,6 +31,8 @@ export default function ProfileSetup() {
     const [isImageUploading, setisImageUploading] = useState(false)
     const [updatingProfile, setupdatingProfile] = useState(false)
     const [user, setUser] = useRecoilState(authUser)
+    const [isSetModeOn, setisSetModeOn] = useState(false)
+    const [UserInfo, setUserInfo] = useRecoilState(userCompleteInfo)
     const { toast } = useToast()
 
     const navigate = useNavigate()
@@ -49,13 +52,77 @@ export default function ProfileSetup() {
                         headers: { 'Content-Type': 'multipart/form-data' }
                     }
                 );
-                console.log(response.data.secure_url, "this is url")
                 setImage(response.data.secure_url)
                 setisImageUploading(false)
+                toast({
+                    title: "Added training Img to your avatar's list!",
+                    variant: "default",
+                    className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                });
                 return response.data.secure_url;
             } catch (error) {
                 setisImageUploading(false)
                 console.error('Error uploading to Cloudinary:', error);
+            }
+        }
+    }
+    const uploadToCloudinaryAndSetActiveImg = async (file) => {
+        if (file) {
+            setisImageUploading(true)
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'ideogram');
+
+            try {
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/dzow59kgu/image/upload`,
+                    formData,
+                    {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    }
+                );
+                console.log(response.data.secure_url, "this is url")
+                setImage(response.data.secure_url)
+                if (response.data.secure_url) {
+                    console.log("apicall")
+                    const { data } = await axios.post(`${BACKEND_URL}/addTrainingImg`, {
+                        email: user.email,
+                        img: response.data.secure_url
+                    })
+                }
+                setisImageUploading(false)
+                toast({
+                    title: "Added training Img to your avatar's list!",
+                    variant: "default",
+                    className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                });
+                return response.data.secure_url;
+            } catch (error) {
+                setisImageUploading(false)
+                console.error('Error uploading to Cloudinary:', error);
+            }
+        }
+    }
+    const handleImage2 = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files
+        if (files && files.length > 0) {
+            const imageFile = files[0]
+            const response = new FileReader()
+            response.onloadend = () => {
+                setCloudinaryURL(response.result as string)
+            }
+            response.readAsDataURL(imageFile);
+            try {
+                const options = {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1920,
+                    useWebWorker: true
+                }
+                const compressedFile = await imageCompression(imageFile, options)
+                uploadToCloudinaryAndSetActiveImg(compressedFile)
+
+            } catch (error) {
+                console.error('Error compressing image:', error)
             }
         }
     }
@@ -151,40 +218,58 @@ export default function ProfileSetup() {
             });
         }
     }
-    const fetchUserDetails = async () => {
+    // const fetchUserDetails = async () => {
+    //     try {
+    //         const { data } = await axios.post(`${BACKEND_URL}/getUserDetails`, {
+    //             email: user.user_metadata.email
+    //         })
+    //         console.log(data)
+    //         if (data) {
+    //             setUsername(data.user.name)
+    //             setImageLink(data.user.trainingImg)
+    //             setUserAbout(data.user.about)
+    //             setName(data.user.name)
+    //             setImage(data.user.trainingImg)
+    //             setAbout(data.user.about)
+    //         }
+    //     } catch (error) {
+    //         toast({
+    //             title: "Setup your profile to use Pixelbrew AI",
+    //             variant: "default",
+    //             className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+    //         });
+    //     }
+    // }
+    console.log(UserInfo)
+
+    const setActiveImageHandler = async (likedImgs, index) => {
         try {
-            const { data } = await axios.post(`${BACKEND_URL}/getUserDetails`, {
-                email: user.user_metadata.email
+            const { data } = await axios.post(`${BACKEND_URL}/setActiveImage`, {
+                email: UserInfo.user.email,
+                img: likedImgs
             })
-            console.log(data)
-            if (data) {
-                setUsername(data.user.name)
-                setImageLink(data.user.trainingImg)
-                setUserAbout(data.user.about)
-                setName(data.user.name)
-                setImage(data.user.trainingImg)
-                setAbout(data.user.about)
-            }
+            setisSetModeOn((e) => !e)
+            toast({
+                title: "Updated your active training image",
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
         } catch (error) {
             toast({
-                title: "Setup your profile to use Pixelbrew AI",
+                title: "Something went wrong",
                 variant: "default",
                 className: "bg-primmaryColor text-white font-sans border-gray-800 border",
             });
         }
     }
 
-    useEffect(() => {
-        fetchUserDetails()
-    }, [username, ImageLink, userabout])
-
     return (
         <>
             <div className="flex items-stretch md:items-start justify-center bg-primmaryColor font-sans min-h-screen p-4 pb-0">
-                <Card className="w-full max-w-4xl bg-black bg-opacity-50 text-white overflow-hidden flex flex-col justify-evenly">
-                    <CardHeader className="flex-shrink-0 bg-slate-200">
-                        <CardTitle className="text-3xl font-bold text-black">Profile</CardTitle>
-                        <CardDescription className="text-gray-800 text-base font-sans font-semibold">
+                <Card className="w-full max-w-4xl bg-purple-700 bg-opacity-50 text-white border border-white border-opacity-40 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-white overflow-hidden flex flex-col justify-evenly">
+                    <CardHeader className="flex-shrink-0 bg-black text-white">
+                        <CardTitle className="text-3xl font-bold ">Profile</CardTitle>
+                        <CardDescription className=" text-base font-sans text-gray-100 font-semibold">
                             {username == null ? "Setup" : 'Update'} your profile
                         </CardDescription>
                     </CardHeader>
@@ -195,9 +280,9 @@ export default function ProfileSetup() {
                                 <Input
                                     id="name"
                                     placeholder="Enter your name"
-                                    value={name}
+                                    value={UserInfo?.user.name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="bg-[#0c0f1a] border-0 text-white rounded-xl"
+                                    className="bg-[#0c0f1a] border-1 text-white rounded-xl  "
                                 />
                             </div>
                             <div className="space-y-1">
@@ -205,14 +290,18 @@ export default function ProfileSetup() {
                                 <Textarea
                                     id="about"
                                     placeholder="Tell us about yourself"
-                                    value={about}
+                                    value={UserInfo?.user.about}
                                     onChange={(e) => setAbout(e.target.value)}
                                     className="bg-[#0c0f1a] border-0 text-white min-h-[100px] rounded-2xl resize-none"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <Label htmlFor="training_image" className="text-white">Training Image</Label>
+                                    <Label htmlFor="training_image" className="text-white">{
+                                        UserInfo?.user.trainingImg == null ?
+                                            'Training Image' :
+                                            'Add Another Training Image'
+                                    }</Label>
                                     <TooltipProvider>
                                         <Tooltip delayDuration={200}>
                                             <TooltipTrigger>
@@ -238,13 +327,23 @@ export default function ProfileSetup() {
                                             Uploading...
                                         </div>
                                         :
-                                        <Input
-                                            id="training_image"
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => handleImage(e)}
-                                            className="bg-[#0c0f1a] border-0 text-white rounded-xl cursor-pointer"
-                                        />
+                                        UserInfo?.user.trainingImg == null ?
+                                            <Input
+                                                id="training_image"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => handleImage(e)}
+                                                className="bg-[#0c0f1a] border-0 text-white rounded-xl cursor-pointer"
+                                            />
+                                            :
+
+                                            <Input
+                                                id="Upload another image"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => handleImage2(e)}
+                                                className="bg-[#0c0f1a] border-0 text-white rounded-xl cursor-pointer"
+                                            />
                                 }
                             </div>
                             {
@@ -258,8 +357,36 @@ export default function ProfileSetup() {
                                     </Button>
                             }
                         </form>
-                        <div className="bg-primmaryColor w-full md:w-[130px] h-[100px] md:h-[100px] flex-shrink-0">
-                            <img src={image ?? ImageLink} alt="pfp" className="w-full h-full object-cover rounded-3xl" />
+                        <div className="flex flex-col gap-4 justify-center items-center">
+                            {isSetModeOn ?
+                                <Carousel className='mx-3 bg-purple-700 rounded-lg p-3 mr-7'>
+                                    <CarouselPrevious />
+                                    <CarouselContent className="w-[150px]">
+                                        {UserInfo?.user?.trainingImages.map((likedImgs, index) => (
+                                            <CarouselItem className=" select-none flex flex-col justify-between" key={likedImgs.postID}>
+                                                <img src={likedImgs} alt="" className="w-full h-full object-cover rounded-3xl" />
+                                                <div
+                                                    onClick={() => setActiveImageHandler(likedImgs, index)}
+                                                    className="px-3 py-2 mt-2 text-sm cursor-pointer  border-2 border-black flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
+                                                    SET ACTIVE IMG
+                                                </div>
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent>
+                                    <CarouselNext />
+                                </Carousel> :
+                                <>
+                                    <div className="border-white border-2 rounded-3xl   w-full md:w-[130px] h-[100px] md:h-[100px] flex-shrink-0">
+                                        <img src={UserInfo?.user.trainingImg} alt="pfp" className="w-full h-full object-cover rounded-3xl" />
+                                    </div>
+                                </>}
+                            <div
+                                onClick={() => setisSetModeOn((e) => !e)}
+                                className="px-4 py-2 text-sm cursor-pointer shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
+                                {isSetModeOn ?
+                                    " CANCEL" : " SET ACTIVE IMG"
+                                }
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
