@@ -42,10 +42,11 @@ model Payments {
   id              String   @id @default(uuid())
   orderID         String
   paymentId       String
-  signature       String
+  tokensRecharged Boolean  @default(false)
+  userEmail       String
+  method          String   @default("")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  userEmail       String
   tokensPurchased Int
   user            User     @relation(fields: [userEmail], references: [email])
 }
