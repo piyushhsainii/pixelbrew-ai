@@ -98,57 +98,18 @@ export default function AddToCart() {
                 app_name: "PixelBrew AI",
                 order_id: data.response.id, // Use the order ID from your backend response
                 handler: async function (response) {                //Handler Response
-                    // response.razorpay_payment_id   -- payment id if request was successfull
-                    if (response) {
-                        const isVerified = await axios.post(`${BACKEND_URL}/verifySignature`, {         //verifying the authenticity of payment
-                            orderID: data.response.id,
-                            paymentId: response.razorpay_payment_id,
-                            signature: response.razorpay_signature,
-                            email: user.email,
-                            tokenAmt: TokenCount
-                        })
-                        if (isVerified.data.isVerified == true) {         //if payment is authentic
-                            // const res = await axios.post(`${BACKEND_URL}/capturePayments`, {        //capturing the payment
-                            //     paymentID: response.razorpay_payment_id,
-                            //     amount: data.response.amount,
-                            //     currency: "INR"
-                            // })
-                            // if (res.data.success) {                             // if payment is sucessfull
-                            toast({
-                                title: `Credit Purchase sucessfull`,
-                                variant: "default",
-                                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-                            });
-                            try {
-                                const res = await axios.post(`${BACKEND_URL}/fetchPaymentandAddToken`, {    //recharging token in balance
-                                    paymentID: response.razorpay_payment_id,
-                                    email: user.email
-                                })
-                                if (res) {
-                                    toast({
-                                        title: `${res.data.tokenRechargeAmount} credits added to your wallet! `,
-                                        variant: "default",
-                                        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-                                    });
-                                    window.location.reload()
-                                }
-
-                            } catch (error) {
-                                toast({
-                                    title: "Error occured while fetching payments",
-                                    variant: "default",
-                                    className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-                                });
-                            }
-                            toast({
-                                title: "Token purchase successfull",
-                                variant: "default",
-                                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-                            });
-                            // }
-                        }
+                    console.log(response)           //response_order_id && //response_payment_id && response.signature
+                    const { data, status } = await axios.post(`${BACKEND_URL}/fetchPayments`, {
+                        paymentID: response.razorpay_payment_id
+                    })
+                    if (status == 200) {
+                        window.location.reload()
+                        toast({
+                            title: "Tokens purchase successfull",
+                            variant: "default",
+                            className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                        });
                     }
-
                 },
                 prefill: {
                     name: user.user_metadata.name, // Add customer name if available

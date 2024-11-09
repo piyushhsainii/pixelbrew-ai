@@ -58,6 +58,7 @@ app.post('/setupProfile', (req, res) => __awaiter(void 0, void 0, void 0, functi
                 email,
                 about,
                 trainingImg,
+                trainingImages: [trainingImg],
                 avatar_url,
                 provider,
             }
@@ -69,6 +70,44 @@ app.post('/setupProfile', (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
     catch (error) {
         return res.json({ error }).status(400);
+    }
+}));
+app.post('/addTrainingImg', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    const trainingImg = req.body.img;
+    try {
+        const updatedTrainingImg = yield db_1.default.user.update({
+            where: {
+                email: email
+            },
+            data: {
+                trainingImages: {
+                    push: [trainingImg]
+                }
+            }
+        });
+        return res.json(updatedTrainingImg).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(400);
+    }
+}));
+app.post('/setActiveImage', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    const trainingImg = req.body.img;
+    try {
+        const activeImg = yield db_1.default.user.update({
+            where: {
+                email: email
+            },
+            data: {
+                trainingImg: trainingImg
+            }
+        });
+        return res.json(activeImg).status(200);
+    }
+    catch (error) {
+        return res.json(error).status(200);
     }
 }));
 app.post('/getUserDetails', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

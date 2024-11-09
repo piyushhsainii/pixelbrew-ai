@@ -49,6 +49,7 @@ app.post('/setupProfile', async (req: Request, res: any) => {
                 email,
                 about,
                 trainingImg,
+                trainingImages: [trainingImg],
                 avatar_url,
                 provider,
             }
@@ -59,6 +60,44 @@ app.post('/setupProfile', async (req: Request, res: any) => {
         }).status(200)
     } catch (error) {
         return res.json({ error }).status(400)
+    }
+})
+
+app.post('/addTrainingImg', async (req: Request, res: any) => {
+    const email = req.body.email
+    const trainingImg = req.body.img
+    try {
+        const updatedTrainingImg = await prisma.user.update({
+            where: {
+                email: email
+            },
+            data: {
+                trainingImages: {
+                    push: [trainingImg]
+                }
+            }
+        })
+        return res.json(updatedTrainingImg).status(200)
+    } catch (error) {
+        return res.json(error).status(400)
+    }
+})
+
+app.post('/setActiveImage', async (req: Request, res: any) => {
+    const email = req.body.email
+    const trainingImg = req.body.img
+    try {
+        const activeImg = await prisma.user.update({
+            where: {
+                email: email
+            },
+            data: {
+                trainingImg: trainingImg
+            }
+        })
+        return res.json(activeImg).status(200)
+    } catch (error) {
+        return res.json(error).status(200)
     }
 })
 

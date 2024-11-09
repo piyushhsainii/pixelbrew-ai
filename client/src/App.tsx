@@ -1,7 +1,7 @@
 import axios from 'axios'
 import './App.css'
 import ImageGenerationComponent from './components/ImageGenerationComponent'
-import Navbar from './components/Navbar'
+import Navbar from './components/Navbar/Navbar'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import ProfileSetup from './components/screens/ProfileSetup';
@@ -16,16 +16,15 @@ import { BACKEND_URL } from './lib/url';
 import MyAccount from './components/screens/MyAccount';
 import { useToast } from './hooks/use-toast';
 import PayButton from './components/razorpay/PayButtons';
-import Lenis from "lenis"
 import Explore from './components/screens/Explore'
 import Footer from './components/screens/Footer'
 import NotFound from './components/screens/NotFound'
+import AllPurchases from './components/razorpay/AllPurchases'
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
   const [userBalance, setBalance] = useRecoilState(Balance)
   const [UserCompleteInfo, setUserCompleteInfo] = useRecoilState(userCompleteInfo)
-  const lenis = new Lenis();
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -56,16 +55,6 @@ function App() {
     }
   }
 
-  lenis.on('scroll', (e) => {
-  });
-
-  // Use requestAnimationFrame to continuously update the scroll
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-
-  requestAnimationFrame(raf);
 
   useEffect(() => {
     getSession()
@@ -77,9 +66,9 @@ function App() {
     }
   }, [user])
 
-  setInterval(() => {
-    axios.get(`${BACKEND_URL}`)
-  }, 40000)
+  // setInterval(() => {
+  //   axios.get(`${BACKEND_URL}`)
+  // }, 40000)
 
   return (
 
@@ -92,9 +81,11 @@ function App() {
           <Route path='/profileSetup' element={<ProfileSetup />} />
           <Route path='/profile' element={<MyAccount />} />
           <Route path='/myImages' element={<MyImagesPage />} />
+          <Route path='/shop' element={<PayButton />} />
         </Route>
         <Route path='/login' element={<LoginPage />} />
         <Route path='/explore' element={<Explore />} />
+        <Route path='/purchases' element={<AllPurchases />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />
