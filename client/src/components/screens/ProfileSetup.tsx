@@ -305,9 +305,9 @@ export default function ProfileSetup() {
                                     <TooltipProvider>
                                         <Tooltip delayDuration={200}>
                                             <TooltipTrigger>
-                                                <div className="text-[0.77rem] flex gap-1 items-center text-gray-400">
+                                                <div className="text-[0.77rem] flex gap-1 items-center text-white">
                                                     note:
-                                                    <Info width={12} color="grey" className="pt-[0.25rem]" />
+                                                    <Info width={12} color="white" className="" />
                                                 </div>
                                             </TooltipTrigger>
                                             <TooltipContent className="h-[170px] w-[170px] flex flex-col bg-primmaryColor border-white border border-opacity-30 text-white">
@@ -319,6 +319,11 @@ export default function ProfileSetup() {
                                         </Tooltip>
                                     </TooltipProvider>
                                 </div>
+                                <label
+                                    className="bg-primmaryColor w-full py-2 px-5 text-base font-semibold flex  rounded-md cursor-pointer hover:bg-gray-900 hover:scale-105 transition-all duration-150"
+                                    htmlFor="file-input" >
+                                    UPLOAD YOUR IMAGE
+                                </label>
                                 {
                                     isImageUploading ?
                                         <div className="bg-[#0c0f1a] border-0 rounded-xl cursor-pointer text-center py-1 font-semibold
@@ -329,20 +334,20 @@ export default function ProfileSetup() {
                                         :
                                         UserInfo?.user.trainingImg == null ?
                                             <Input
-                                                id="training_image"
+                                                id="file-input"
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={(e) => handleImage(e)}
-                                                className="bg-[#0c0f1a] border-0 text-white rounded-xl cursor-pointer"
+                                                className="bg-[#0c0f1a] border-0 text-white rounded-xl cursor-pointer hidden"
                                             />
                                             :
 
                                             <Input
-                                                id="Upload another image"
+                                                id="file-input"
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={(e) => handleImage2(e)}
-                                                className="bg-[#0c0f1a] border-0 text-white rounded-xl cursor-pointer"
+                                                className="bg-[#0c0f1a] border-0 text-white rounded-xl cursor-pointer hidden"
                                             />
                                 }
                             </div>
@@ -377,16 +382,24 @@ export default function ProfileSetup() {
                                 </Carousel> :
                                 <>
                                     <div className="border-white border-2 rounded-3xl   w-full md:w-[130px] h-[100px] md:h-[100px] flex-shrink-0">
-                                        <img src={UserInfo?.user.trainingImg} alt="pfp" className="w-full h-full object-cover rounded-3xl" />
+                                        {UserInfo?.user.trainingImg ?
+                                            <img src={UserInfo?.user.trainingImg} className="w-full h-full object-cover rounded-3xl" /> :
+                                            <div className="text-pretty flex justify-center items-center ml-4 mt-2">
+                                                Your training Image will appear here.
+                                            </div>
+                                        }
                                     </div>
                                 </>}
-                            <div
-                                onClick={() => setisSetModeOn((e) => !e)}
-                                className="px-4 py-2 text-sm cursor-pointer shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
-                                {isSetModeOn ?
-                                    " CANCEL" : " SET ACTIVE IMG"
-                                }
-                            </div>
+                            {
+                                UserInfo?.user.trainingImg &&
+                                <div
+                                    onClick={() => setisSetModeOn((e) => !e)}
+                                    className="px-4 py-2 text-sm cursor-pointer shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
+                                    {isSetModeOn ?
+                                        " CANCEL" : " SET ACTIVE IMG"
+                                    }
+                                </div>
+                            }
                         </div>
                     </CardContent>
                 </Card>

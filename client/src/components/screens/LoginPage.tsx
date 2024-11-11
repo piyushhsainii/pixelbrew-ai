@@ -26,14 +26,14 @@ const LoginPage = () => {
     }, [])
     console.log(user)
     return (
-        <div className="grid min-h-[90vh] grid-cols-1 md:grid-cols-2">
-            <div className="flex items-center justify-center bg-[radial-gradient(circle,_black_60%,_purple_99%)] h-screen">
+        <div className="grid h-screen  grid-cols-1 md:grid-cols-2">
+            <div className="flex items-center justify-center bg-[radial-gradient(circle,_black_60%,_purple_99%)] h-[50vh] md:h-screen">
                 <div className="text-center">
                     <h1 className="mb-4 text-5xl font-bold font-mono text-white">PixelBrew AI</h1>
                     <p className=" text-white opacity-80 font-sans text-base font-semibold">Pixel Perfect Thumbnails, Brewed by AI.</p>
                 </div>
             </div>
-            <div className="flex items-center justify-center bg-gray-100">
+            <div className="flex items-center justify-center bg-gray-100 h-[50vh] md:h-screen">
                 <div className="w-full max-w-md space-y-8 px-4">
                     <div className="text-center">
                         <h2 className="mt-6 text-5xl font-bold text-gray-900 font-sans">Welcome back</h2>

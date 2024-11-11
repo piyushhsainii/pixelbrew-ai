@@ -43,15 +43,7 @@ function App() {
         setUserCompleteInfo(data)
       }
     } catch (error) {
-      // if (window.location.href !== '/profileSetup') {
-      //   window.location.href = '/profileSetup'
-      // }
       navigate('/profileSetup')
-      toast({
-        title: "Could not fetch balance",
-        variant: "default",
-        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-      });
     }
   }
 

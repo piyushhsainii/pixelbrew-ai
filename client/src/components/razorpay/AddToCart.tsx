@@ -4,7 +4,7 @@ import { Plus, Minus, ShoppingCart } from "lucide-react"
 import { Button } from "../ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { useRecoilState } from "recoil"
-import { authUser } from "../../atoms/atoms"
+import { authUser, userCompleteInfo } from "../../atoms/atoms"
 import { BACKEND_URL } from "../../lib/url"
 import axios from "axios"
 import { useToast } from "../../hooks/use-toast"
@@ -35,6 +35,7 @@ export default function AddToCart() {
     const [user, setUser] = useRecoilState(authUser)
     const [totalPrice, setTotalPrice] = useState<Number | null>(null)
     const [loading, setLoading] = useState(false);
+    const [userInfo, setUserInfo] = useRecoilState(userCompleteInfo)
     const [TokenCount, setTokenCount] = useState<any>(0)
     const { toast } = useToast()
     const navigate = useNavigate()
@@ -164,6 +165,7 @@ export default function AddToCart() {
                                 </CardContent>
                                 <CardFooter>
                                     <Button
+                                        disabled={userInfo == null ? true : false}
                                         onClick={() => {
                                             addToCart(token)
                                             setTokenCount((tokenCount) => {

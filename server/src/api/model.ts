@@ -54,6 +54,9 @@ router.post('/generate', async (req: Request, res: any) => {
             }),
         });
         const result = await response.json();
+        if (!result.data[0].url) {
+            return res.json({ error: "Something went wrong generating image" }).status(400)
+        }
         if (result.data && result.data.length > 0) {
             try {
                 const output = await replicate.run(
@@ -72,12 +75,8 @@ router.post('/generate', async (req: Request, res: any) => {
                 console.log(error)
             }
             const updateBalance = await prisma.user.update({
-                where: {
-                    email: email
-                },
-                data: {
-                    balance: userDetail.balance - 1
-                }
+                where: { email: email },
+                data: { balance: userDetail.balance - 1 }
             })
             return res.json({
                 result,
@@ -91,5 +90,5 @@ router.post('/generate', async (req: Request, res: any) => {
     }
 })
 
-
 export default router
+

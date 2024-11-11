@@ -153,16 +153,27 @@ router.post("/api/webhook", async (req: Request, res: any) => {
                         select: { balance: true }
                     })
                     // Add the entry to payments table -
-                    const paymentTableEntry = await prisma.payments.create({
-                        data: {
+                    const paymentTableEntry = await prisma.payments.upsert({
+                        where: { paymentId: payload.payment.entity.id },
+                        create: {
+                            orderID: "",
+                            paymentId: payload.payment.entity.id,
+                            tokensPurchased: Number(payload.payment.entity.amount),
+                            method: payload.payment.entity.method,
+                            userEmail: email,
+                            status: payload.payment.entity.status,
+                            Tokens: JSON.stringify(tokenAmount),
+                        },
+                        update: {
                             orderID: payload.payment.entity.order_id,
                             paymentId: payload.payment.entity.id,
                             tokensPurchased: Number(payload.payment.entity.amount),
                             method: payload.payment.entity.method,
-                            userEmail: email
+                            userEmail: email,
+                            status: payload.payment.entity.status,
+                            Tokens: JSON.stringify(tokenAmount),
                         }
                     })
-
                     return res.json({ success: true, payload, tokenRechargeAmount: rechargeTokens, paymentTableEntry }).status(200)
                 }
                 catch (error) {
@@ -173,7 +184,22 @@ router.post("/api/webhook", async (req: Request, res: any) => {
                     }).status(400)
                 }
             case "payment.failed":
-                await console.log('payment was failed')
+                function extractTokenAmount(description) {
+                    const match = description.match(/\b\d+\b/);
+                    return match ? Number(match[0]) : 0;
+                }
+                const tokenAmount = extractTokenAmount(payload.payment.entity.description)
+                await prisma.payments.create({
+                    data: {
+                        orderID: payload.payment.entity.order_id,
+                        paymentId: payload.payment.entity.id,
+                        tokensPurchased: Number(payload.payment.entity.amount),
+                        method: payload.payment.entity.method,
+                        userEmail: email,
+                        status: payload.payment.entity.status,
+                        Tokens: JSON.stringify(tokenAmount),
+                    }
+                })
                 break;
             default:
                 console.log(`Unhandled event: ${event}`);

@@ -233,36 +233,38 @@ app.post('/updateProfile', async (req: Request, res: any) => {
     }
 })
 
-app.put('/updateLikes', async (req: Request, res: any) => {
+app.put('/updateLikes', async (req: Request, res: Response) => {
     const likes = req.body.likes
     const liked = req.body.isLiked
     const postID = req.body.postID
     const userEmail = req.body.userEmail
     const url = req.body.url
     try {
-        // delete the like
-        if (liked == true) {
+        const userExist = await prisma.user.findUnique({ where: { email: userEmail } })
+        if (userExist == null) { res.status(402).json({ error: "Setup your profile first!" }) }
+        if (userExist !== null && liked == true) {
             await prisma.likes.updateMany({
                 where: { postID: postID },
                 data: { isLiked: false }
             })
-            console.log("update to false")
-        } else {
-            await prisma.likes.create({
+            await prisma.prompt.update({ where: { id: postID }, data: { Likes: likes } })
+            res.json({ success: true }).status(200)
+        }
+        if (userExist !== null && liked == false) {
+            (await prisma.likes.create({
                 data: {
                     isLiked: true,
                     postID: postID,
                     url: url,
                     userEmail: userEmail
                 }
-            })
-            console.log("create the like")
+            }))
+            await prisma.prompt.update({ where: { id: postID }, data: { Likes: likes } })
+            res.json({ success: true }).status(200)
         }
-        // updating likes of the post
-        await prisma.prompt.update({ where: { id: postID }, data: { Likes: likes } })
-        return res.json({ success: true }).status(200)
-    } catch (error) {
-        return res.json({ success: false, error }).status(400)
+    }
+    catch (error) {
+        res.json({ success: false, error }).status(400)
     }
 })
 app.put('/deleteLikes', async (req: Request, res: any) => {
