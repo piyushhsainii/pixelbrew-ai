@@ -319,8 +319,9 @@ export default function ProfileSetup() {
                                         </Tooltip>
                                     </TooltipProvider>
                                 </div>
+
                                 <label
-                                    className="bg-primmaryColor w-full py-2 px-5 text-base font-semibold flex  rounded-md cursor-pointer hover:bg-gray-900 hover:scale-105 transition-all duration-150"
+                                    className="bg-primmaryColor w-full py-2 px-5 text-base font-semibold flex  rounded-md cursor-pointer hover:bg-gray-900  transition-all duration-150"
                                     htmlFor="file-input" >
                                     UPLOAD YOUR IMAGE
                                 </label>
