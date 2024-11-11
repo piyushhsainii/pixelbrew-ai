@@ -4,7 +4,7 @@ import { BACKEND_URL } from "../../lib/url"
 import axios from "axios"
 import { useToast } from "../../hooks/use-toast"
 import { AllImages, userLikes } from "../../lib/interface"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Loader from "../Loader"
 import { useRecoilState } from "recoil"
 import { authUser } from "../../atoms/atoms"
@@ -42,6 +42,9 @@ const Explore = () => {
     return (
         <div className="relative min-h-screen w-full bg-black">
             <div className="relative z-10   py-8">
+                <div className="text-white font-sans text-3xl text-pretty text-center">
+                    EXPLORE IMAGES BREWED BY PIXEL BREW AI
+                </div>
                 {isLoading ? (
                     <div className="flex justify-center items-center min-h-[200px]">
                         <Loader />
@@ -55,7 +58,7 @@ const Explore = () => {
                                     url={image.url}
                                     userInfo={image.user}
                                     likes={image.likes}
-                                    email={userInfo.email}
+                                    email={userInfo?.email ?? null}
                                     setRefresh={setRefresh}
                                     myLikes={userLikes}
                                 />

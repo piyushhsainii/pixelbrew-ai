@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { ApiResponse } from "../lib/interface"
-import { Copy, Download, Info } from "lucide-react"
+import { Copy, Download, Info, SlidersHorizontal } from "lucide-react"
 import { HashLoader } from "react-spinners"
 import { useRecoilState } from "recoil"
 import { authUser, Balance, userImageLink } from "../atoms/atoms"
 import { BACKEND_URL } from "../lib/url"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../hooks/use-toast"
-import { Switch } from "./ui/switch"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
+
 import DownloadButton from "./DownloadBtn"
 import SuggestionCard from "./SuggestionCard"
+import SearchBar from "./ImageGeneration/SearchBar"
 
-type MagicPrompt = "ON" | "OFF" | "AUTO"
+export type MagicPrompt = "ON" | "OFF" | "AUTO"
 
 const ImageGenerationComponent = () => {
 
@@ -182,93 +182,75 @@ const ImageGenerationComponent = () => {
         getUserDetails()
     }, [Response])
     return (
-        <div className='flex justify-stretch bg-black min-h-[100vh] h-full '>
+        <div className='flex justify-stretch bg-black min-h-[100vh] h-full  w-screen font-sans'>
             <div className='w-[250px] hidden border-r border-secondaryColor border-opacity-45 mt-8 md:flex flex-col p-4 gap-5'>
                 <div className="text-gray-400 font-sans text-center ">
                     MODIFY PARAMETERS
                 </div>
-                <select
-                    className='p-2 bg-primmaryColor text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
-                    value={styleType}
-                    onChange={(e) => setstyleType(e.target.value)}
-                >
-                    <option value="GENERAL">GENERAL</option>
-                    <option value="REALISTIC">REALISTIC</option>
-                    <option value="DESIGN">DESIGN</option>
-                    <option value="RENDER_3D">RENDER_3D</option>
-                    <option value="ANIME">ANIME</option>
-                </select>
-                <select
-                    className='p-2 bg-primmaryColor text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
-                    value={ModelVersion}
-                    onChange={(e) => setModelVersion(e.target.value)}
-                >
-                    <option value="V_1">V_1</option>
-                    <option value="V_1_TURBO">V_1_TURBO</option>
-                    <option value="V_2">V_2</option>
-                    <option value="V_2_TURBO">V_2_TURBO</option>
-                </select>
-                <select
-                    className='p-2 bg-primmaryColor text-gray-200 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
-                    value={AspectRatio}
-                    onChange={(e) => setAspectRatio(e.target.value)}
-                >
-                    <option className="text-gray-200" value="ASPECT_16_9">ASPECT_16_9</option>
-                    <option className="text-gray-200" value="ASPECT_16_10">ASPECT_16_10</option>
-                    <option className="text-gray-200" value="ASPECT_10_16">ASPECT_10_16</option>
-                    <option className="text-gray-200" value="ASPECT_1_1">ASPECT_1_1</option>
-                    <option className="text-gray-200" value="ASPECT_1_3">ASPECT_1_3</option>
-                    <option className="text-gray-200" value="ASPECT_2_3">ASPECT_2_3</option>
-                    <option className="text-gray-200" value="ASPECT_3_1">ASPECT_3_1</option>
-                    <option className="text-gray-200" value="ASPECT_3_2">ASPECT_3_2</option>
-                    <option className="text-gray-200" value="ASPECT_3_4">ASPECT_3_4</option>
-                    <option className="text-gray-200" value="ASPECT_4_3">ASPECT_4_3</option>
-                    <option className="text-gray-200" value="ASPECT_9_16">ASPECT_9_16</option>
-                </select>
+                <div className="text-gray-300 font-sans text-base text-center">
+                    <div className="my-1">CONFIGURE IMAGE TYPE</div>
+                    <select
+                        className='p-2 bg-primmaryColor shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
+                        value={styleType}
+                        onChange={(e) => setstyleType(e.target.value)}
+                    >
+                        <option value="GENERAL">GENERAL</option>
+                        <option value="REALISTIC">REALISTIC</option>
+                        <option value="DESIGN">DESIGN</option>
+                        <option value="RENDER_3D">RENDER_3D</option>
+                        <option value="ANIME">ANIME</option>
+                    </select>
+                </div>
+                <div className="text-gray-300 font-sans text-base text-center">
+                    <div className="my-1 " >SELECT MODEL</div>
+                    <select
+                        className='p-2 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 bg-primmaryColor text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
+                        value={ModelVersion}
+                        onChange={(e) => setModelVersion(e.target.value)}
+                    >
+                        <option value="V_1">V_1</option>
+                        <option value="V_1_TURBO">V_1_TURBO</option>
+                        <option value="V_2">V_2</option>
+                        <option value="V_2_TURBO">V_2_TURBO</option>
+                    </select>
+                </div>
+                <div className="text-gray-300 font-sans text-base text-center">
+                    <div className="my-1">ASPECT RATIO</div>
+                    <select
+                        className='p-2 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 bg-primmaryColor text-gray-200 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
+                        value={AspectRatio}
+                        onChange={(e) => setAspectRatio(e.target.value)}
+                    >
+                        <option className="text-gray-200" value="ASPECT_16_9">ASPECT_16_9</option>
+                        <option className="text-gray-200" value="ASPECT_16_10">ASPECT_16_10</option>
+                        <option className="text-gray-200" value="ASPECT_10_16">ASPECT_10_16</option>
+                        <option className="text-gray-200" value="ASPECT_1_1">ASPECT_1_1</option>
+                        <option className="text-gray-200" value="ASPECT_1_3">ASPECT_1_3</option>
+                        <option className="text-gray-200" value="ASPECT_2_3">ASPECT_2_3</option>
+                        <option className="text-gray-200" value="ASPECT_3_1">ASPECT_3_1</option>
+                        <option className="text-gray-200" value="ASPECT_3_2">ASPECT_3_2</option>
+                        <option className="text-gray-200" value="ASPECT_3_4">ASPECT_3_4</option>
+                        <option className="text-gray-200" value="ASPECT_4_3">ASPECT_4_3</option>
+                        <option className="text-gray-200" value="ASPECT_9_16">ASPECT_9_16</option>
+                    </select>
+                </div>
+
+            </div>
+            <div className="text-white bg-black fixed right-4 mt-5 md:hidden">
+                <SlidersHorizontal className="border-purple-700 border-2 rounded-lg" size={33} />
             </div>
             <div className='bg-black w-[100%] p-4  '>
-                <div className='border-purple-800 border border-opacity-60 rounded-3xl py-[0.95px] w-[85%] m-auto flex flex-col  md:flex-row justify-between my-4'>
-                    <div className=" flex items-center mx-3">
-                        <TooltipProvider>
-                            <Tooltip delayDuration={200}>
-                                <TooltipTrigger>
-                                    <div className="text-[0.77rem] flex gap-1 items-baseline text-gray-400 relative"
-                                        onClick={toggleMagicPromptState}
-                                    >
-                                        <Switch className=" mr-3" />    <Info size={14} className="absolute mt-[0.35rem] ml-10" />
-                                    </div>
-                                </TooltipTrigger>
-                                <TooltipContent className="h-[90px] w-[180px] bg-slate-100 border-white border border-opacity-30">
-                                    <div className="text-primmaryColor font-sans text-center font-bold text-[0.900rem]"> MAGIC PROMPT </div>
-                                    <div className="text-primmaryColor font-sans text-center my-2 mb-4">
-                                        turning this on will enhance your prompt with <span className="font-mono">pixelbrew AI</span>
-                                    </div>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    </div>
-                    <textarea
-                        className='bg-black  w-[100%] pl-3 rounded-3xl font-sans focus:outline-none active:outline-none text-gray-300
-                         p-3 resize-none'
-                        ref={textareaRef}
-                        placeholder='Describe what you want to see...'
-                        value={Input}
-                        rows={1}
-                        onChange={handleInputChange}
-                    ></textarea>
-                    <button
-                        className='bg-gradient-to-r  max-h-[55px] font-semibold text-white 
-                    from-blue-600 to-purple-600 px-10  rounded-3xl py-2 hover:scale-x-[120%]
-                    hover:scale-110 transition-all duration-200 active:scale-90 font-sans text-lg border
-                     border-blue-800
-                    '
-                        onClick={generateImage}
-                    >
-
-                        {isLoading ? "Generating..." : "Generate"}
-                    </button>
-                </div>
+                <SearchBar
+                    toggleMagicPromptState={toggleMagicPromptState}
+                    textareaRef={textareaRef}
+                    handleInputChange={handleInputChange}
+                    generateImage={generateImage}
+                    isLoading={isLoading}
+                    Input={Input}
+                    isMagicPromptOn={isMagicPromptOn}
+                />
                 {
+                    !isLoading &&
                     <SuggestionCard generate={generateImage} setInput={setInput} />
                 }
                 {

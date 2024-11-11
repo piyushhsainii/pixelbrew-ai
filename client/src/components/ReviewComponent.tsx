@@ -44,14 +44,8 @@ const ReviewComponent = ({ user }: { user: any }) => {
 
     return (
         <form onSubmit={addReview}>
-            <section className="bg-black py-5 h-[45vh] w-full flex justify-evenly items-center">
-                <div>
-                    <div className="text-white bg-black flex justify-center items-center text-2xl font-sans"> YOUR FEEDBACK TRULY MATTERS TO US </div>
-                    <button
-                        className="text-white m-auto px-8 py-2 rounded-xl mt-4 flex justify-center font-semibold hover:scale-110 active:scale-90 bg-purple-800 items-center text-pretty font-sans transition-all duration-200">
-                        ADD MY REVIEW
-                    </button>
-                </div>
+            <section className=" py-5 h-[45vh]  flex flex-col md:flex-row w-full px-10 bg-black justify-evenly items-center">
+
                 <div className="flex flex-col text-white items-center justify-center font-sans text-pretty">
                     <div className="">
                         <div className='font-mono p-2'> Let us know what you think about Pixel Brew ai? </div>
@@ -69,6 +63,14 @@ const ReviewComponent = ({ user }: { user: any }) => {
                         />
 
                     </div>
+                </div>
+                <div className=' flex justify-center flex-col items-center my-4'>
+                    <div className="text-white bg-black flex justify-center items-center  text-center  text-pretty text-2xl font-sans"> YOUR FEEDBACK TRULY MATTERS TO US </div>
+                    <button
+                        type='submit'
+                        className="px-4 py-2  bg-purple-700 flex justify-center m-auto items-center my-5 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-white  shadow-[3px_4px_4px_[1]px_rgba(2,4,4,0.4)] hover:scale-110">
+                        ADD MY REVIEW
+                    </button>
                 </div>
 
             </section>

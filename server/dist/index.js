@@ -248,31 +248,33 @@ app.put('/updateLikes', (req, res) => __awaiter(void 0, void 0, void 0, function
     const userEmail = req.body.userEmail;
     const url = req.body.url;
     try {
-        // delete the like
-        if (liked == true) {
+        const userExist = yield db_1.default.user.findUnique({ where: { email: userEmail } });
+        if (userExist == null) {
+            res.status(402).json({ error: "Setup your profile first!" });
+        }
+        if (userExist !== null && liked == true) {
             yield db_1.default.likes.updateMany({
                 where: { postID: postID },
                 data: { isLiked: false }
             });
-            console.log("update to false");
+            yield db_1.default.prompt.update({ where: { id: postID }, data: { Likes: likes } });
+            res.json({ success: true }).status(200);
         }
-        else {
-            yield db_1.default.likes.create({
+        if (userExist !== null && liked == false) {
+            (yield db_1.default.likes.create({
                 data: {
                     isLiked: true,
                     postID: postID,
                     url: url,
                     userEmail: userEmail
                 }
-            });
-            console.log("create the like");
+            }));
+            yield db_1.default.prompt.update({ where: { id: postID }, data: { Likes: likes } });
+            res.json({ success: true }).status(200);
         }
-        // updating likes of the post
-        yield db_1.default.prompt.update({ where: { id: postID }, data: { Likes: likes } });
-        return res.json({ success: true }).status(200);
     }
     catch (error) {
-        return res.json({ success: false, error }).status(400);
+        res.json({ success: false, error }).status(400);
     }
 }));
 app.put('/deleteLikes', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

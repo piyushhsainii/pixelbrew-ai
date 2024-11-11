@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 
 const data = [
     {
@@ -17,21 +18,45 @@ const data = [
 
 const SuggestionCard = ({ generate, setInput }: { generate: any, setInput: React.Dispatch<React.SetStateAction<string>> }) => {
     return (
-        <div className="flex flex-wrap  w-[65vw] gap-4  m-auto ">
-            {
-                data && data.map((data, index) => (
-                    <div
-                        key={index}
-                        className="border-purple-700 flex flex-col  justify-between border text-white w-[380px] p-4 rounded-xl hover:bg-purple-700 hover:bg-opacity-40 " >
-                        <div className="font-sans"> {data.name} </div>
-                        <div className="font-sans text-[0.800rem] my-2"> {data.body} </div>
-                        <button className="flex justify-end  ">
-                            <ArrowRight size={35} className="hover:bg-purple-700 rounded-full mx-2 p-1  cursor-pointer " />
-                        </button>
-                    </div>
-                ))
-            }
-        </div>
+        <>
+            <div className="flex flex-wrap  justify-center w-[65vw] max-w-[1400px] gap-4  m-auto  ">
+                {
+                    data && data.map((data, index) => (
+                        <div
+                            key={index}
+                            className="border-purple-700 hidden md:flex flex-col shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 transition-all duration-200 cursor-pointer  justify-between border text-white w-[380px] p-4 rounded-xl hover:bg-purple-700 hover:bg-opacity-70 " >
+                            <div className="font-sans"> {data.name} </div>
+                            <div className="font-sans text-[0.800rem] my-2"> {data.body} </div>
+                            <button className="flex justify-end  ">
+                                <ArrowRight size={35} className="hover:bg-purple-700 rounded-full mx-2 p-1  cursor-pointer " />
+                            </button>
+                        </div>
+                    ))
+                }
+            </div>
+            <div className=" text-white h-[400px] flex items-center justify-center mt-20 md:hidden">
+                <Carousel className="w-[80vw] flex items-center" orientation="vertical">
+                    <CarouselPrevious />
+                    <CarouselContent className=" m-auto h-[400px]">
+                        {data && data.map((data, index) => (
+                            <CarouselItem className=" flex items-center mx-8">
+                                <div
+                                    key={index}
+                                    className="border-purple-700 p-5 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 flex flex-col transition-all duration-200 cursor-pointer  justify-between border text-white  rounded-xl hover:bg-purple-700 hover:bg-opacity-70 " >
+                                    <div className="font-sans"> {data.name} </div>
+                                    <div className="font-sans text-[0.800rem] my-2"> {data.body} </div>
+                                    <div className="flex justify-end  ">
+                                        <ArrowRight size={35} className="hover:bg-purple-700 rounded-full mx-2 p-1  cursor-pointer " />
+                                    </div>
+                                </div>
+                            </CarouselItem>
+                        ))
+                        }
+                    </CarouselContent>
+                    <CarouselNext />
+                </Carousel>
+            </div>
+        </>
     )
 }
 

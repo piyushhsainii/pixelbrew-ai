@@ -12,6 +12,7 @@ import {
     DialogTrigger,
 } from "../components/ui/dialog"
 import { userLikes } from '../lib/interface'
+import { useNavigate } from 'react-router-dom'
 
 
 const ImageCard = (
@@ -20,7 +21,10 @@ const ImageCard = (
 
     const { toast } = useToast()
     const isPostLiked = myLikes.filter((like) => like.isLiked == true && like.postID == image.id)
+    const navigate = useNavigate()
+
     const updateLikeCount = async (image, likes) => {
+        if (email == null) return
         try {
             const updateLikes = await axios.put(`${BACKEND_URL}/updateLikes`, {
                 likes: isPostLiked.length > 0 ? image.Likes - 1 : image.Likes + 1,              //add like or remove like based on current status
@@ -29,6 +33,8 @@ const ImageCard = (
                 userEmail: email,
                 url: image.url
             })
+            console.log(updateLikes.status)
+
             if (updateLikes.status == 200) {
                 toast({
                     title: "Added your liked posts",
@@ -38,12 +44,16 @@ const ImageCard = (
                 setRefresh(updateLikes)
             }
         } catch (error) {
-            console.log(error)
-            toast({
-                title: "Something went wrong, please try again",
-                variant: "default",
-                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-            });
+            if (error.response.status == 402) {
+                toast({
+                    title: "Setup your profile to add likes",
+                    variant: "default",
+                    className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                })
+                setTimeout(() => {
+                    navigate('/profileSetup')
+                }, 3000)
+            }
         }
     }
     const formattedDate = new Date(image.createdAt).toLocaleString()
@@ -57,7 +67,6 @@ const ImageCard = (
                         className='h-[100%] object-cover '
                     />
                 </DialogTrigger>
-
                 <DialogContent className='bg-black   rounded-lg border-none text-white font-sans min-w-[40vw] max-w-[70vw] min-h-[45vh] max-h-[65vh]'>
                     <DialogHeader>
                         <DialogTitle>
@@ -105,7 +114,7 @@ const ImageCard = (
                                 onClick={() => updateLikeCount(image, likes)}
                                 size={17}
                                 color={` red `}
-                                className={`mt-[0.1rem]  duration-150 transition-all ${isPostLiked.length > 0 ? 'fill-red-600' : ''} hover:fill-red-600 hover:scale-105 active:scale-90 `} />
+                                className={`mt-[0.1rem]  duration-150 transition-all ${email && isPostLiked.length > 0 ? 'fill-red-600' : ''} hover:fill-red-600 hover:scale-105 active:scale-90 `} />
                         </span>
                     </div>
                 </div>
