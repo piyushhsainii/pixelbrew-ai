@@ -51,7 +51,7 @@ const ReviewComponent = ({ user }: { user: any }) => {
                         <div className=' font-sans p-2 tracking-tighter'> LET US KNOW WHAT YOU THINK ABOUT PIXEL BREW AI? </div>
                         <Textarea
                             required={true}
-                            placeholder='LET US KNOW WHAT YOU THINK ABOUT PIXEL BREW AI?  '
+                            placeholder='Let us know what you think about PixelBrew AI '
                             onChange={(e) => setReview(e.target.value)}
                             className="bg-black border max-w-[500px] hover:scale-100 text-white border-purple-800 resize-none rounded-2xl"
                         />
@@ -59,7 +59,7 @@ const ReviewComponent = ({ user }: { user: any }) => {
                         <Textarea
                             onChange={(e) => setReview2(e.target.value)}
                             className="bg-black border max-w-[500px] hover:scale-100 text-white border-purple-800 resize-none rounded-2xl"
-                            placeholder='YOUR HONEST FEEDBACK TRULY MATTERS TO US!'
+                            placeholder='Your Honest Feedback truly matters to us!'
                         />
 
                     </div>

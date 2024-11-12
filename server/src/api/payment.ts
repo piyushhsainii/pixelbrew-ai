@@ -135,12 +135,13 @@ router.post("/api/webhook", async (req: Request, res: any) => {
     if (isValid) {
         const { event, payload } = req.body;
         console.log(payload)
-        const email = payload.payment.entity.email
         switch (event) {
             case "payment.authorized":
                 await console.log('payment was authorised')
                 break;
             case "payment.captured":
+                const email = payload.payment.entity.email
+
                 try {
                     function extractTokenAmount(description) {
                         const match = description.match(/\b\d+\b/);
@@ -184,6 +185,7 @@ router.post("/api/webhook", async (req: Request, res: any) => {
                     }).status(400)
                 }
             case "payment.failed":
+
                 function extractTokenAmount(description) {
                     const match = description.match(/\b\d+\b/);
                     return match ? Number(match[0]) : 0;
