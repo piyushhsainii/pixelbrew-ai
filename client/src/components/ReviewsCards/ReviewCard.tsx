@@ -16,12 +16,11 @@ export const ReviewCard = ({
         <>
             <figure
                 className={cn(
-                    "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
-                    // Adjusted styles for black theme
-                    "border-gray-800 bg-purple-900 shadow-sm shadow-white hover:bg-black text-white"
+                    "relative w-64 cursor-pointer overflow-hidden rounded-xl border border-slate-400 p-4",
+                    " bg-purple-900  hover:bg-black text-white"
                 )}
             >
-                <div className="flex flex-row items-center gap-2 font-sans mb-2 ">
+                <div className="flex flex-row items-center gap-2 font-sans mb-2">
                     <img className="rounded-full" width="28" height="32" alt="" src={img} />
                     <div className="flex flex-col">
                         <figcaption className="text-sm font-medium text-white">

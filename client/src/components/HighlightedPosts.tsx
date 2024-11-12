@@ -47,7 +47,7 @@ const reviews2 = [
     },
 ];
 
-export function HighlightedPosts({ reviews, topPosts }: { reviews: AllReviews[], topPosts: TopPosts[] }) {
+export function HighlightedPosts({ topPosts }: { topPosts: TopPosts[] }) {
     return (
         <div className="relative flex  w-full flex-col items-center justify-center overflow-hidden  bg-black md:shadow-xl">
             {
@@ -65,22 +65,6 @@ export function HighlightedPosts({ reviews, topPosts }: { reviews: AllReviews[],
                     </BlurFade>
                 </>
             }
-            {
-                reviews &&
-                <>
-                    <div className="text-white font-sans text-xl font-semibold my-4">
-                        WHAT USERS THINK ABOUT PIXEL BREW AI?
-                    </div>
-                    <BlurFade inView className="">
-                        <Marquee pauseOnHover className="[--duration:10s]">
-                            {reviews?.map((review) => (
-                                <ReviewCard key={review.id} body={review.review} img={review.user.avatar_url} name={review.user.name} username={""} />
-                            ))}
-                        </Marquee>
-                    </BlurFade>
-                </>
-            }
-
             <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-black"></div>
             <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-black"></div>
         </div>

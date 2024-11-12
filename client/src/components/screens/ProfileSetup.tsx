@@ -218,29 +218,6 @@ export default function ProfileSetup() {
             });
         }
     }
-    // const fetchUserDetails = async () => {
-    //     try {
-    //         const { data } = await axios.post(`${BACKEND_URL}/getUserDetails`, {
-    //             email: user.user_metadata.email
-    //         })
-    //         console.log(data)
-    //         if (data) {
-    //             setUsername(data.user.name)
-    //             setImageLink(data.user.trainingImg)
-    //             setUserAbout(data.user.about)
-    //             setName(data.user.name)
-    //             setImage(data.user.trainingImg)
-    //             setAbout(data.user.about)
-    //         }
-    //     } catch (error) {
-    //         toast({
-    //             title: "Setup your profile to use Pixelbrew AI",
-    //             variant: "default",
-    //             className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-    //         });
-    //     }
-    // }
-    console.log(UserInfo)
 
     const setActiveImageHandler = async (likedImgs, index) => {
         try {
@@ -383,7 +360,7 @@ export default function ProfileSetup() {
                                 </Carousel> :
                                 <>
                                     <div className="border-white border-2 rounded-3xl   w-full md:w-[130px] h-[100px] md:h-[100px] flex-shrink-0">
-                                        {UserInfo?.user.trainingImg ?
+                                        {UserInfo?.user.trainingImg || image ?
                                             <img src={UserInfo?.user.trainingImg} className="w-full h-full object-cover rounded-3xl" /> :
                                             <div className="text-pretty flex justify-center items-center ml-4 mt-2">
                                                 Your training Image will appear here.

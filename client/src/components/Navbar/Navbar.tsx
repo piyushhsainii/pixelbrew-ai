@@ -34,7 +34,7 @@ const Navbar = ({ balance }: { balance: Number }) => {
     }
     return (
         <>
-            <div className=' flex justify-between w-full border-b border-secondaryColor border-opacity-40 bg-black'>
+            <div className=' flex justify-between w-full border-b border-secondaryColor border-opacity-40 bg-black fixed top-0 z-[100]'>
                 <div className="flex items-center gap-10" >
                     <Link to={'/'}>
                         <div className="text-white p-4 font-normal md:text-xl lg:text-xl select-none font-mono">

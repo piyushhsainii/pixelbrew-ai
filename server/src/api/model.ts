@@ -1,4 +1,4 @@
-import { Request, Router } from "express";
+import { Request, Response, Router } from "express";
 import prisma from "../db";
 import Replicate from "replicate";
 import dotenv from "dotenv"
@@ -10,7 +10,7 @@ const replicate = new Replicate({
     auth: process.env.REPLICATION_TOKEN,
 })
 
-router.post('/generate', async (req: Request, res: any) => {
+router.post('/generate', async (req: Request, res: Response) => {
     const body = req.body
     try {
         const input = body.input
@@ -26,12 +26,12 @@ router.post('/generate', async (req: Request, res: any) => {
             }
         })
         if (userDetail == null) {
-            return res.json({
+            res.json({
                 error: "Failed to fetch user"
             }).status(400)
         }
         if (userDetail.balance == 0) {
-            return res.json({
+            res.json({
                 error: "Please buy credits to generate Images"
             }).status(400)
         }
@@ -49,13 +49,12 @@ router.post('/generate', async (req: Request, res: any) => {
                     "model": model_version,
                     "style_type": style_type,
                     "magic_prompt_option": magic_Prompt,
-
                 }
             }),
         });
         const result = await response.json();
         if (!result.data[0].url) {
-            return res.json({ error: "Something went wrong generating image" }).status(400)
+            res.json({ error: "Something went wrong generating image" }).status(400)
         }
         if (result.data && result.data.length > 0) {
             try {
@@ -70,23 +69,24 @@ router.post('/generate', async (req: Request, res: any) => {
                 );
                 result.data[0].url = output;
                 console.log(output, "replicate response")
-
+                const updateBalance = await prisma.user.update({
+                    where: { email: email },
+                    data: { balance: userDetail.balance - 1 }
+                })
+                res.json({
+                    result,
+                    balance: updateBalance.balance
+                })
             } catch (error) {
                 console.log(error)
             }
-            const updateBalance = await prisma.user.update({
-                where: { email: email },
-                data: { balance: userDetail.balance - 1 }
-            })
-            return res.json({
-                result,
-                balance: updateBalance.balance
-            })
+
+
         }
     }
     catch (error) {
         console.error(error);
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
 
