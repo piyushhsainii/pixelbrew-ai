@@ -156,7 +156,7 @@ router.post("/api/webhook", async (req: Request, res: any) => {
                     const paymentTableEntry = await prisma.payments.upsert({
                         where: { paymentId: payload.payment.entity.id },
                         create: {
-                            orderID: "",
+                            orderID: payload.payment.entity.order_id,
                             paymentId: payload.payment.entity.id,
                             tokensPurchased: Number(payload.payment.entity.amount),
                             method: payload.payment.entity.method,

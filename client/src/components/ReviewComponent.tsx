@@ -48,14 +48,14 @@ const ReviewComponent = ({ user }: { user: any }) => {
 
                 <div className="flex flex-col text-white items-center justify-center font-sans text-pretty">
                     <div className="">
-                        <div className='font-mono p-2'> Let us know what you think about Pixel Brew ai? </div>
+                        <div className=' font-sans p-2'> Let us know what you think about Pixel Brew ai? </div>
                         <Textarea
                             required={true}
                             placeholder='Let us know what you think about Pixel Brew ai? '
                             onChange={(e) => setReview(e.target.value)}
                             className="bg-black border max-w-[500px] hover:scale-100 text-white border-purple-800 resize-none rounded-2xl"
                         />
-                        <div className='font-mono p-2'> How can we make it better? </div>
+                        <div className=' font-sans p-2'> How can we make it better? </div>
                         <Textarea
                             onChange={(e) => setReview2(e.target.value)}
                             className="bg-black border max-w-[500px] hover:scale-100 text-white border-purple-800 resize-none rounded-2xl"

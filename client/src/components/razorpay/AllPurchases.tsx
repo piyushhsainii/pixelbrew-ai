@@ -24,7 +24,7 @@ const AllPurchases = () => {
                 </div>
             </div> :
             userPayments ?
-                <div className="bg-black text-white font-sans">
+                <div className="bg-black text-white font-sans mt-16">
                     <Table className="font-sans text-white">
                         <TableCaption>A list of your recent invoices.</TableCaption>
                         <TableHeader >
@@ -42,7 +42,8 @@ const AllPurchases = () => {
                                     <TableCell className="font-sans text-base  text-white">
                                         {paymentInfo.status == "captured" ?
                                             <span className="text-green-400 font-semibold"> Paid </span> :
-                                            <span className="font-semibold"> {paymentInfo.status} </span>}
+                                            <span className={`font-semibold ${paymentInfo.status == "failed" ? "text-red-500" : ""}`}> {paymentInfo.status} </span>
+                                        }
                                     </TableCell>
                                     <TableCell className="font-sans text-base  text-white">{paymentInfo.method}</TableCell>
                                     <TableCell className="font-sans text-base text-white font-semibold" > ₹{(paymentInfo.tokensPurchased / 100).toString()}</TableCell>

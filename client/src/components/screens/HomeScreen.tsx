@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../lib/url";
 import axios from "axios";
 import { AllReviews, TopPosts } from "../../lib/interface";
+import Testimonials from "../Testimonials";
+import WhyPixelBrewAI from "../WhyPixelBrew";
 
 export function LandingPage() {
     const [user, setUser] = useRecoilState(authUser)
@@ -61,8 +63,10 @@ export function LandingPage() {
                 <div>
                 </div>
             </div>
-            <HighlightedPosts reviews={reviews} topPosts={topPosts} />
+            <HighlightedPosts topPosts={topPosts} />
+            <WhyPixelBrewAI />
             <HowItWorks />
+            <Testimonials reviews={reviews} />
             <ReviewComponent user={user} />
         </>
     );
