@@ -17,8 +17,7 @@ export const TopPostCard = ({
         <>
             <figure
                 className={cn(
-                    "relative w-72 cursor-pointer overflow-hidden rounded-xl border p-4",
-                    // Adjusted styles for black theme
+                    "relative w-96 cursor-pointer overflow-hidden rounded-xl border p-4",
                     "border-gray-800 bg-purple-900 hover:bg-black text-white"
                 )}
             >
@@ -33,7 +32,7 @@ export const TopPostCard = ({
                         </div>
                     </div>
                 </div>
-                <img src={body} className="mt-2 text-sm text-gray-200  font-sans rounded-lg border-2 border-black" />
+                <img src={body} className="mt-2 text-sm text-gray-200  font-sans rounded-lg border-2 border-white" />
             </figure>
         </>
     );

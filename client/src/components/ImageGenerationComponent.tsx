@@ -19,7 +19,7 @@ export type MagicPrompt = "ON" | "OFF" | "AUTO"
 const ImageGenerationComponent = () => {
 
     const [Input, setInput] = useState<string>("")
-    const [styleType, setstyleType] = useState<string>('GENERAL')
+    const [styleType, setstyleType] = useState<string>('REALISTIC')
     const [ModelVersion, setModelVersion] = useState<string>('V_2')
     const [AspectRatio, setAspectRatio] = useState<string>('ASPECT_16_9')
     const [isMagicPromptOn, setIsMagicPromptOn] = useState<MagicPrompt>('OFF')
@@ -212,7 +212,7 @@ const ImageGenerationComponent = () => {
                     Input={Input}
                     isMagicPromptOn={isMagicPromptOn}
                 />
-                {!isLoading && !Response.data &&
+                {!isLoading && !Response?.data &&
                     (<>
                         <div className="text-purple-400 text-sm flex justify-center mb-1 tracking-tight">
                             not sure how to prompt? try these!
