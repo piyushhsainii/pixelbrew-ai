@@ -27,7 +27,7 @@ const Navbar = ({ balance }: { balance: Number }) => {
         toast({
             title: "Successfully logged out!",
             variant: "default",
-            className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            className: "bg-primmaryColor text-white font-sans tracking-wider border-gray-800 border",
 
         });
         navigate('/')
@@ -37,7 +37,7 @@ const Navbar = ({ balance }: { balance: Number }) => {
             <div className=' flex justify-between w-full border-b border-secondaryColor border-opacity-40 bg-black fixed top-0 z-[100]'>
                 <div className="flex items-center gap-10" >
                     <Link to={'/'}>
-                        <div className="text-white p-4 font-normal md:text-xl lg:text-xl select-none font-mono">
+                        <div className="text-white p-4 font-normal md:text-xl lg:text-xl select-none font-sans tracking-wider">
                             <span className="inline-block transition-all duration-300 hover:shadow-[0_0_20px_rgba(125,34,190,0.6)]">
                                 Pixel Brew AI
                             </span>
@@ -45,25 +45,25 @@ const Navbar = ({ balance }: { balance: Number }) => {
 
                     </Link>
                     <Link to={'/explore'} >
-                        <div className="text-white font-mono hidden sm:flex gap-1 cursor-pointer hover:text-purple-400">
+                        <div className="text-white font-sans tracking-wider hidden sm:flex gap-1 cursor-pointer hover:text-purple-400">
                             <Globe color="purple" width={18} />  Explore
                         </div>
                     </Link>
                     {userInfo !== null &&
                         <Link to={'/myImages'} className="hidden md:block" >
-                            <div className="text-white font-mono flex gap-1 cursor-pointer hover:text-purple-400">
+                            <div className="text-white font-sans tracking-wider flex gap-1 cursor-pointer hover:text-purple-400">
                                 <Image color="purple" width={18} /> My Images
 
                             </div>
                         </Link>}
                     <Link to={'/shop'} className="hidden md:block">
-                        <div className="text-white font-mono flex gap-1 cursor-pointer hover:text-purple-400">
+                        <div className="text-white font-sans tracking-wider flex gap-1 cursor-pointer hover:text-purple-400">
                             <IndianRupee color="purple" width={18} />  Pricing
                         </div>
                     </Link>
                     <Dialog >
                         <DialogTrigger className="hidden md:block">
-                            <div className="text-white font-mono flex gap-1 items-center cursor-pointer hover:text-purple-400">
+                            <div className="text-white font-sans tracking-wider flex gap-1 items-center cursor-pointer hover:text-purple-400">
                                 <QuestionMarkIcon color="purple" width={20} />  How it Works?
                             </div>
                         </DialogTrigger>
@@ -82,34 +82,34 @@ const Navbar = ({ balance }: { balance: Number }) => {
                                 <div className="">
                                     <div className="flex flex-col items-center gap-10" >
                                         <a href={'/'} onClick={() => setSheetOpen((v) => !v)}>
-                                            <div className="text-white p-4 font-normal md:text-xl lg:text-xl select-none font-mono">
+                                            <div className="text-white p-4 font-normal md:text-xl lg:text-xl select-none font-sans tracking-wider">
                                                 <span className="inline-block transition-all duration-300 hover:shadow-[0_0_20px_rgba(125,34,190,0.6)]">
                                                     Pixel Brew AI
                                                 </span>
                                             </div>
                                         </a>
                                         <a href={'/explore'} onClick={() => setSheetOpen((v) => !v)}>
-                                            <div className="text-white font-mono flex gap-1 cursor-pointer hover:text-purple-400">
+                                            <div className="text-white font-sans tracking-wider flex gap-1 cursor-pointer hover:text-purple-400">
                                                 <Globe color="purple" width={18} />  Explore
                                             </div>
                                         </a>
                                         {
                                             userInfo !== null &&
                                             <a href={'/myImages'} className="" onClick={() => setSheetOpen((v) => !v)}>
-                                                <div className="text-white font-mono flex gap-1 cursor-pointer hover:text-purple-400">
+                                                <div className="text-white font-sans tracking-wider flex gap-1 cursor-pointer hover:text-purple-400">
                                                     <Image color="purple" width={18} /> My Images
 
                                                 </div>
                                             </a>
                                         }
                                         <a href={'/shop'} className="" onClick={() => setSheetOpen((v) => !v)}>
-                                            <div className="text-white font-mono flex gap-1 cursor-pointer hover:text-purple-400">
+                                            <div className="text-white font-sans tracking-wider flex gap-1 cursor-pointer hover:text-purple-400">
                                                 <IndianRupee color="purple" width={18} />  Pricing
                                             </div>
                                         </a>
                                         <Dialog >
                                             <DialogTrigger className="" onClick={() => setSheetOpen((v) => !v)}>
-                                                <div className="text-white font-mono flex gap-1 items-center cursor-pointer hover:text-purple-400">
+                                                <div className="text-white font-sans tracking-wider flex gap-1 items-center cursor-pointer hover:text-purple-400">
                                                     <QuestionMarkIcon color="purple" width={20} />  How it Works?
                                                 </div>
                                             </DialogTrigger>

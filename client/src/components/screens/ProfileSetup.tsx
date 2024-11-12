@@ -177,7 +177,7 @@ export default function ProfileSetup() {
 
             });
             window.location.reload()
-            setTimeout(() => { navigate('/generate') }, 1200)
+            setTimeout(() => { window.location.href = '/generate' }, 2000)
 
         } catch (error) {
             setupdatingProfile(false)
@@ -361,7 +361,7 @@ export default function ProfileSetup() {
                                 <>
                                     <div className="border-white border-2 rounded-3xl   w-full md:w-[130px] h-[100px] md:h-[100px] flex-shrink-0">
                                         {UserInfo?.user.trainingImg || image ?
-                                            <img src={UserInfo?.user.trainingImg} className="w-full h-full object-cover rounded-3xl" /> :
+                                            <img src={UserInfo?.user.trainingImg ?? image} className="w-full h-full object-cover rounded-3xl" /> :
                                             <div className="text-pretty flex justify-center items-center ml-4 mt-2">
                                                 Your training Image will appear here.
                                             </div>

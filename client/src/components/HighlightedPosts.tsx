@@ -53,11 +53,11 @@ export function HighlightedPosts({ topPosts }: { topPosts: TopPosts[] }) {
             {
                 topPosts &&
                 <>
-                    <div className="text-white font-sans text-2xl font-semibold my-4">
+                    <div className="text-white font-sans text-3xl font-semibold my-4 tracking-tight">
                         TOP POSTS
                     </div>
-                    <BlurFade inView className="">
-                        <Marquee reverse pauseOnHover className="[--duration:50s]">
+                    <BlurFade inView className="mt-5">
+                        <Marquee reverse pauseOnHover className="[--duration:22s]">
                             {topPosts?.map((review) => (
                                 <TopPostCard key={review.id} body={review.url} img={review.user.avatar_url} name={review.user.name} username={review.Likes.toString()} />
                             ))}

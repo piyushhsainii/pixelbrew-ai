@@ -26,7 +26,7 @@ export default function Component() {
     ]
 
     return (
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-black text-white font-sans m-auto">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-black text-white font-sans m-auto select-none">
             <div className="container px-4 m-auto">
                 <h2 className="text-3xl font-semibold tracking-tighter text-white  font-sans text-center mb-12 ">
                     WHY PIXEL BREW AI?

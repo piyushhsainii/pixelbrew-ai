@@ -49,27 +49,32 @@ const MyAccount = () => {
                                 </span>
                             </div>
                         </div>
-                        <div className=' '>
-                            <button className='font-sans flex items-center gap-2 ml-5 bg-purple-700 border-2 border-black px-3 py-1 text-white font-semibold rounded-lg my-2
+                        {
+                            userInfo?.user.Likes.length > 0 &&
+                            <div className=' '>
+                                <button className='font-sans flex items-center gap-2 ml-5 bg-purple-700 border-2 border-black px-3 py-1 text-white font-semibold rounded-lg my-2
                     hover:scale-105 transition-all duration-200 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-white'>
-                                LIKED POSTS
-                                <Heart fill='red' color='red' size={16} className='border-red-700 text-red mt-[3px]' />
+                                    LIKED POSTS
+                                    <Heart fill='red' color='red' size={16} className='border-red-700 text-red mt-[3px]' />
 
-                            </button>
-                            <div className='w-[90%] mx-auto my-10 mt-4 flex justify-center items-center '>
-                                <Carousel className='mx-3 bg-purple-700 rounded-lg p-3 '>
-                                    <CarouselPrevious />
-                                    <CarouselContent className="">
-                                        {userInfo?.user?.Likes.map((likedImgs) => (
-                                            <CarouselItem className="md:basis-1/2 lg:basis-1/3 select-none " key={likedImgs.postID}>
-                                                <img src={likedImgs.url} alt="" className='min-h-40 w-auto object-cover rounded-lg border-2 border-black ' />
-                                            </CarouselItem>
-                                        ))}
-                                    </CarouselContent>
-                                    <CarouselNext />
-                                </Carousel>
+                                </button>
+
+                                <div className='w-[90%] mx-auto my-10 mt-4 flex justify-center items-center '>
+                                    <Carousel className='mx-3 bg-purple-700 rounded-lg p-3 '>
+                                        <CarouselPrevious />
+                                        <CarouselContent className="">
+                                            {userInfo?.user?.Likes.map((likedImgs) => (
+                                                <CarouselItem className="md:basis-1/2 lg:basis-1/3 select-none " key={likedImgs.postID}>
+                                                    <img src={likedImgs.url} alt="" className='min-h-40 w-auto object-cover rounded-lg border-2 border-black ' />
+                                                </CarouselItem>
+                                            ))}
+                                        </CarouselContent>
+                                        <CarouselNext />
+                                    </Carousel>
+                                </div>
+
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>}
         </>
