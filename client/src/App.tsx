@@ -20,6 +20,7 @@ import Explore from './components/screens/Explore'
 import Footer from './components/screens/Footer'
 import NotFound from './components/screens/NotFound'
 import AllPurchases from './components/razorpay/AllPurchases'
+import AboutUs from './components/AboutUs'
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -78,6 +79,7 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/explore' element={<Explore />} />
         <Route path='/purchases' element={<AllPurchases />} />
+        <Route path='/about-us' element={<AboutUs />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />

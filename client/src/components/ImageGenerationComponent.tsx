@@ -8,10 +8,11 @@ import { authUser, Balance, userImageLink } from "../atoms/atoms"
 import { BACKEND_URL } from "../lib/url"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../hooks/use-toast"
-
 import DownloadButton from "./DownloadBtn"
 import SuggestionCard from "./SuggestionCard"
 import SearchBar from "./ImageGeneration/SearchBar"
+import Filter from "./ImageGeneration/Filter"
+import MobileFilter from "./ImageGeneration/MobileFilter"
 
 export type MagicPrompt = "ON" | "OFF" | "AUTO"
 
@@ -30,7 +31,19 @@ const ImageGenerationComponent = () => {
     const [isCopied, setisCopied] = useState(false)
     const [savingDataToDb, setsavingDataToDb] = useState(false)
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
-    const [Response, setResponse] = useState<ApiResponse | null>(null)
+    const [Response, setResponse] = useState<ApiResponse | null>({
+        "created": "2024-11-12T14:21:51.079743+00:00",
+        "data": [
+            {
+                "is_image_safe": true,
+                "prompt": "Generate a youtube thumbnail for me for my coding tutorial youtube video, the title of the video is 'Build Chess with me' and it should be vibrant and flashy and i should be in center with highlights to make me popout of the thubmnail.",
+                "resolution": "1312x736",
+                "seed": 584554435,
+                "style_type": "GENERAL",
+                "url": "https://replicate.delivery/yhqm/jj3YLfGYRzXaFKeWwaWh2WzfN9HtzMzZwt6cshgeng0nrFBPB/1731421369.jpg"
+            }
+        ]
+    })
     const { toast } = useToast()
     const navigate = useNavigate();
 
@@ -182,62 +195,24 @@ const ImageGenerationComponent = () => {
         getUserDetails()
     }, [Response])
     return (
-        <div className='flex justify-stretch bg-black min-h-[100vh] h-full  w-screen font-sans'>
-            <div className='w-[250px] hidden border-r border-secondaryColor border-opacity-45 mt-8 md:flex flex-col p-4 gap-5'>
-                <div className="text-gray-400 font-sans text-center ">
-                    MODIFY PARAMETERS
-                </div>
-                <div className="text-gray-300 font-sans text-base text-center">
-                    <div className="my-1">CONFIGURE IMAGE TYPE</div>
-                    <select
-                        className='p-2 bg-primmaryColor shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
-                        value={styleType}
-                        onChange={(e) => setstyleType(e.target.value)}
-                    >
-                        <option value="GENERAL">GENERAL</option>
-                        <option value="REALISTIC">REALISTIC</option>
-                        <option value="DESIGN">DESIGN</option>
-                        <option value="RENDER_3D">RENDER_3D</option>
-                        <option value="ANIME">ANIME</option>
-                    </select>
-                </div>
-                <div className="text-gray-300 font-sans text-base text-center">
-                    <div className="my-1 " >SELECT MODEL</div>
-                    <select
-                        className='p-2 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 bg-primmaryColor text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
-                        value={ModelVersion}
-                        onChange={(e) => setModelVersion(e.target.value)}
-                    >
-                        <option value="V_1">V_1</option>
-                        <option value="V_1_TURBO">V_1_TURBO</option>
-                        <option value="V_2">V_2</option>
-                        <option value="V_2_TURBO">V_2_TURBO</option>
-                    </select>
-                </div>
-                <div className="text-gray-300 font-sans text-base text-center">
-                    <div className="my-1">ASPECT RATIO</div>
-                    <select
-                        className='p-2 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 bg-primmaryColor text-gray-200 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
-                        value={AspectRatio}
-                        onChange={(e) => setAspectRatio(e.target.value)}
-                    >
-                        <option className="text-gray-200" value="ASPECT_16_9">ASPECT_16_9</option>
-                        <option className="text-gray-200" value="ASPECT_16_10">ASPECT_16_10</option>
-                        <option className="text-gray-200" value="ASPECT_10_16">ASPECT_10_16</option>
-                        <option className="text-gray-200" value="ASPECT_1_1">ASPECT_1_1</option>
-                        <option className="text-gray-200" value="ASPECT_1_3">ASPECT_1_3</option>
-                        <option className="text-gray-200" value="ASPECT_2_3">ASPECT_2_3</option>
-                        <option className="text-gray-200" value="ASPECT_3_1">ASPECT_3_1</option>
-                        <option className="text-gray-200" value="ASPECT_3_2">ASPECT_3_2</option>
-                        <option className="text-gray-200" value="ASPECT_3_4">ASPECT_3_4</option>
-                        <option className="text-gray-200" value="ASPECT_4_3">ASPECT_4_3</option>
-                        <option className="text-gray-200" value="ASPECT_9_16">ASPECT_9_16</option>
-                    </select>
-                </div>
-
-            </div>
+        <div className='flex justify-stretch bg-black min-h-[100vh] h-full  w-screen font-sans mt-14'>
+            <Filter
+                styleType={styleType}
+                setstyleType={setstyleType}
+                ModelVersion={ModelVersion}
+                setModelVersion={setModelVersion}
+                AspectRatio={AspectRatio}
+                setAspectRatio={setAspectRatio}
+            />
             <div className="text-white bg-black fixed right-4 mt-5 md:hidden">
-                <SlidersHorizontal className="border-purple-700 border-2 rounded-lg" size={33} />
+                <MobileFilter
+                    styleType={styleType}
+                    setstyleType={setstyleType}
+                    ModelVersion={ModelVersion}
+                    setModelVersion={setModelVersion}
+                    AspectRatio={AspectRatio}
+                    setAspectRatio={setAspectRatio}
+                />
             </div>
             <div className='bg-black w-[100%] p-4  '>
                 <SearchBar
@@ -249,77 +224,75 @@ const ImageGenerationComponent = () => {
                     Input={Input}
                     isMagicPromptOn={isMagicPromptOn}
                 />
-                {
-                    !isLoading &&
-                    <SuggestionCard generate={generateImage} setInput={setInput} />
-                }
-                {
-                    isLoading &&
+                {!isLoading && !Response.data &&
+                    (<>
+                        <div className="text-purple-400 text-sm flex justify-center mb-1 tracking-tight">
+                            not sure how to prompt? try these!
+                        </div>
+                        <SuggestionCard generate={generateImage} setInput={setInput} />
+                    </>)}
+                {isLoading &&
                     <div className="flex justify-center items-center h-[60vh]" >
                         <HashLoader className="w-20 " color="#152243" size={150} />
-                    </div>
-                }
-                {
-                    Response?.data && !isLoading &&
+                    </div>}
+                {Response?.data && !isLoading &&
                     <div className="flex flex-col md:flex-row flex-wrap justify-evenly  p-5 bg-primmaryColor ">
                         <div className="max-w-[600px] max-h-[450px]">
                             <img
                                 src={Response.data[0].url}
                                 alt="img"
-                                className="border border-gray-600 " />
+                                className="border-2 border-white " />
                         </div>
                         <div className="text-gray-300 font-sans w-[100%] md:w-[40%] flex flex-col border border-gray-700 border-opacity-40 p-2">
                             <div>
-                                <div className="flex justify-between bg-blue-950 bg-opacity-80 items-center px-2 rounded-lg">
+                                <div className="flex justify-between bg-purple-700 bg-opacity-80 items-center px-2 ">
                                     <div className="p-2 font-semibold" > Prompt </div>
                                     {/* @ts-ignore */}
                                     <div className="mr-2 cursor-pointer" onClick={() => copyPrompt(Response.data[0].prompt as string)} >
-                                        {isCopied ? 'Text copied!' : <Copy width={17} />}
+                                        {isCopied ? 'Text copied!' : <Copy width={17} className="hover:scale-105" />}
                                     </div>
                                 </div>
-                                <div className="bg-blue-950 bg-opacity-40 p-4 text-gray-400 text-sm ">
-                                    {
-                                        Response.data[0].prompt
-                                    }
+                                <div className="bg-purple-700 bg-opacity-40 p-4 text-gray-200  tracking-tight text-sm ">
+                                    {Response.data[0].prompt}
                                 </div>
                             </div>
                             <div className="flex flex-col gap-4 mt-3 ">
                                 <div className="w-full">
                                     <div className="flex ">
-                                        <div className="bg-blue-950 rounded-lg bg-opacity-80 p-2 font-semibold  w-[50%] "  >
+                                        <div className="bg-purple-700  bg-opacity-80 p-2 font-semibold  w-[50%] "  >
                                             Model
                                         </div>
-                                        <div className="bg-blue-950 rounded-lg bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center  ">
+                                        <div className="bg-purple-700  bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center  ">
                                             Ideogram
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                     <div className="flex">
-                                        <div className="bg-blue-950 bg-opacity-80 p-2 font-semibold w-[50%] " >
+                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%] " >
                                             Resolution
                                         </div>
-                                        <div className="bg-blue-950 bg-opacity-40 p-2 text-gray-300 w-[50%] text-sm flex items-center ">
+                                        <div className="bg-purple-700 bg-opacity-40 p-2 text-gray-300 w-[50%] text-sm flex items-center ">
                                             {Response?.data[0].resolution}
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                     <div className="flex ">
-                                        <div className="bg-blue-950 bg-opacity-80 p-2 font-semibold w-[50%]" >
+                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%]" >
                                             Style Type
                                         </div>
-                                        <div className="bg-blue-950 bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center text-sm">
+                                        <div className="bg-purple-700 bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center text-sm">
                                             {Response?.data[0].style_type}
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                     <div className="flex">
-                                        <div className="bg-blue-950 bg-opacity-80 p-2 font-semibold w-[50%]" >
+                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%]" >
                                             Date created
                                         </div>
-                                        <div className="bg-blue-950  bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center text-sm">
+                                        <div className="bg-purple-700  bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center text-sm">
                                             {createdAt.toLocaleString()}
                                         </div>
                                     </div>

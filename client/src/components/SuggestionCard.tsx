@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 const data = [
     {
@@ -27,9 +28,28 @@ const SuggestionCard = ({ generate, setInput }: { generate: any, setInput: React
                             className="border-purple-700 hidden md:flex flex-col shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 transition-all duration-200 cursor-pointer  justify-between border text-white w-[380px] p-4 rounded-xl hover:bg-purple-700 hover:bg-opacity-70 " >
                             <div className="font-sans"> {data.name} </div>
                             <div className="font-sans text-[0.800rem] my-2"> {data.body} </div>
-                            <button className="flex justify-end  ">
-                                <ArrowRight size={35} className="hover:bg-purple-700 rounded-full mx-2 p-1  cursor-pointer " />
-                            </button>
+                            <div className="flex justify-end  ">
+
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <button
+                                                onClick={() => {
+                                                    setInput(data.body)
+                                                    setTimeout(() => {
+                                                        generate()
+                                                    }, 1500)
+                                                }}>
+                                                <ArrowRight size={35} className="hover:bg-purple-700 rounded-full mx-2 p-1  cursor-pointer " />
+                                            </button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <div className="tracking-tight"> TRY THIS PROMPT!? </div>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            </div>
+
                         </div>
                     ))
                 }
@@ -45,7 +65,14 @@ const SuggestionCard = ({ generate, setInput }: { generate: any, setInput: React
                                     className="border-purple-700 p-5 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 flex flex-col transition-all duration-200 cursor-pointer  justify-between border text-white  rounded-xl hover:bg-purple-700 hover:bg-opacity-70 " >
                                     <div className="font-sans"> {data.name} </div>
                                     <div className="font-sans text-[0.800rem] my-2"> {data.body} </div>
-                                    <div className="flex justify-end  ">
+                                    <div className="flex justify-end  "
+                                        onClick={() => {
+                                            setInput(data.body)
+                                            setTimeout(() => {
+                                                generate()
+                                            }, 1500)
+                                        }}
+                                    >
                                         <ArrowRight size={35} className="hover:bg-purple-700 rounded-full mx-2 p-1  cursor-pointer " />
                                     </div>
                                 </div>

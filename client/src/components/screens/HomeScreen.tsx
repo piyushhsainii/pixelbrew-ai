@@ -49,7 +49,7 @@ export function LandingPage() {
                     </p>
                     <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 relative">
                         <Link to={'/explore'}>
-                            <button className="px-4 py-2 flex items-center gap-1 justify-center bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-white shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
+                            <button className="px-4 py-2 flex items-center gap-1 justify-center bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white s">
                                 Explore <ArrowUpRight size={19} className="mt-1" />
                             </button>
                         </Link>
