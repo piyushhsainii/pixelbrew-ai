@@ -39,9 +39,9 @@ const LoginPage = () => {
                         <h2 className="mt-6 text-5xl font-bold text-gray-900 font-sans">Welcome back</h2>
                         <p className="mt-2 text-base text-gray-600 font-sans font-semibold">Please sign in to your account</p>
                     </div>
-                    <div className="mt-8 border border-gray-600 border-opacity-30 rounded-lg ">
+                    <div className="mt-8  border-opacity-30 rounded-lg flex flex-col gap-5">
                         <Button
-                            className="w-full  hover:bg-gray-200 transition-all duration-200"
+                            className="w-full border border-gray-600 border-opacity-45 hover:bg-gray-200 transition-all duration-200"
                             variant="outline"
                             onClick={async () => {
                                 await supabase.auth.signInWithOAuth({
