@@ -140,7 +140,6 @@ router.post("/api/webhook", async (req: Request, res: Response) => {
                 await console.log('payment was authorised')
                 break;
             case "payment.captured":
-                const email = payload?.payment?.entity?.email
                 try {
                     function extractTokenAmount(description) {
                         const match = description.match(/\b\d+\b/);
@@ -148,7 +147,7 @@ router.post("/api/webhook", async (req: Request, res: Response) => {
                     }
                     const tokenAmount = extractTokenAmount(payload.payment.entity.description)
                     const rechargeTokens = await prisma.user.update({           //Updating Tokens in the database
-                        where: { email: email },
+                        where: { email: payload?.payment?.entity?.email, },
                         data: { balance: { increment: tokenAmount } },
                         select: { balance: true }
                     })
@@ -159,7 +158,7 @@ router.post("/api/webhook", async (req: Request, res: Response) => {
                             paymentId: payload.payment.entity.id,
                             tokensPurchased: Number(payload.payment.entity.amount),
                             method: payload.payment.entity.method,
-                            userEmail: email,
+                            userEmail: payload?.payment?.entity?.email,
                             status: payload.payment.entity.status,
                             Tokens: JSON.stringify(tokenAmount),
                         },
@@ -185,7 +184,7 @@ router.post("/api/webhook", async (req: Request, res: Response) => {
                         paymentId: payload.payment.entity.id,
                         tokensPurchased: Number(payload.payment.entity.amount),
                         method: payload.payment.entity.method,
-                        userEmail: email,
+                        userEmail: payload?.payment?.entity?.email,
                         status: payload.payment.entity.status,
                         Tokens: JSON.stringify(tokenAmount),
                     }
