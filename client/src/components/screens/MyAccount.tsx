@@ -14,8 +14,8 @@ const MyAccount = () => {
     return (
         <>
             {userInfo &&
-                <div className='bg-black h-screen flex justify-center items-center mt-20 pb-10'>
-                    <div className='bg-black border-2 hover:border-purple-700 my-5 border-black max-h-[1800px] w-[70vw]  max-w-[1400px] rounded-2xl relative min-w-[375px]  shadow-[10px_12px_23px_[0.5]px_rgba(2,1,1,0.5)] shadow-purple-500 hover:shadow-purple-700 duration-200 transition-all'>
+                <div className='bg-black min-h-screen flex justify-center items-center mt-16  max-h-[1800px]'>
+                    <div className='bg-black border-2 hover:border-purple-700 my-5 border-black  w-[70vw]  max-w-[1400px] rounded-2xl relative min-w-[375px]  shadow-[10px_12px_23px_[0.5]px_rgba(2,1,1,0.5)] shadow-purple-500 hover:shadow-purple-700 duration-200 transition-all'>
                         <div className='w-36 h-36 rounded-[100%]  m-auto   '>
                             <img
                                 src={userInfo?.user?.trainingImg}
