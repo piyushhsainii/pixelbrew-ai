@@ -72,6 +72,7 @@ app.post('/addTrainingImg', async (req: Request, res: any) => {
                 email: email
             },
             data: {
+                trainingImg: trainingImg,
                 trainingImages: {
                     push: [trainingImg]
                 }

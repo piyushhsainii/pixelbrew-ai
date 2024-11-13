@@ -152,6 +152,14 @@ router.post("/api/webhook", async (req: Request, res: Response) => {
                         select: { balance: true }
                     })
                     // Add the entry to payments table -
+                    const alreadyTableExist = await prisma.payments.findUnique({
+                        where: {
+                            paymentId: payload.payment.entity.id
+                        }
+                    })
+                    if (alreadyTableExist) {
+                        return;
+                    }
                     const paymentTableEntry = await prisma.payments.create({
                         data: {
                             orderID: payload.payment.entity.order_id,

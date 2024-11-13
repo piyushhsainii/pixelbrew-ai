@@ -49,24 +49,24 @@ const reviews2 = [
 
 export function HighlightedPosts({ topPosts }: { topPosts: TopPosts[] }) {
     return (
-        <div className="relative flex  w-full flex-col items-center justify-center overflow-hidden  bg-black md:shadow-xl">
+        <div className="relative flex  w-full flex-col items-center justify-center overflow-hidden  bg-black md:shadow-xl ">
             {
                 topPosts &&
-                <>
-                    <div className="text-white font-sans text-3xl font-semibold my-4 tracking-tight">
+                <div className="">
+                    <div className="text-white font-sans text-3xl font-semibold my-4 tracking-tight text-center">
                         TOP POSTS
                     </div>
                     <BlurFade inView className="mt-5">
-                        <Marquee reverse pauseOnHover className="[--duration:22s]">
+                        <Marquee reverse pauseOnHover className="[--duration:26s]">
                             {topPosts?.map((review) => (
                                 <TopPostCard key={review.id} body={review.url} img={review.user.avatar_url} name={review.user.name} username={review.Likes.toString()} />
                             ))}
                         </Marquee>
                     </BlurFade>
-                </>
+                </div>
             }
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-black"></div>
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-black"></div>
+            <div className="max-w-[1400px] pointer-events-none absolute inset-y-0 left-0 w-[25%] bg-gradient-to-r from-black"></div>
+            <div className="max-w-[1400px] pointer-events-none absolute inset-y-0 right-0 w-[25%] bg-gradient-to-l from-black"></div>
         </div>
 
     );

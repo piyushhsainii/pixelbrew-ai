@@ -24,15 +24,15 @@ export default function ProfileSetup() {
     const [username, setUsername] = useRecoilState(userUsername)
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
     const [userabout, setUserAbout] = useRecoilState(userAbout)
-    const [name, setName] = useState(username ?? "")
-    const [about, setAbout] = useState(userabout ?? "")
+    const [UserInfo, setUserInfo] = useRecoilState(userCompleteInfo)
+    const [name, setName] = useState(UserInfo?.user.name)
+    const [about, setAbout] = useState(UserInfo?.user.about)
     const [image, setImage] = useState<string | null>(null)
     const [CloudinaryURL, setCloudinaryURL] = useState<null | string>(ImageLink ?? null)
     const [isImageUploading, setisImageUploading] = useState(false)
     const [updatingProfile, setupdatingProfile] = useState(false)
     const [user, setUser] = useRecoilState(authUser)
     const [isSetModeOn, setisSetModeOn] = useState(false)
-    const [UserInfo, setUserInfo] = useRecoilState(userCompleteInfo)
     const { toast } = useToast()
 
     const navigate = useNavigate()
@@ -240,6 +240,10 @@ export default function ProfileSetup() {
         }
     }
 
+    useEffect(() => {
+
+    }, [CloudinaryURL])
+
     return (
         <>
             <div className="flex items-stretch md:items-start justify-center bg-primmaryColor font-sans min-h-screen p-4 pb-0 mt-16">
@@ -257,7 +261,7 @@ export default function ProfileSetup() {
                                 <Input
                                     id="name"
                                     placeholder="Enter your name"
-                                    value={UserInfo?.user.name}
+                                    value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     className="bg-[#0c0f1a] border-1 text-white rounded-xl  "
                                 />
@@ -267,7 +271,7 @@ export default function ProfileSetup() {
                                 <Textarea
                                     id="about"
                                     placeholder="Tell us about yourself"
-                                    value={UserInfo?.user.about}
+                                    value={about}
                                     onChange={(e) => setAbout(e.target.value)}
                                     className="bg-[#0c0f1a] border-0 text-white min-h-[100px] rounded-2xl resize-none"
                                 />
