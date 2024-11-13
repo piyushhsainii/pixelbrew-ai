@@ -153,9 +153,8 @@ router.post("/api/webhook", async (req: Request, res: Response) => {
                         select: { balance: true }
                     })
                     // Add the entry to payments table -
-                    const paymentTableEntry = await prisma.payments.upsert({
-                        where: { paymentId: payload.payment.entity.id },
-                        create: {
+                    const paymentTableEntry = await prisma.payments.create({
+                        data: {
                             orderID: payload.payment.entity.order_id,
                             paymentId: payload.payment.entity.id,
                             tokensPurchased: Number(payload.payment.entity.amount),
@@ -164,15 +163,6 @@ router.post("/api/webhook", async (req: Request, res: Response) => {
                             status: payload.payment.entity.status,
                             Tokens: JSON.stringify(tokenAmount),
                         },
-                        update: {
-                            orderID: payload.payment.entity.order_id,
-                            paymentId: payload.payment.entity.id,
-                            tokensPurchased: Number(payload.payment.entity.amount),
-                            method: payload.payment.entity.method,
-                            userEmail: email,
-                            status: payload.payment.entity.status,
-                            Tokens: JSON.stringify(tokenAmount),
-                        }
                     })
                     res.json({ success: true, payload, tokenRechargeAmount: rechargeTokens, paymentTableEntry }).status(200)
                 }
