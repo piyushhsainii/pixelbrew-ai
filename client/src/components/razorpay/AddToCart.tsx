@@ -90,7 +90,7 @@ export default function AddToCart() {
             });
 
             const options = {
-                key: 'rzp_test_aSbweFTU6RDCFQ', // Enter the Key ID generated from the Dashboard
+                key: 'rzp_live_Z8ObYvmttZQHYh', // Enter the Key ID generated from the Dashboard
                 amount: data.response.amount, // Amount is in currency subunits
                 currency: "INR",
                 name: "Pixel Brew AI",

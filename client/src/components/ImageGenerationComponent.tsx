@@ -19,7 +19,7 @@ export type MagicPrompt = "ON" | "OFF" | "AUTO"
 const ImageGenerationComponent = () => {
 
     const [Input, setInput] = useState<string>("")
-    const [styleType, setstyleType] = useState<string>('GENERAL')
+    const [styleType, setstyleType] = useState<string>('REALISTIC')
     const [ModelVersion, setModelVersion] = useState<string>('V_2')
     const [AspectRatio, setAspectRatio] = useState<string>('ASPECT_16_9')
     const [isMagicPromptOn, setIsMagicPromptOn] = useState<MagicPrompt>('OFF')
@@ -31,19 +31,7 @@ const ImageGenerationComponent = () => {
     const [isCopied, setisCopied] = useState(false)
     const [savingDataToDb, setsavingDataToDb] = useState(false)
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
-    const [Response, setResponse] = useState<ApiResponse | null>({
-        "created": "2024-11-12T14:21:51.079743+00:00",
-        "data": [
-            {
-                "is_image_safe": true,
-                "prompt": "Generate a youtube thumbnail for me for my coding tutorial youtube video, the title of the video is 'Build Chess with me' and it should be vibrant and flashy and i should be in center with highlights to make me popout of the thubmnail.",
-                "resolution": "1312x736",
-                "seed": 584554435,
-                "style_type": "GENERAL",
-                "url": "https://replicate.delivery/yhqm/jj3YLfGYRzXaFKeWwaWh2WzfN9HtzMzZwt6cshgeng0nrFBPB/1731421369.jpg"
-            }
-        ]
-    })
+    const [Response, setResponse] = useState<ApiResponse | null>(null)
     const { toast } = useToast()
     const navigate = useNavigate();
 
@@ -224,7 +212,7 @@ const ImageGenerationComponent = () => {
                     Input={Input}
                     isMagicPromptOn={isMagicPromptOn}
                 />
-                {!isLoading && !Response.data &&
+                {!isLoading && !Response?.data &&
                     (<>
                         <div className="text-purple-400 text-sm flex justify-center mb-1 tracking-tight">
                             not sure how to prompt? try these!
