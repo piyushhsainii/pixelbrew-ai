@@ -21,6 +21,7 @@ import Footer from './components/screens/Footer'
 import NotFound from './components/screens/NotFound'
 import AllPurchases from './components/razorpay/AllPurchases'
 import AboutUs from './components/AboutUs'
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -83,6 +84,7 @@ function App() {
         <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />
+      <Analytics />
     </>
   )
 }
