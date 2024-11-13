@@ -18,7 +18,6 @@ const Navbar = ({ balance }: { balance: Number }) => {
     const [user, setUser] = useRecoilState(authUser)
     const [SheetOpen, setSheetOpen] = useState(false)
     const [userInfo, setuserInfo] = useRecoilState(userCompleteInfo)
-    console.log(userInfo, "info")
     const logoutHandler = async () => {
         const { error } = await supabase.auth.signOut()
         if (!error) {
