@@ -1,5 +1,5 @@
 
-import { Request, Router } from "express";
+import { Request, Response, Router } from "express";
 import Razorpay from "razorpay";
 import prisma from "../db";
 import { validatePaymentVerification, validateWebhookSignature } from "razorpay/dist/utils/razorpay-utils";
@@ -125,7 +125,7 @@ router.post('/fetchPaymentandAddToken', async (req: Request, res: any) => {
     }
 })
 // WEBHOOK API
-router.post("/api/webhook", async (req: Request, res: any) => {
+router.post("/api/webhook", async (req: Request, res: Response) => {
     const signature = req.headers["x-razorpay-signature"];
     const isValid = await validateWebhookSignature(
         JSON.stringify(req.body),
@@ -140,8 +140,7 @@ router.post("/api/webhook", async (req: Request, res: any) => {
                 await console.log('payment was authorised')
                 break;
             case "payment.captured":
-                const email = payload.payment.entity.email
-
+                const email = payload?.payment?.entity?.email
                 try {
                     function extractTokenAmount(description) {
                         const match = description.match(/\b\d+\b/);
@@ -175,17 +174,16 @@ router.post("/api/webhook", async (req: Request, res: any) => {
                             Tokens: JSON.stringify(tokenAmount),
                         }
                     })
-                    return res.json({ success: true, payload, tokenRechargeAmount: rechargeTokens, paymentTableEntry }).status(200)
+                    res.json({ success: true, payload, tokenRechargeAmount: rechargeTokens, paymentTableEntry }).status(200)
                 }
                 catch (error) {
                     console.log(error)
-                    return res.json({
+                    res.json({
                         mmessage: "Error occured while fetching payments",
                         error: error
                     }).status(400)
                 }
             case "payment.failed":
-
                 function extractTokenAmount(description) {
                     const match = description.match(/\b\d+\b/);
                     return match ? Number(match[0]) : 0;
