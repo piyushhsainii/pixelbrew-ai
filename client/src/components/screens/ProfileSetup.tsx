@@ -242,7 +242,7 @@ export default function ProfileSetup() {
 
     return (
         <>
-            <div className="flex items-stretch md:items-start justify-center bg-primmaryColor font-sans min-h-screen p-4 pb-0">
+            <div className="flex items-stretch md:items-start justify-center bg-primmaryColor font-sans min-h-screen p-4 pb-0 mt-16">
                 <Card className="w-full max-w-4xl bg-purple-700 bg-opacity-50 text-white border border-white border-opacity-40 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-white overflow-hidden flex flex-col justify-evenly">
                     <CardHeader className="flex-shrink-0 bg-black text-white">
                         <CardTitle className="text-3xl font-bold ">Profile</CardTitle>

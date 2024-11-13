@@ -2,14 +2,18 @@ import { useRecoilState } from "recoil"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { userCompleteInfo } from "../../atoms/atoms"
 import Loader from "../Loader"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import ShadowBtn from "../ShadowBtn"
 
 const AllPurchases = () => {
     const [userPayments, setuserPayments] = useRecoilState(userCompleteInfo)
     console.log(userPayments)
+    const navigate = useNavigate()
+    if (userPayments == null) {
+        return null
+    }
     return (
-        <>{userPayments?.user?.Payments.length == null ?
+        <>{userPayments?.user?.Payments.length == 0 ?
             <div className=" h-[75vh] md:h-[60vh] bg-black flex flex-col md:flex-row items-center justify-center md:justify-evenly">
                 <iframe
                     src="https://lottie.host/embed/b9548532-b6c3-439f-aa46-f3b6829d7bd1/KTuAP0GVNT.lottie"
