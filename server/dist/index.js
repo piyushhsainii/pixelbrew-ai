@@ -81,6 +81,7 @@ app.post('/addTrainingImg', (req, res) => __awaiter(void 0, void 0, void 0, func
                 email: email
             },
             data: {
+                trainingImg: trainingImg,
                 trainingImages: {
                     push: [trainingImg]
                 }
@@ -97,75 +98,57 @@ app.post('/setActiveImage', (req, res) => __awaiter(void 0, void 0, void 0, func
     const trainingImg = req.body.img;
     try {
         const activeImg = yield db_1.default.user.update({
-            where: {
-                email: email
-            },
-            data: {
-                trainingImg: trainingImg
-            }
+            where: { email: email },
+            data: { trainingImg: trainingImg }
         });
-        return res.json(activeImg).status(200);
+        res.json(activeImg).status(200);
     }
     catch (error) {
-        return res.json(error).status(200);
+        res.json(error).status(200);
     }
 }));
 app.post('/getUserDetails', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.body.email;
     try {
         const user = yield db_1.default.user.findFirst({
-            where: {
-                email: email
-            },
+            where: { email: email },
             include: {
                 Payments: true,
                 Prompt: true,
                 Reviews: true,
                 Likes: {
-                    select: {
-                        isLiked: true,
-                        postID: true,
-                        userEmail: true,
-                        url: true
-                    }
+                    select: { isLiked: true, postID: true, userEmail: true, url: true }
                 }
             }
         });
-        return res.json({
+        res.json({
             user
         }).status(200);
     }
     catch (error) {
-        return res.json(error).status(400);
+        res.json(error).status(400);
     }
 }));
 app.post('/getAllImages', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.body.email;
     try {
         const AllImages = yield db_1.default.prompt.findMany({
-            where: {
-                isPublic: true
-            },
-            include: {
-                user: true,
-                likes: true
-            },
-            orderBy: {
-                Likes: "desc"
-            },
+            where: { isPublic: true },
+            include: { user: true, likes: true },
+            orderBy: { Likes: "desc" },
         });
         const userLikes = yield db_1.default.likes.findMany({
             where: {
                 userEmail: email
             }
         });
-        return res.json({
+        res.json({
             AllImages,
             userLikes
         }).status(200);
     }
     catch (error) {
-        return res.json(error).status(400);
+        res.json(error).status(400);
     }
 }));
 app.post('/getPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -184,12 +167,12 @@ app.post('/getPrompts', (req, res) => __awaiter(void 0, void 0, void 0, function
                     }
                 }
             },
-            orderBy: [{ prompt: "asc" }]
+            orderBy: [{ isPublic: "asc" }]
         });
-        return res.json(getPrompt).status(200);
+        res.json(getPrompt).status(200);
     }
     catch (error) {
-        return res.json(error).status(400);
+        res.json(error).status(400);
     }
 }));
 app.post('/savePrompts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -201,18 +184,16 @@ app.post('/savePrompts', (req, res) => __awaiter(void 0, void 0, void 0, functio
             data: {
                 prompt: prompt,
                 url: ImageUrl,
-                user: {
-                    connect: { email: userEmail }
-                }
+                user: { connect: { email: userEmail } }
             },
             include: { user: true },
         });
-        return res.json({
+        res.json({
             saveDataToPromptTable
         }).status(200);
     }
     catch (error) {
-        return res.json(error).status(400);
+        res.json(error).status(400);
     }
 }));
 app.post('/updateProfile', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -227,16 +208,14 @@ app.post('/updateProfile', (req, res) => __awaiter(void 0, void 0, void 0, funct
                 about: about,
                 trainingImg: trainingImg
             },
-            where: {
-                email: email
-            }
+            where: { email: email }
         });
-        return res.json({
+        res.json({
             updateProfie
         }).status(200);
     }
     catch (error) {
-        return res.json({
+        res.json({
             error
         }).status(400);
     }
@@ -281,10 +260,10 @@ app.put('/deleteLikes', (req, res) => __awaiter(void 0, void 0, void 0, function
     const id = req.body.id;
     try {
         const deleteLikes = yield db_1.default.likes.delete({ where: { id: id } });
-        return res.json({ deleteLikes }).status(200);
+        res.json({ deleteLikes }).status(200);
     }
     catch (error) {
-        return res.json({
+        res.json({
             success: false,
             error
         }).status(400);
@@ -295,17 +274,13 @@ app.post('/switchVisibilityOfPrompts', (req, res) => __awaiter(void 0, void 0, v
     const Visibility = req.body.switch;
     try {
         const switchVisibility = yield db_1.default.prompt.update({
-            where: {
-                id: id
-            },
-            data: {
-                isPublic: Visibility
-            }
+            where: { id: id },
+            data: { isPublic: Visibility }
         });
-        return res.json(switchVisibility).status(200);
+        res.json(switchVisibility).status(200);
     }
     catch (error) {
-        return res.json(error).status(400);
+        res.json(error).status(400);
     }
 }));
 // review
@@ -322,10 +297,10 @@ app.post('/addReview', (req, res) => __awaiter(void 0, void 0, void 0, function*
             },
             include: { user: { select: { name: true } } }
         });
-        return res.json(Reviews).status(200);
+        res.json(Reviews).status(200);
     }
     catch (error) {
-        return res.json(error).status(400);
+        res.json(error).status(400);
     }
 }));
 app.get('/getAllReviews', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -333,10 +308,10 @@ app.get('/getAllReviews', (req, res) => __awaiter(void 0, void 0, void 0, functi
         const reviews = yield db_1.default.reviews.findMany({
             include: { user: { select: { name: true, avatar_url: true } } }
         });
-        return res.json(reviews).status(200);
+        res.json(reviews).status(200);
     }
     catch (error) {
-        return res.json(error).status(400);
+        res.json(error).status(400);
     }
 }));
 app.get('/getTopPosts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -344,17 +319,24 @@ app.get('/getTopPosts', (req, res) => __awaiter(void 0, void 0, void 0, function
         const topPosts = yield db_1.default.prompt.findMany({
             include: { user: { select: { name: true, avatar_url: true } } },
             orderBy: {
-                Likes: "desc"
+                Likes: "asc"
             },
             where: {
                 isPublic: true
             },
-            take: 10
+            take: 12
         });
-        return res.json(topPosts).status(200);
+        const recentPosts = yield db_1.default.prompt.findMany({
+            include: { user: { select: { name: true, avatar_url: true } } },
+            where: {
+                isPublic: true
+            },
+            take: 12
+        });
+        res.json({ topPosts, recentPosts }).status(200);
     }
     catch (error) {
-        return res.json(error).status(400);
+        res.json(error).status(400);
     }
 }));
 app.get("/", (req, res) => res.send("Congratulation 🎉🎉! Our Express server is Running on Vercel"));

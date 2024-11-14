@@ -18,7 +18,7 @@ export const TopPostCard = ({
             <figure
                 className={cn(
                     "relative w-96 cursor-pointer overflow-hidden rounded-xl border p-4",
-                    "border-gray-800 bg-purple-900 hover:bg-black text-white"
+                    "border-gray-800 bg-gradient-to-r from-purple-500 to-purple-900 hover:bg-black text-white"
                 )}
             >
                 <div className="flex flex-row items-center gap-2 font-sans">
@@ -32,7 +32,7 @@ export const TopPostCard = ({
                         </div>
                     </div>
                 </div>
-                <img src={body} className="mt-2 text-sm text-gray-200  font-sans rounded-lg border-2 border-white" />
+                <img src={body} className="mt-2 text-sm text-gray-200  font-sans rounded-lg border-2 border-black" />
             </figure>
         </>
     );

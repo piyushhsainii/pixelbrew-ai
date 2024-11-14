@@ -50,7 +50,7 @@ const Explore = () => {
                         <Loader />
                     </div>
                 ) : (
-                    <div className="flex justify-center  flex-wrap gap-3 my-10  max-w-[1600px] m-auto ">
+                    <div className="flex justify-center  flex-wrap gap-7 md:gap-3 my-10 w-[80%] md:w-[100%] max-w-[1600px] m-auto ">
                         {images?.map((image, index) => (
                             <div key={index} className="relative">
                                 <ImageCard

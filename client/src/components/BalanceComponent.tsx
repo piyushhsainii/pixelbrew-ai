@@ -24,7 +24,7 @@ const BalanceComponent = ({ balance }: { balance: Number }) => {
                     <div className="text-black font-sans text-left my-2 mt-1 mb-4">
                         <span className='font-semibold'>Pixel Brew AI</span> credits lets you generate images <br></br>
                         <div className='flex items-center justify-evenly'>
-                            <div className=''>  1</div>
+                            <div className=''>  3</div>
                             <div><Zap color="#d84dff" size={14} /></div>
                             <div>is charged per image</div>
                         </div>

@@ -18,15 +18,27 @@ export function LandingPage() {
     const [user, setUser] = useRecoilState(authUser)
     const [reviews, setReviews] = useState<AllReviews[] | null>(null)
     const [topPosts, setTopPosts] = useState<TopPosts[] | null>(null)
+    const [ReverseMap, setReverseMap] = useState([])
 
     const getHighlightedData = async () => {
         try {
             const { data } = await axios.get(`${BACKEND_URL}/getAllReviews`)
             const topPosts = await axios.get(`${BACKEND_URL}/getTopPosts`)
             setReviews(data)
-            setTopPosts(topPosts.data)
+            setTopPosts(topPosts.data.topPosts)
+            reverseMap(topPosts.data.recentPosts)
         } catch (error) {
 
+        }
+    }
+    let promptArray = []
+    const reverseMap = (data) => {
+        if (data) {
+            for (let i = 0; i < data.length; i++) {
+                const reverseLen = data.length - 1 - i
+                promptArray.push(data[reverseLen])
+            }
+            setReverseMap(promptArray)
         }
     }
 
@@ -54,7 +66,7 @@ export function LandingPage() {
                             </button>
                         </Link>
                         <Link to={'/generate'}>
-                            <button className="px-4 py-2  bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
+                            <button className="px-4 py-2  bg-gradient-to-r from-blue-500 to-purple-700 hover:from-purple-700 hover:to-blue-600 transition-all duration-300  font-semibold font-sans rounded-lg text-white ">
                                 Try it now
                             </button>
                         </Link>
@@ -63,7 +75,7 @@ export function LandingPage() {
                 <div>
                 </div>
             </div>
-            <HighlightedPosts topPosts={topPosts} />
+            <HighlightedPosts topPosts={topPosts} recentPosts={ReverseMap} />
             <WhyPixelBrewAI />
             <HowItWorks />
             <Testimonials reviews={reviews} />

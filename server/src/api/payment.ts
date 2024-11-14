@@ -11,8 +11,7 @@ const RazorpayInstance = new Razorpay({
     key_secret: process.env.KEY_SECRET,
 });
 
-router.post('/purchaseTokens', async (req: Request, res: any) => {
-    // Creating the order
+router.post('/purchaseTokens', async (req: Request, res: Response) => {
     const amount = req.body.amount
     try {
         const response = await RazorpayInstance.orders.create({
@@ -21,64 +20,64 @@ router.post('/purchaseTokens', async (req: Request, res: any) => {
             receipt: "reciept1"
 
         })
-        return res.json({
+        res.json({
             response
         }).status(200)
     } catch (error) {
         console.log(error)
-        return res.json({
+        res.json({
             error
         }).status(400)
     }
 })
-router.post('/verifyOrder', async (req: Request, res: any) => {
+router.post('/verifyOrder', async (req: Request, res: Response) => {
     // Creating the order
     const orderId = req.body.orderId
     try {
         const response = await RazorpayInstance.orders.fetch(orderId)
-        return res.json({
+        res.json({
             success: true,
             response
         }).status(200)
     } catch (error) {
         console.log(error)
-        return res.json({
+        res.json({
             mmessage: "Something went wrong",
             error: error
         }).status(400)
     }
 })
-router.post('/fetchPayments', async (req: Request, res: any) => {
+router.post('/fetchPayments', async (req: Request, res: Response) => {
     // Creating the order
     const payemtnID = req.body.paymentID
     try {
         const response = await RazorpayInstance.payments.fetch(payemtnID)
         if (!response) {
-            return res.json({ error: "could not find that payment" }).status(400)
+            res.json({ error: "could not find that payment" }).status(400)
         }
-        return res.json({
+        res.json({
             success: true,
             response
         }).status(200)
     } catch (error) {
         console.log(error)
-        return res.json({
+        res.json({
             mmessage: "Error occured while fetching payments",
             error: error
         }).status(400)
     }
 })
 
-router.get('/fetchAllPayments', async (req: Request, res: any) => {
+router.get('/fetchAllPayments', async (req: Request, res: Response) => {
     try {
         const userPayments = await prisma.payments.findMany()
-        return res.json(userPayments).status(200)
+        res.json(userPayments).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
 
-router.post('/fetchPaymentandAddToken', async (req: Request, res: any) => {
+router.post('/fetchPaymentandAddToken', async (req: Request, res: Response) => {
     // Creating the order
     const payemtnID = req.body.paymentID
     const email = req.body.email
@@ -107,18 +106,18 @@ router.post('/fetchPaymentandAddToken', async (req: Request, res: any) => {
                     balance: true
                 }
             })
-            return res.json({
+            res.json({
                 success: true,
                 response,
                 tokenRechargeAmount: rechargeTokens
             }).status(200)
         } else {
             console.log(response)
-            return res.json(response).status(200)
+            res.json(response).status(200)
         }
     } catch (error) {
         console.log(error)
-        return res.json({
+        res.json({
             mmessage: "Error occured while fetching payments",
             error: error
         }).status(400)
@@ -134,7 +133,6 @@ router.post("/api/webhook", async (req: Request, res: Response) => {
     );
     if (isValid) {
         const { event, payload } = req.body;
-        console.log(payload)
         switch (event) {
             case "payment.authorized":
                 await console.log('payment was authorised')

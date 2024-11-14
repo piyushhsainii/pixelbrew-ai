@@ -33,7 +33,6 @@ const ImageCard = (
                 userEmail: email,
                 url: image.url
             })
-            console.log(updateLikes.status)
 
             if (updateLikes.status == 200) {
                 toast({
@@ -59,7 +58,7 @@ const ImageCard = (
     const formattedDate = new Date(image.createdAt).toLocaleString()
     return (
         <Dialog >
-            <div className='h-72 min-w-[300px] duration-300 transition-all max-w-[400px] shadow-[3px_7px_12px_[0.5]px_rgba(2,1,1,0.2)] shadow-purple-700 border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
+            <div className='h-72 min-w-[300px] duration-300 hover:bg-slate-900 cursor-pointer transition-all max-w-[400px] shadow-[3px_7px_12px_[0.5]px_rgba(2,1,1,0.2)] shadow-purple-700 border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
                 <DialogTrigger className='cursor-pointer'>
                     <img
                         src={url}
@@ -67,39 +66,40 @@ const ImageCard = (
                         className='h-[100%] object-cover '
                     />
                 </DialogTrigger>
-                <DialogContent className='bg-black   rounded-lg border-none text-white font-sans min-w-[40vw] max-w-[70vw] min-h-[45vh] max-h-[65vh]'>
-                    <DialogHeader>
+                <DialogContent className='bg-black flex flex-col  rounded-lg border-none text-white font-sans h-[84vh] md:h-[75vh] w-[90vw] md:w-[70vw]'>
+                    <div className='overflow-y-scroll' >
                         <DialogTitle>
-                            <div className='flex items-center gap-3 select-none'>
+                            <div className='flex  items-center gap-3 select-none'>
                                 <img src={userInfo.trainingImg} className='h-6 w-6 rounded-xl select-none selection:select-none' />
                                 <div className='font-mono text-sm text-white pt-1'> {userInfo.name} </div>
                             </div>
                         </DialogTitle>
-                    </DialogHeader>
-                    <DialogDescription>
-                        <div className='flex justify-center items-center  '>
-                            <div className='max-h-[20rem] max-w-[25rem] border-purple-700 cursor-pointer m-10'>
-                                <img
-                                    src={url}
-                                    alt=""
-                                    className='rounded-2xl object-fill border-purple-700 border-2'
-                                />
-                            </div>
-                            <div className=' flex flex-col text-white items-start text-left w-[50%] border-purple-700 border-2 p-5 rounded-xl'>
-                                <div className='text-pretty text-sm flex  justify-center items-center  m-3 rounded-lg '>
-                                    {image.prompt}
+                        <DialogDescription>
+                            <div className='flex flex-col md:flex-row justify-center items-center  '>
+                                <div className='max-h-[20rem]  w-full md:w-[50%] border-purple-700 cursor-pointer m-10'>
+                                    <img
+                                        src={url}
+                                        alt=""
+                                        className='rounded-2xl object-fill border-purple-700 border-2'
+                                    />
                                 </div>
-                                <div className="flex justify-between w-full bg-gray-900 rounded-2xl px-3">
-                                    <div className=" p-2 font-semibold " >
-                                        Date created
+                                <div className=' flex flex-col text-white items-start text-left w-full md:w-[50%] border-purple-700 border-2 p-5 rounded-xl'>
+                                    <div className='text-pretty text-sm flex  justify-center items-center  m-3 rounded-lg '>
+                                        {image.prompt}
                                     </div>
-                                    <div className="  bg-opacity-40 p-2 text-gray-300 flex items-center text-sm">
-                                        {formattedDate}
+                                    <div className="flex justify-between w-full bg-gray-900 rounded-2xl px-3">
+                                        <div className=" p-2 font-semibold " >
+                                            Date created
+                                        </div>
+                                        <div className="  bg-opacity-40 p-2 text-gray-300 flex items-center text-sm">
+                                            {formattedDate}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </DialogDescription>
+                        </DialogDescription>
+
+                    </div>
                 </DialogContent>
 
                 <div className='flex justify-between items-center p-1 m-1'>

@@ -143,7 +143,6 @@ const ImageGenerationComponent = () => {
         setFaceImageUrl(userDetails.data.user.trainingImg)
     }
     const copyPrompt = async (prompt: string) => {
-        console.log(prompt)
         setisCopied(true)
         await navigator.clipboard.writeText(prompt)
         setTimeout(() => {
@@ -245,16 +244,6 @@ const ImageGenerationComponent = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col gap-4 mt-3 ">
-                                <div className="w-full">
-                                    <div className="flex ">
-                                        <div className="bg-purple-700  bg-opacity-80 p-2 font-semibold  w-[50%] "  >
-                                            Model
-                                        </div>
-                                        <div className="bg-purple-700  bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center  ">
-                                            Ideogram
-                                        </div>
-                                    </div>
-                                </div>
                                 <div>
                                     <div className="flex">
                                         <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%] " >

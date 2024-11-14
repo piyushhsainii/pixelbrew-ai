@@ -7,7 +7,6 @@ import ShadowBtn from "../ShadowBtn"
 
 const AllPurchases = () => {
     const [userPayments, setuserPayments] = useRecoilState(userCompleteInfo)
-    console.log(userPayments)
     const navigate = useNavigate()
     if (userPayments == null) {
         return null

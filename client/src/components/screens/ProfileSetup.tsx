@@ -81,10 +81,8 @@ export default function ProfileSetup() {
                         headers: { 'Content-Type': 'multipart/form-data' }
                     }
                 );
-                console.log(response.data.secure_url, "this is url")
                 setImage(response.data.secure_url)
                 if (response.data.secure_url) {
-                    console.log("apicall")
                     const { data } = await axios.post(`${BACKEND_URL}/addTrainingImg`, {
                         email: user.email,
                         img: response.data.secure_url

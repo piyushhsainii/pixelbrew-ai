@@ -22,6 +22,7 @@ import NotFound from './components/screens/NotFound'
 import AllPurchases from './components/razorpay/AllPurchases'
 import AboutUs from './components/AboutUs'
 import { Analytics } from "@vercel/analytics/react"
+import Announcement from './components/Announcement'
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -60,12 +61,7 @@ function App() {
     }
   }, [user])
 
-  // setInterval(() => {
-  //   axios.get(`${BACKEND_URL}`)
-  // }, 40000)
-
   return (
-
     <>
       <Navbar balance={userBalance} />
       <Routes>
@@ -85,6 +81,7 @@ function App() {
       </Routes>
       <Footer />
       <Analytics />
+      <Announcement />
     </>
   )
 }

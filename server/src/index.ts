@@ -84,84 +84,65 @@ app.post('/addTrainingImg', async (req: Request, res: any) => {
     }
 })
 
-app.post('/setActiveImage', async (req: Request, res: any) => {
+app.post('/setActiveImage', async (req: Request, res: Response) => {
     const email = req.body.email
     const trainingImg = req.body.img
     try {
         const activeImg = await prisma.user.update({
-            where: {
-                email: email
-            },
-            data: {
-                trainingImg: trainingImg
-            }
+            where: { email: email },
+            data: { trainingImg: trainingImg }
         })
-        return res.json(activeImg).status(200)
+        res.json(activeImg).status(200)
     } catch (error) {
-        return res.json(error).status(200)
+        res.json(error).status(200)
     }
 })
 
-app.post('/getUserDetails', async (req: Request, res: any) => {
+app.post('/getUserDetails', async (req: Request, res: Response) => {
     const email = req.body.email
     try {
         const user = await prisma.user.findFirst({
-            where: {
-                email: email
-            },
+            where: { email: email },
             include: {
                 Payments: true,
                 Prompt: true,
                 Reviews: true,
                 Likes: {
-                    select: {
-                        isLiked: true,
-                        postID: true,
-                        userEmail: true,
-                        url: true
-                    }
+                    select: { isLiked: true, postID: true, userEmail: true, url: true }
                 }
             }
         })
-        return res.json({
+        res.json({
             user
         }).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
 
-app.post('/getAllImages', async (req: Request, res: any) => {
+app.post('/getAllImages', async (req: Request, res: Response) => {
     const email = req.body.email
     try {
         const AllImages = await prisma.prompt.findMany({
-            where: {
-                isPublic: true
-            },
-            include: {
-                user: true,
-                likes: true
-            },
-            orderBy: {
-                Likes: "desc"
-            },
-
+            where: { isPublic: true },
+            include: { user: true, likes: true },
+            orderBy: { Likes: "desc" },
         })
         const userLikes = await prisma.likes.findMany({
             where: {
                 userEmail: email
             }
         })
-        return res.json({
+        res.json({
             AllImages,
             userLikes
         }).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
 
-app.post('/getPrompts', async (req: Request, res: any) => {
+app.post('/getPrompts', async (req: Request, res: Response) => {
     const email = req.body.email
     try {
         const getPrompt = await prisma.prompt.findFirst({
@@ -177,15 +158,15 @@ app.post('/getPrompts', async (req: Request, res: any) => {
                     }
                 }
             },
-            orderBy: [{ prompt: "asc" }]
+            orderBy: [{ isPublic: "asc" }]
         })
-        return res.json(getPrompt).status(200)
+        res.json(getPrompt).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
 
-app.post('/savePrompts', async (req: Request, res: any) => {
+app.post('/savePrompts', async (req: Request, res: Response) => {
     const prompt = req.body.prompt
     const ImageUrl = req.body.image
     const userEmail = req.body.email
@@ -194,21 +175,19 @@ app.post('/savePrompts', async (req: Request, res: any) => {
             data: {
                 prompt: prompt,
                 url: ImageUrl,
-                user: {
-                    connect: { email: userEmail }
-                }
+                user: { connect: { email: userEmail } }
             },
             include: { user: true },
         })
-        return res.json({
+        res.json({
             saveDataToPromptTable
         }).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
 
-app.post('/updateProfile', async (req: Request, res: any) => {
+app.post('/updateProfile', async (req: Request, res: Response) => {
     const email = req.body.email
     const username = req.body.username
     const about = req.body.about
@@ -220,15 +199,13 @@ app.post('/updateProfile', async (req: Request, res: any) => {
                 about: about,
                 trainingImg: trainingImg
             },
-            where: {
-                email: email
-            }
+            where: { email: email }
         })
-        return res.json({
+        res.json({
             updateProfie
         }).status(200)
     } catch (error) {
-        return res.json({
+        res.json({
             error
         }).status(400)
     }
@@ -268,37 +245,33 @@ app.put('/updateLikes', async (req: Request, res: Response) => {
         res.json({ success: false, error }).status(400)
     }
 })
-app.put('/deleteLikes', async (req: Request, res: any) => {
+app.put('/deleteLikes', async (req: Request, res: Response) => {
     const id = req.body.id
     try {
         const deleteLikes = await prisma.likes.delete({ where: { id: id } })
-        return res.json({ deleteLikes }).status(200)
+        res.json({ deleteLikes }).status(200)
     } catch (error) {
-        return res.json({
+        res.json({
             success: false,
             error
         }).status(400)
     }
 })
-app.post('/switchVisibilityOfPrompts', async (req: Request, res: any) => {
+app.post('/switchVisibilityOfPrompts', async (req: Request, res: Response) => {
     const id = req.body.id
     const Visibility = req.body.switch
     try {
         const switchVisibility = await prisma.prompt.update({
-            where: {
-                id: id
-            },
-            data: {
-                isPublic: Visibility
-            }
+            where: { id: id },
+            data: { isPublic: Visibility }
         })
-        return res.json(switchVisibility).status(200)
+        res.json(switchVisibility).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
 // review
-app.post('/addReview', async (req: Request, res: any) => {
+app.post('/addReview', async (req: Request, res: Response) => {
     const review = req.body.review
     const review2 = req.body.review2
     const userEmail = req.body.email
@@ -311,36 +284,43 @@ app.post('/addReview', async (req: Request, res: any) => {
             },
             include: { user: { select: { name: true } } }
         })
-        return res.json(Reviews).status(200)
+        res.json(Reviews).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
-app.get('/getAllReviews', async (req: Request, res: any) => {
+app.get('/getAllReviews', async (req: Request, res: Response) => {
     try {
         const reviews = await prisma.reviews.findMany({
             include: { user: { select: { name: true, avatar_url: true } } }
         })
-        return res.json(reviews).status(200)
+        res.json(reviews).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
-app.get('/getTopPosts', async (req: Request, res: any) => {
+app.get('/getTopPosts', async (req: Request, res: Response) => {
     try {
         const topPosts = await prisma.prompt.findMany({
             include: { user: { select: { name: true, avatar_url: true } } },
             orderBy: {
-                Likes: "desc"
+                Likes: "asc"
             },
             where: {
                 isPublic: true
             },
-            take: 10
+            take: 12
         })
-        return res.json(topPosts).status(200)
+        const recentPosts = await prisma.prompt.findMany({
+            include: { user: { select: { name: true, avatar_url: true } } },
+            where: {
+                isPublic: true
+            },
+            take: 12
+        })
+        res.json({ topPosts, recentPosts }).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
 

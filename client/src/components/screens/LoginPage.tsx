@@ -24,7 +24,6 @@ const LoginPage = () => {
     useEffect(() => {
         getSession()
     }, [])
-    console.log(user)
     return (
         <div className="grid h-screen  grid-cols-1 md:grid-cols-2">
             <div className="flex items-center justify-center bg-[radial-gradient(circle,_black_60%,_purple_99%)] h-[50vh] md:h-screen">

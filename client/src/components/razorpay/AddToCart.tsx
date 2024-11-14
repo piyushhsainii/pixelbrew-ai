@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
-import { Plus, Minus, ShoppingCart } from "lucide-react"
+import { Plus, Minus, ShoppingCart, Zap } from "lucide-react"
 import { Button } from "../ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { useRecoilState } from "recoil"
@@ -25,9 +25,9 @@ interface CartItem extends Token {
     quantity: number
 }
 const availableTokens: Token[] = [
-    { id: 1, name: "Starter", price: 33, tokenAmt: 3 },
-    { id: 2, name: "Premium Token", price: 47, tokenAmt: 5 },
-    { id: 3, name: "Elite Token", price: 91, tokenAmt: 10 },
+    { id: 1, name: "BASIC", price: 39, tokenAmt: 10 },
+    { id: 2, name: "STANDARD", price: 69, tokenAmt: 20 },
+    { id: 3, name: "SUPER SAVER", price: 99, tokenAmt: 30 },
 ]
 
 export default function AddToCart() {
@@ -99,7 +99,7 @@ export default function AddToCart() {
                 app_name: "PixelBrew AI",
                 order_id: data.response.id, // Use the order ID from your backend response
                 handler: async function (response) {                //Handler Response
-                    console.log(response)           //response_order_id && //response_payment_id && response.signature
+                    //response_order_id && //response_payment_id && response.signature
                     const { data, status } = await axios.post(`${BACKEND_URL}/fetchPayments`, {
                         paymentID: response.razorpay_payment_id
                     })
@@ -157,7 +157,9 @@ export default function AddToCart() {
                         {availableTokens.map((token) => (
                             <Card key={token.id} className="mb-4 bg-gray-800 border-purple-600">
                                 <CardHeader>
-                                    <CardTitle className="text-purple-300">{token.name} {'('} {token.tokenAmt} {')'}</CardTitle>
+                                    <CardTitle className="text-purple-300 flex items-center">
+                                        {token.name} {'('} {token.tokenAmt} <Zap color="#9333ea " size={14} className="mx-1" />  {')'}
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex justify-between">
                                     <p className="text-gray-300 font-semibold">Price:</p>
@@ -171,13 +173,13 @@ export default function AddToCart() {
                                             setTokenCount((tokenCount) => {
                                                 let newTokenCount = tokenCount;
                                                 if (token.id == 1) {
-                                                    newTokenCount = tokenCount + 3
+                                                    newTokenCount = tokenCount + 10
                                                 }
                                                 if (token.id == 2) {
-                                                    newTokenCount = tokenCount + 5
+                                                    newTokenCount = tokenCount + 20
                                                 }
                                                 if (token.id == 3) {
-                                                    newTokenCount = tokenCount + 10
+                                                    newTokenCount = tokenCount + 30
                                                 }
                                                 return newTokenCount
                                             })
@@ -216,13 +218,13 @@ export default function AddToCart() {
                                                                 setTokenCount((tokenCount) => {
                                                                     let newTokenCount = tokenCount;
                                                                     if (item.id == 1) {
-                                                                        newTokenCount = tokenCount - 3
+                                                                        newTokenCount = tokenCount - 10
                                                                     }
                                                                     if (item.id == 2) {
-                                                                        newTokenCount = tokenCount - 5
+                                                                        newTokenCount = tokenCount - 20
                                                                     }
                                                                     if (item.id == 3) {
-                                                                        newTokenCount = tokenCount - 10
+                                                                        newTokenCount = tokenCount - 30
                                                                     }
                                                                     return newTokenCount
                                                                 })
@@ -238,7 +240,11 @@ export default function AddToCart() {
                                             </div>
                                         ))}
                                         <div className="flex justify-end text-sm text-purple-400 underline cursor-pointer"
-                                            onClick={() => setCart([])}
+                                            onClick={() => {
+                                                setCart([])
+                                                setTotalPrice(0)
+                                                setTokenCount(0)
+                                            }}
                                         >
                                             clear all
                                         </div>

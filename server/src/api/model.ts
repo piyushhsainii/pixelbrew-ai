@@ -68,7 +68,6 @@ router.post('/generate', async (req: Request, res: Response) => {
                     }
                 );
                 result.data[0].url = output;
-                console.log(output, "replicate response")
                 const updateBalance = await prisma.user.update({
                     where: { email: email },
                     data: { balance: userDetail.balance - 1 }
