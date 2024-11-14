@@ -18,7 +18,7 @@ model User {
   provider       String
   trainingImg    String
   trainingImages String[]   @default([])
-  balance        Int        @default(2)
+  balance        Int        @default(6)
   Payments       Payments[]
   Prompt         Prompt[]
   Reviews        Reviews[]
