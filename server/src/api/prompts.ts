@@ -1,9 +1,9 @@
-import { Request, Router } from "express"
+import { Request, Response, Router } from "express"
 import prisma from "../db"
 
 const router = Router()
 
-router.post(`/getPromptDetails`, async (req: Request, res: any) => {
+router.post(`/getPromptDetails`, async (req: Request, res: Response) => {
     const promptID = req.body.id
     try {
         const promptDetails = await prisma.prompt.findUnique({
@@ -11,11 +11,11 @@ router.post(`/getPromptDetails`, async (req: Request, res: any) => {
                 id: promptID
             }
         })
-        return res.json({
+        res.json({
             promptDetails
         }).status(200)
     } catch (error) {
-        return res.json(error).status(400)
+        res.json(error).status(400)
     }
 })
 

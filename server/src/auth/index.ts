@@ -26,10 +26,8 @@ router.get('/callback', async (req: Request, res: Response) => {
                 },
             }
         )
-        console.log("auth")
         await supabase.auth.exchangeCodeForSession(code)
     }
-
     res.redirect('http://localhost:5173')
 })
 

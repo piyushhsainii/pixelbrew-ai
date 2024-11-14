@@ -4,7 +4,7 @@ import { authUser, userCompleteInfo } from "../../atoms/atoms"
 import { supabase } from "../../lib/supabase"
 import { useToast } from "../../hooks/use-toast"
 import Balance from "../BalanceComponent"
-import { Globe, Image, IndianRupee, MenuIcon } from "lucide-react"
+import { Globe, Image, IndianRupee, MenuIcon, Zap } from "lucide-react"
 import { QuestionMarkIcon } from "@radix-ui/react-icons"
 import AvatarComponent from "./AvatarComponent"
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog"
@@ -42,6 +42,11 @@ const Navbar = ({ balance }: { balance: Number }) => {
                             </span>
                         </div>
 
+                    </Link>
+                    <Link to={'/generate'} >
+                        <div className="text-white font-sans tracking-wider hidden sm:flex gap-1 cursor-pointer hover:text-purple-400">
+                            <Zap color="purple" width={18} />  Generate
+                        </div>
                     </Link>
                     <Link to={'/explore'} >
                         <div className="text-white font-sans tracking-wider hidden sm:flex gap-1 cursor-pointer hover:text-purple-400">
@@ -85,6 +90,11 @@ const Navbar = ({ balance }: { balance: Number }) => {
                                                 <span className="inline-block transition-all duration-300 hover:shadow-[0_0_20px_rgba(125,34,190,0.6)]">
                                                     Pixel Brew AI
                                                 </span>
+                                            </div>
+                                        </a>
+                                        <a href={'/generate'} onClick={() => setSheetOpen((v) => !v)}>
+                                            <div className="text-white font-sans tracking-wider flex gap-1 cursor-pointer hover:text-purple-400">
+                                                <Zap color="purple" width={18} />  Generate
                                             </div>
                                         </a>
                                         <a href={'/explore'} onClick={() => setSheetOpen((v) => !v)}>

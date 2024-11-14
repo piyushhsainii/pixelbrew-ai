@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { BrainCircuit, Image, Sparkles, Zap } from "lucide-react"
+import BlurFade from "./ui/blur-fade"
 
 export default function Component() {
     const features = [
@@ -26,25 +27,28 @@ export default function Component() {
     ]
 
     return (
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-black text-white font-sans m-auto select-none">
-            <div className="container px-4 m-auto">
-                <h2 className="text-3xl font-semibold tracking-tighter text-white  font-sans text-center mb-12 ">
-                    WHY PIXEL BREW AI?
-                </h2>
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 font-sans m-auto">
-                    {features.map((feature, index) => (
-                        <Card key={index} className="flex flex-col items-center text-center bg-gray-900 border-purple-500 shadow-purple-700  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
-                            <CardHeader>
-                                <div className="p-2 bg-purple-900/50 rounded-full mb-4 max-w-[40px]">{feature.icon}</div>
-                                <CardTitle className="text-xl text-purple-300">{feature.title}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-gray-300 font-semibold">{feature.description}</p>
-                            </CardContent>
-                        </Card>
-                    ))}
+        <BlurFade inView className="">
+            <section className="w-full py-12 md:py-24 lg:py-32 bg-black text-white font-sans m-auto select-none">
+                <div className="container px-4 m-auto">
+                    <h2 className="text-3xl font-semibold tracking-tighter text-white  font-sans text-center mb-12 ">
+                        WHY PIXEL BREW AI?
+                    </h2>
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 font-sans m-auto">
+                        {features.map((feature, index) => (
+                            <Card key={index} className="flex flex-col items-center text-center bg-gray-900 border-purple-500 shadow-purple-700  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
+                                <CardHeader>
+                                    <div className="p-2 bg-purple-900/50 rounded-full mb-4 max-w-[40px]">{feature.icon}</div>
+                                    <CardTitle className="text-xl text-purple-300">{feature.title}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-gray-300 font-semibold">{feature.description}</p>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </BlurFade>
+
     )
 }
