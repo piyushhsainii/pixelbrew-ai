@@ -11,7 +11,7 @@ import modelApi from "./api/model"
 const multer = require('multer')
 const app = express()
 app.use(cors({
-    origin: '*'
+    origin: 'https://pixelbrew-ai.vercel.app'
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
