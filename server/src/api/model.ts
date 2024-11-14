@@ -30,9 +30,9 @@ router.post('/generate', async (req: Request, res: Response) => {
                 error: "Failed to fetch user"
             }).status(400)
         }
-        if (userDetail.balance == 0) {
+        if (userDetail.balance < 3) {
             res.json({
-                error: "Please buy credits to generate Images"
+                error: "Low Balance"
             }).status(400)
         }
 
@@ -52,6 +52,9 @@ router.post('/generate', async (req: Request, res: Response) => {
                 }
             }),
         });
+        if (response == null) {
+            return;
+        }
         const result = await response.json();
         if (!result.data[0].url) {
             res.json({ error: "Something went wrong generating image" }).status(400)
@@ -70,7 +73,7 @@ router.post('/generate', async (req: Request, res: Response) => {
                 result.data[0].url = output;
                 const updateBalance = await prisma.user.update({
                     where: { email: email },
-                    data: { balance: userDetail.balance - 1 }
+                    data: { balance: userDetail.balance - 3 }
                 })
                 res.json({
                     result,
