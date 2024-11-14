@@ -48,8 +48,6 @@ const reviews2 = [
 ];
 
 export function HighlightedPosts({ topPosts, recentPosts }: { topPosts: TopPosts[], recentPosts: any }) {
-    console.log(recentPosts)
-    console.log(topPosts, "topPosts")
     return (
         <div className="relative flex  w-full flex-col items-center justify-center overflow-hidden  bg-black md:shadow-xl ">
             {
