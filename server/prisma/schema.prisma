@@ -41,7 +41,7 @@ model Prompt {
 model Payments {
   id              String   @id @default(uuid())
   orderID         String
-  paymentId       String   @unique
+  paymentId       String
   tokensRecharged Boolean  @default(false)
   userEmail       String
   status          String
