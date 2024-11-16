@@ -8,21 +8,22 @@ datasource db {
 }
 
 model User {
-  id             String     @id @default(uuid())
+  id             String       @id @default(uuid())
   name           String
-  email          String     @unique
+  email          String       @unique
   avatar_url     String
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   about          String
   provider       String
   trainingImg    String
-  trainingImages String[]   @default([])
-  balance        Int        @default(6)
+  trainingImages String[]     @default([])
+  balance        Int          @default(6)
   Payments       Payments[]
   Prompt         Prompt[]
   Reviews        Reviews[]
   Likes          Likes[]
+  FalAI          FalAIModel[]
 }
 
 model Prompt {
@@ -30,10 +31,11 @@ model Prompt {
   prompt    String
   url       String
   isPublic  Boolean  @default(false)
+  model     String   @default("Ideogram")
   Likes     Int      @default(0)
+  userEmail String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userEmail String
   user      User     @relation(fields: [userEmail], references: [email])
   likes     Likes[]
 }
@@ -69,4 +71,13 @@ model Likes {
   isLiked   Boolean
   userid    User    @relation(fields: [userEmail], references: [email])
   post      Prompt  @relation(fields: [postID], references: [id])
+}
+
+model FalAIModel {
+  id        String   @id @default(uuid())
+  requestID String
+  status    String
+  userEmail String
+  useremail User     @relation(fields: [userEmail], references: [email])
+  createdAt DateTime @default(now())
 }

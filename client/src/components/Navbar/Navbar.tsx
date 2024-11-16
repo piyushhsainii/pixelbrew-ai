@@ -5,7 +5,7 @@ import { supabase } from "../../lib/supabase"
 import { useToast } from "../../hooks/use-toast"
 import Balance from "../BalanceComponent"
 import { Globe, Image, IndianRupee, MenuIcon, Zap } from "lucide-react"
-import { QuestionMarkIcon } from "@radix-ui/react-icons"
+import { DashboardIcon, QuestionMarkIcon } from "@radix-ui/react-icons"
 import AvatarComponent from "./AvatarComponent"
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog"
 import HowItWorksDialog from "../how_it_works_dialog"
@@ -49,17 +49,10 @@ const Navbar = ({ balance }: { balance: Number }) => {
                         </div>
                     </Link>
                     <Link to={'/explore'} >
-                        <div className="text-white font-sans tracking-wider hidden sm:flex gap-1 cursor-pointer hover:text-purple-400">
+                        <div className="text-white font-sans tracking-wider  hidden sm:flex items-center gap-1 cursor-pointer hover:text-purple-400">
                             <Globe color="purple" width={18} />  Explore
                         </div>
                     </Link>
-                    {userInfo !== null &&
-                        <Link to={'/myImages'} className="hidden md:block" >
-                            <div className="text-white font-sans tracking-wider flex gap-1 cursor-pointer hover:text-purple-400">
-                                <Image color="purple" width={18} /> My Images
-
-                            </div>
-                        </Link>}
                     <Link to={'/shop'} className="hidden md:block">
                         <div className="text-white font-sans tracking-wider flex gap-1 cursor-pointer hover:text-purple-400">
                             <IndianRupee color="purple" width={18} />  Pricing
@@ -75,6 +68,12 @@ const Navbar = ({ balance }: { balance: Number }) => {
                             <HowItWorksDialog />
                         </DialogContent>
                     </Dialog>
+                    {userInfo !== null &&
+                        <Link to={'/dashboard'} className="hidden md:block" >
+                            <div className="text-white font-sans  flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
+                                <DashboardIcon color="purple" width={18} /> Dashboard
+                            </div>
+                        </Link>}
                 </div>
                 <div className=" flex items-center justify-center">
                     <div className=" flex items-center md:hidden ">

@@ -22,12 +22,14 @@ const SearchBar = ({
     isMagicPromptOn: MagicPrompt
 }) => {
     return (
-        <div className='max-w-[1400px] border-purple-800 border border-opacity-60 rounded-3xl py-[0.95px] w-[85%] m-auto flex flex-col  md:flex-row justify-between my-4'>
+        <div className='max-w-[1400px] border-purple-800  md:ml-32 mt- md:mt-7 relative border border-opacity-60 rounded-3xl py-[0.95px] w-[85%] m-auto flex flex-col  md:flex-row justify-between my-4'>
             <div className=" flex items-center mx-3">
                 <TooltipProvider>
                     <Tooltip delayDuration={200}>
                         <TooltipTrigger>
-                            <div className="text-[0.77rem] flex gap-1 items-baseline text-gray-400 relative"
+                            <div className="text-[0.77rem] flex gap-1 items-baseline text-gray-400 
+                            absolute left-[-2rem] top-[-3.9rem] md:left-[-7.7rem] md:top-0
+                            "
                                 onClick={toggleMagicPromptState}>
                                 <AnimatedSubscribeButton
                                     initialText={"Magic Prompt is OFF"}
@@ -47,8 +49,8 @@ const SearchBar = ({
                 </TooltipProvider>
             </div>
             <textarea
-                className='bg-black  w-[100%] pl-3 rounded-3xl font-sans focus:outline-none active:outline-none text-gray-300
-         p-3 resize-none'
+                className='bg-black  w-[100%]  rounded-3xl font-sans focus:outline-none active:outline-none text-gray-300
+                p-3 resize-none'
                 ref={textareaRef}
                 placeholder='Describe what you want to see...'
                 value={Input}
@@ -57,10 +59,10 @@ const SearchBar = ({
             ></textarea>
             <button
                 className='bg-gradient-to-r  max-h-[55px] font-semibold text-white 
-    from-blue-600 to-purple-600 px-10  rounded-3xl py-2 hover:scale-x-[120%]
-    hover:scale-110 transition-all duration-200 active:scale-90 font-sans text-lg border
-     border-blue-800
-    '
+                from-blue-600 to-purple-600 px-10  rounded-3xl py-2 hover:scale-x-[120%]
+                hover:scale-105 transition-all duration-200 active:scale-90 font-sans text-lg border
+                border-blue-800 hover:border-purple-700
+                '
                 onClick={generateImage}
             >
 

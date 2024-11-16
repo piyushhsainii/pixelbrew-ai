@@ -23,6 +23,7 @@ import AllPurchases from './components/razorpay/AllPurchases'
 import AboutUs from './components/AboutUs'
 import { Analytics } from "@vercel/analytics/react"
 import Announcement from './components/Announcement'
+import Dashboard from './components/Dashboard/Dashboard'
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -72,6 +73,7 @@ function App() {
           <Route path='/profile' element={<MyAccount />} />
           <Route path='/myImages' element={<MyImagesPage />} />
           <Route path='/shop' element={<PayButton />} />
+          <Route path='/dashboard' element={<Dashboard />} />
         </Route>
         <Route path='/login' element={<LoginPage />} />
         <Route path='/explore' element={<Explore />} />

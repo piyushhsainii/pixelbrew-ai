@@ -54,9 +54,9 @@ export function LandingPage() {
                 >
                     <BlurIn
                         word="PixelBrew AI"
-                        className="text-white text-4xl md:text-6xl font-bold text-center font-sans select-none"
+                        className="text-white text-4xl md:text-6xl font-bold text-center font-sans select-none bg-gradient-to-t from-gray-400 to-white text-transparent bg-clip-text "
                     />
-                    <p className="text-white text-lg md:text-2xl max-w-xl mt-6 text-center font-sans select-none tracking-tight">
+                    <p className="text-white text-lg md:text-2xl max-w-xl mt-4 text-center font-sans select-none tracking-tighter ">
                         Pixel Perfect Thumbnails, Brewed by AI.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 relative">
@@ -76,8 +76,8 @@ export function LandingPage() {
                 </div>
             </div>
             <HighlightedPosts topPosts={topPosts} recentPosts={ReverseMap} />
-            <WhyPixelBrewAI />
             <HowItWorks />
+            <WhyPixelBrewAI />
             <Testimonials reviews={reviews} />
             <ReviewComponent user={user} />
         </>

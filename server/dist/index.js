@@ -21,6 +21,7 @@ const auth_1 = __importDefault(require("./auth"));
 const db_1 = __importDefault(require("./db"));
 const payment_1 = __importDefault(require("./api/payment"));
 const model_1 = __importDefault(require("./api/model"));
+const falAi_model_1 = __importDefault(require("./api/falAi_model"));
 const multer = require('multer');
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
@@ -31,6 +32,7 @@ app.use(express_1.default.urlencoded({ extended: true }));
 const upload = multer({ dest: 'uploads/' });
 app.use('/auth', auth_1.default); //handles the google auth
 app.use('/', payment_1.default);
+app.use('/', falAi_model_1.default);
 app.use('/', model_1.default);
 app.post('/uploadToCloud', upload.single('file'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -179,11 +181,13 @@ app.post('/savePrompts', (req, res) => __awaiter(void 0, void 0, void 0, functio
     const prompt = req.body.prompt;
     const ImageUrl = req.body.image;
     const userEmail = req.body.email;
+    const model = req.body.model;
     try {
         const saveDataToPromptTable = yield db_1.default.prompt.create({
             data: {
                 prompt: prompt,
                 url: ImageUrl,
+                model: model,
                 user: { connect: { email: userEmail } }
             },
             include: { user: true },

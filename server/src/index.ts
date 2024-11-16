@@ -7,11 +7,12 @@ import auth from "./auth"
 import prisma from "./db";
 import paymentApi from "./api/payment"
 import modelApi from "./api/model"
+import FalAI from "./api/falAi_model"
 
 const multer = require('multer')
 const app = express()
 app.use(cors({
-    origin: 'https://pixelbrew-ai.vercel.app'
+    origin: '*'
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
@@ -20,6 +21,7 @@ const upload = multer({ dest: 'uploads/' })
 
 app.use('/auth', auth)             //handles the google auth
 app.use('/', paymentApi)
+app.use('/', FalAI)
 app.use('/', modelApi)
 
 app.post('/uploadToCloud', upload.single('file'), async (req: Request, res: any) => {
@@ -33,7 +35,6 @@ app.post('/uploadToCloud', upload.single('file'), async (req: Request, res: any)
         return res.json({ error }).status(400)
     }
 })
-
 app.post('/setupProfile', async (req: Request, res: any) => {
     const name = req.body.name
     const email = req.body.email
@@ -62,7 +63,6 @@ app.post('/setupProfile', async (req: Request, res: any) => {
         return res.json({ error }).status(400)
     }
 })
-
 app.post('/addTrainingImg', async (req: Request, res: any) => {
     const email = req.body.email
     const trainingImg = req.body.img
@@ -83,7 +83,6 @@ app.post('/addTrainingImg', async (req: Request, res: any) => {
         return res.json(error).status(400)
     }
 })
-
 app.post('/setActiveImage', async (req: Request, res: Response) => {
     const email = req.body.email
     const trainingImg = req.body.img
@@ -97,7 +96,6 @@ app.post('/setActiveImage', async (req: Request, res: Response) => {
         res.json(error).status(200)
     }
 })
-
 app.post('/getUserDetails', async (req: Request, res: Response) => {
     const email = req.body.email
     try {
@@ -119,7 +117,6 @@ app.post('/getUserDetails', async (req: Request, res: Response) => {
         res.json(error).status(400)
     }
 })
-
 app.post('/getAllImages', async (req: Request, res: Response) => {
     const email = req.body.email
     try {
@@ -141,7 +138,6 @@ app.post('/getAllImages', async (req: Request, res: Response) => {
         res.json(error).status(400)
     }
 })
-
 app.post('/getPrompts', async (req: Request, res: Response) => {
     const email = req.body.email
     try {
@@ -165,16 +161,17 @@ app.post('/getPrompts', async (req: Request, res: Response) => {
         res.json(error).status(400)
     }
 })
-
 app.post('/savePrompts', async (req: Request, res: Response) => {
     const prompt = req.body.prompt
     const ImageUrl = req.body.image
     const userEmail = req.body.email
+    const model = req.body.model
     try {
         const saveDataToPromptTable = await prisma.prompt.create({
             data: {
                 prompt: prompt,
                 url: ImageUrl,
+                model: model,
                 user: { connect: { email: userEmail } }
             },
             include: { user: true },
@@ -186,7 +183,6 @@ app.post('/savePrompts', async (req: Request, res: Response) => {
         res.json(error).status(400)
     }
 })
-
 app.post('/updateProfile', async (req: Request, res: Response) => {
     const email = req.body.email
     const username = req.body.username
@@ -210,7 +206,6 @@ app.post('/updateProfile', async (req: Request, res: Response) => {
         }).status(400)
     }
 })
-
 app.put('/updateLikes', async (req: Request, res: Response) => {
     const likes = req.body.likes
     const liked = req.body.isLiked

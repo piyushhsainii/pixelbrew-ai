@@ -12,6 +12,31 @@ export interface ApiResponse {
     data: ImageData[];
 }
 
+export interface FalAIResponse {
+    success: boolean,
+    result: {
+        data: {
+            images: [
+                {
+                    url: string,
+                    width: number,
+                    height: number,
+                    content_type: string
+                }
+            ],
+            timings: any,
+            seed: number,
+            has_nsfw_concepts: [
+                boolean
+            ],
+            prompt: string
+        },
+        requestId: string
+    },
+    prompt: string,
+    url: string
+}
+
 export interface AllImages {
     id: string,
     prompt: string,

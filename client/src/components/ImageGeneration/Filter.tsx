@@ -1,3 +1,4 @@
+import { QuestionMarkCircledIcon } from "@radix-ui/react-icons"
 
 const Filter = ({
     styleType,
@@ -5,7 +6,9 @@ const Filter = ({
     ModelVersion,
     setModelVersion,
     AspectRatio,
-    setAspectRatio
+    setAspectRatio,
+    Model,
+    setModel
 }: {
     styleType: string
     setstyleType: React.Dispatch<React.SetStateAction<string>>
@@ -13,16 +16,34 @@ const Filter = ({
     setModelVersion: React.Dispatch<React.SetStateAction<string>>
     AspectRatio: string
     setAspectRatio: React.Dispatch<React.SetStateAction<string>>
+    Model: string
+    setModel: React.Dispatch<React.SetStateAction<string>>
 }) => {
     return (
         <div className='w-[250px] hidden border-r border-secondaryColor border-opacity-45 mt-8 md:flex flex-col p-4 gap-5'>
             <div className="text-gray-400 font-sans text-center ">
                 MODIFY PARAMETERS
             </div>
-            <div className="text-gray-300 font-sans text-base text-center">
-                <div className="my-1">CONFIGURE IMAGE TYPE</div>
+            <div className="text-gray-300 font-sans text-base text-center relative" >
+                <div className="m-3 flex items-center justify-center gap-2">SELECT MODEL <QuestionMarkCircledIcon /> </div>
                 <select
-                    className='p-2 bg-primmaryColor shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
+                    name="" id="" value={Model}
+                    onChange={(e) => setModel(e.target.value)}
+                    className="p-2 bg-primmaryColor  shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm"
+                >
+                    <option value="FAL_AI" >Fal AI</option>
+                    <option value="Ideogram"> Ideogram </option>
+                </select>
+                <div className="text-green-500  px-1 rounded-2xl border bg-opacity-20 bg-green-500 border-green-500 border-opacity-40 absolute bottom-5 text-[0.550rem] left-24">
+                    Recommended
+                </div>
+            </div>
+            <div className="text-gray-300 font-sans text-base text-center">
+                <div className="my-1  flex items-center justify-center gap-2">
+                    CONFIGURE IMAGE <QuestionMarkCircledIcon />
+                </div>
+                <select
+                    className='p-2 m-3 bg-primmaryColor shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
                     value={styleType}
                     onChange={(e) => setstyleType(e.target.value)}
                 >
@@ -34,7 +55,7 @@ const Filter = ({
                 </select>
             </div>
             <div className="text-gray-300 font-sans text-base text-center">
-                <div className="my-1 " >SELECT MODEL</div>
+                <div className="my-1 flex justify-center items-center gap-2 " >SELECT MODEL <QuestionMarkCircledIcon /></div>
                 <select
                     className='p-2 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 bg-primmaryColor text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
                     value={ModelVersion}
@@ -47,7 +68,7 @@ const Filter = ({
                 </select>
             </div>
             <div className="text-gray-300 font-sans text-base text-center">
-                <div className="my-1">ASPECT RATIO</div>
+                <div className="my-1 flex justify-center items-center gap-2">ASPECT RATIO <QuestionMarkCircledIcon /></div>
                 <select
                     className='p-2 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 bg-primmaryColor text-gray-200 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
                     value={AspectRatio}

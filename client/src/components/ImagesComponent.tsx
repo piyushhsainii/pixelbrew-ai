@@ -129,7 +129,7 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
     }, [copiedIndex2])
     const formattedDate = new Date(createdAt).toLocaleDateString()
     return (
-        <div className="min-h-screen bg-black text-purple-300 p-5 font-sans">
+        <div className=" bg-black text-purple-300 p-5 font-sans">
             <h1 className="text-4xl font-bold text-purple-500 mb-8 text-center select-none">
                 Your Pixel Brew AI Gallery
             </h1>
@@ -139,7 +139,7 @@ export default function Component({ imagePairs = demoImagePairs }: { imagePairs?
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
                         {prompt && prompt.map((pair, index) => (
-                            <div key={index} className="flex flex-col bg-gray-900 rounded-lg overflow-hidden  h-full shadow-purple-700  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
+                            <div key={index} className="flex flex-col bg-gray-950 rounded-lg overflow-hidden   shadow-purple-700  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
                                 {/* Image Section */}
                                 <div className="h-64 w-full">
                                     <img

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
-import { ApiResponse } from "../lib/interface"
+import { ApiResponse, FalAIResponse } from "../lib/interface"
 import { Copy, Download, Info, SlidersHorizontal } from "lucide-react"
 import { HashLoader } from "react-spinners"
 import { useRecoilState } from "recoil"
@@ -13,14 +13,17 @@ import SuggestionCard from "./SuggestionCard"
 import SearchBar from "./ImageGeneration/SearchBar"
 import Filter from "./ImageGeneration/Filter"
 import MobileFilter from "./ImageGeneration/MobileFilter"
+import { fal } from "@fal-ai/client"
 
 export type MagicPrompt = "ON" | "OFF" | "AUTO"
+export type Model = "FAL_AI" | "Ideogram"
 
 const ImageGenerationComponent = () => {
 
     const [Input, setInput] = useState<string>("")
     const [styleType, setstyleType] = useState<string>('REALISTIC')
     const [ModelVersion, setModelVersion] = useState<string>('V_2')
+    const [Model, setModel] = useState<Model>('FAL_AI')
     const [AspectRatio, setAspectRatio] = useState<string>('ASPECT_16_9')
     const [isMagicPromptOn, setIsMagicPromptOn] = useState<MagicPrompt>('OFF')
     const [isLoading, setisLoading] = useState(false)
@@ -32,6 +35,7 @@ const ImageGenerationComponent = () => {
     const [savingDataToDb, setsavingDataToDb] = useState(false)
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
     const [Response, setResponse] = useState<ApiResponse | null>(null)
+    const [FalAIResponse, setFalAIResponse] = useState<FalAIResponse | null>(null)
     const { toast } = useToast()
     const navigate = useNavigate();
 
@@ -59,6 +63,7 @@ const ImageGenerationComponent = () => {
                     prompt: Input,
                     image: response.data.secure_url,
                     email: user.email,
+                    model: Model
                 })
             }
             toast({
@@ -79,51 +84,88 @@ const ImageGenerationComponent = () => {
     }
 
     const generateImage = async () => {
-        if (Input == "") {
-            return toast({
-                title: "Describe what you want to see!",
-                variant: "default",
-                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+        switch (Model) {
+            case "FAL_AI":
+                if (Input == "") {
+                    return toast({
+                        title: "Describe what you want to see!",
+                        variant: "default",
+                        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                    });
+                }
+                setInput("")
+                setisLoading(true)
+                try {
+                    const { data, status } = await axios.post(`${BACKEND_URL}/generateImg`, {
+                        image: Input
+                    })
+                    if (status == 200) {
+                        savePromptsToDb(data.url)
+                        setFalAIResponse(data)
+                    }
+                    setisLoading(false)
 
-            });
+                } catch (error) {
+                    setisLoading(false)
+                    toast({
+                        title: error,
+                        variant: "default",
+                        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+
+                    });
+                }
+                break;
+            case "Ideogram":
+                if (Input == "") {
+                    return toast({
+                        title: "Describe what you want to see!",
+                        variant: "default",
+                        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+
+                    });
+                }
+                setisLoading(true)
+                setInput("")
+                try {
+                    const { data } = await axios.post(`${BACKEND_URL}/generate`, {
+                        input: Input,
+                        aspect_ratio: AspectRatio,
+                        model_version: ModelVersion,
+                        style_type: styleType,
+                        face_swap: FaceImageUrl,
+                        magic_prompt: isMagicPromptOn,
+                        email: user.email
+
+                    })
+                    if (data.error) {
+                        setisLoading(false)
+                        return toast({
+                            title: data.error,
+                            variant: "destructive",
+                            className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+
+                        });
+                    }
+                    autoResizeTextarea()
+                    setisLoading(false)
+                    setResponse(data.result)
+                    setBalance(data.balance)
+                    const imageUrl = data.result.data[0].url
+                    savePromptsToDb(imageUrl)
+                } catch (error) {
+                    toast({
+                        title: error,
+                        variant: "default",
+                        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+
+                    });
+                    setisLoading(false)
+                }
+                break;
+            default:
+                break;
         }
-        setisLoading(true)
-        setInput("")
-        try {
-            const { data } = await axios.post(`${BACKEND_URL}/generate`, {
-                input: Input,
-                aspect_ratio: AspectRatio,
-                model_version: ModelVersion,
-                style_type: styleType,
-                face_swap: FaceImageUrl,
-                magic_prompt: isMagicPromptOn,
-                email: user.email
 
-            })
-            if (data.error) {
-                setisLoading(false)
-                return toast({
-                    title: data.error,
-                    variant: "destructive",
-                    className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-
-                });
-            }
-            autoResizeTextarea()
-            setisLoading(false)
-            setResponse(data.result)
-            setBalance(data.balance)
-            const imageUrl = data.result.data[0].url
-            savePromptsToDb(imageUrl)
-        } catch (error) {
-            toast({
-                title: error,
-                variant: "default",
-                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-
-            });
-            setisLoading(false)
-        }
     }
     // @ts-ignore
     const createdAt = new Date(Response?.created)
@@ -177,7 +219,7 @@ const ImageGenerationComponent = () => {
         setInput(e.target.value);
         autoResizeTextarea();
     };
-
+    console.log(FalAIResponse)
     useEffect(() => {
         getUserDetails()
     }, [Response])
@@ -190,6 +232,8 @@ const ImageGenerationComponent = () => {
                 setModelVersion={setModelVersion}
                 AspectRatio={AspectRatio}
                 setAspectRatio={setAspectRatio}
+                Model={Model}
+                setModel={setModel}
             />
             <div className="text-white bg-black fixed right-4 mt-5 md:hidden">
                 <MobileFilter
@@ -211,7 +255,7 @@ const ImageGenerationComponent = () => {
                     Input={Input}
                     isMagicPromptOn={isMagicPromptOn}
                 />
-                {!isLoading && !Response?.data &&
+                {!isLoading && !Response?.data && !FalAIResponse &&
                     (<>
                         <div className="text-purple-400 text-sm flex justify-center mb-1 tracking-tight">
                             not sure how to prompt? try these!
@@ -280,6 +324,63 @@ const ImageGenerationComponent = () => {
                                     <DownloadButton
                                         url={Response.data[0].url}
                                         data={Response.data[0].url}
+                                        filename="pixelbrew_ai.jpeg"
+                                        className="bg-green-700   text-center text-white rounded-md p-4 py-2 m-3 ml-0 flex items-center justify-evenly gap-1
+                                        cursor-pointer hover:scale-110 transition-all duration-200 active:scale-90
+                                        "
+                                    />
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+                {
+                    FalAIResponse && !isLoading &&
+                    <div className="flex flex-col md:flex-row flex-wrap  justify-evenly  p-5  ">
+                        <div className="max-w-[600px] max-h-[450px] ">
+                            <img
+                                src={FalAIResponse.url}
+                                alt="img"
+                                className="border-2 border-white " />
+                        </div>
+                        <div className="md:w-[70%]">
+                            <div className="flex flex-col gap-4 mt-3 ">
+                                <div>
+                                    <div className="flex">
+                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%] " >
+                                            Dimensions
+                                        </div>
+                                        <div className="bg-purple-700 bg-opacity-40 p-2 text-gray-300 w-[50%] text-sm flex items-center ">
+                                            {FalAIResponse?.result?.data.images[0].height.toString()} X  {FalAIResponse?.result?.data?.images[0].width.toString()}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex ">
+                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%]" >
+                                            Prompt
+                                        </div>
+                                        <div className="bg-purple-700 bg-opacity-40 p-2 font-sans  tracking-tight text-gray-300 w-[50%] flex items-center text-sm">
+                                            {FalAIResponse?.prompt}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex">
+                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%]" >
+                                            Date created
+                                        </div>
+                                        <div className="bg-purple-700  bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center text-sm">
+                                            {createdAt.toLocaleString()}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href={FalAIResponse.url} download={FalAIResponse.url} target="blank">
+                                <div >
+                                    <DownloadButton
+                                        url={FalAIResponse.url}
+                                        data={FalAIResponse.url}
                                         filename="pixelbrew_ai.jpeg"
                                         className="bg-green-700   text-center text-white rounded-md p-4 py-2 m-3 ml-0 flex items-center justify-evenly gap-1
                                         cursor-pointer hover:scale-110 transition-all duration-200 active:scale-90

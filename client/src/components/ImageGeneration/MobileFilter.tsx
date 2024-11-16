@@ -20,7 +20,7 @@ const MobileFilter = ({
     return (
         <Sheet>
             <SheetTrigger>
-                <SlidersHorizontal className="border-purple-700 border-2 rounded-lg" size={33} />
+                <SlidersHorizontal className="border-purple-700 border-2 rounded-lg mt-2" size={33} />
             </SheetTrigger>
             <SheetContent className='bg-black border-purple-700 border text-white mt-16'>
                 <div>
