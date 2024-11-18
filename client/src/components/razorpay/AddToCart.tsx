@@ -14,7 +14,8 @@ interface Token {
     id: number
     name: string
     price: number
-    tokenAmt: number
+    tokenAmt: number,
+    description: string
 }
 declare global {
     interface Window {
@@ -25,9 +26,10 @@ interface CartItem extends Token {
     quantity: number
 }
 const availableTokens: Token[] = [
-    { id: 1, name: "BASIC", price: 39, tokenAmt: 10 },
-    { id: 2, name: "STANDARD", price: 69, tokenAmt: 20 },
-    { id: 3, name: "SUPER SAVER", price: 99, tokenAmt: 30 },
+    { id: 1, name: "BASIC", price: 39, tokenAmt: 10, description: "Ideal for trying out our platform." },
+    { id: 2, name: "STANDARD", price: 69, tokenAmt: 20, description: "Perfect for moderate usage, offering better value for professionals or teams with consistent needs." },
+    { id: 3, name: "SUPER SAVER", price: 99, tokenAmt: 30, description: "Designed to provide great savings and more flexibility for larger projects." },
+    { id: 4, name: "MODEL TRAINING CARD", price: 249, tokenAmt: 80, description: "Best for intensive usage like model training or enterprise-level tasks. Maximum value for power users or larger teams." },
 ]
 
 export default function AddToCart() {
@@ -148,18 +150,19 @@ export default function AddToCart() {
     return (
         <div className="min-h-screen bg-black text-white p-8 font-sans">
             <div className="max-w-4xl mx-auto">
-                <h1 className="text-3xl font-bold mb-8 text-purple-600">
+                <h1 className="text-3xl font-bold mb-2 text-purple-600">
                     Token Purchase
                 </h1>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h2 className="text-2xl font-semibold mb-4 text-white">Available Tokens</h2>
+                <div className="">
+                    <h2 className="text-2xl font-semibold mb-4  text-white">Available Tokens</h2>
+                    <div className="grid grid-cols-2 gap-5">
                         {availableTokens.map((token) => (
-                            <Card key={token.id} className="mb-4 bg-gray-800 border-purple-600">
+                            <Card key={token.id} className=" bg-gray-900 border-purple-600 shadow-purple-700  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
                                 <CardHeader>
-                                    <CardTitle className="text-purple-300 flex items-center">
+                                    <CardTitle className="text-white flex items-center text-xl">
                                         {token.name} {'('} {token.tokenAmt} <Zap color="#9333ea " size={14} className="mx-1" />  {')'}
                                     </CardTitle>
+                                    <div className="text-sm text-white text-pretty"> {token.description} </div>
                                 </CardHeader>
                                 <CardContent className="flex justify-between">
                                     <p className="text-gray-300 font-semibold">Price:</p>
@@ -181,6 +184,9 @@ export default function AddToCart() {
                                                 if (token.id == 3) {
                                                     newTokenCount = tokenCount + 30
                                                 }
+                                                if (token.id == 4) {
+                                                    newTokenCount = tokenCount + 80
+                                                }
                                                 return newTokenCount
                                             })
                                         }}
@@ -193,76 +199,79 @@ export default function AddToCart() {
                             </Card>
                         ))}
                     </div>
-                    <div>
-                        <h2 className="text-2xl font-semibold mb-4 text-purple-300">Your Cart</h2>
-                        <Card className="bg-gray-800 border-purple-500">
-                            <CardHeader>
-                                <CardTitle className="flex items-center text-purple-300">
-                                    <ShoppingCart className="mr-2" /> Cart Summary
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                {cart.length === 0 ? (
-                                    <p className="text-gray-400">Your cart is empty</p>
-                                ) : (
-                                    <ul>
-                                        {cart.map((item, index) => (
-                                            <div key={index} >
-                                                <li key={index} className="flex justify-between items-center mb-2 text-white">
-                                                    <span>{item.name} (x{item.quantity})</span>
-                                                    <div>
-                                                        <span className="mr-4">₹{item.price * item.quantity}</span>
-                                                        <Button
-                                                            onClick={() => {
-                                                                removeFromCart(item.id)
-                                                                setTokenCount((tokenCount) => {
-                                                                    let newTokenCount = tokenCount;
-                                                                    if (item.id == 1) {
-                                                                        newTokenCount = tokenCount - 10
-                                                                    }
-                                                                    if (item.id == 2) {
-                                                                        newTokenCount = tokenCount - 20
-                                                                    }
-                                                                    if (item.id == 3) {
-                                                                        newTokenCount = tokenCount - 30
-                                                                    }
-                                                                    return newTokenCount
-                                                                })
-                                                            }}
-                                                            variant="outline"
-                                                            size="icon"
-                                                            className="h-8 w-8 border-purple-500 bg-purple-700 hover:bg-purple-900"
-                                                        >
-                                                            <Minus className="h-4 w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </li>
-                                            </div>
-                                        ))}
-                                        <div className="flex justify-end text-sm text-purple-400 underline cursor-pointer"
-                                            onClick={() => {
-                                                setCart([])
-                                                setTotalPrice(0)
-                                                setTokenCount(0)
-                                            }}
-                                        >
-                                            clear all
+                </div>
+                <div>
+                    <h2 className="text-2xl font-semibold my-4 text-purple-300">Your Cart</h2>
+                    <Card className="bg-gray-900 border-purple-500">
+                        <CardHeader>
+                            <CardTitle className="flex items-center text-purple-300">
+                                <ShoppingCart className="mr-2" /> Cart Summary
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            {cart.length === 0 ? (
+                                <p className="text-gray-400">Your cart is empty</p>
+                            ) : (
+                                <ul>
+                                    {cart.map((item, index) => (
+                                        <div key={index} >
+                                            <li key={index} className="flex justify-between items-center mb-2 text-white">
+                                                <span>{item.name} (x{item.quantity})</span>
+                                                <div>
+                                                    <span className="mr-4">₹{item.price * item.quantity}</span>
+                                                    <Button
+                                                        onClick={() => {
+                                                            removeFromCart(item.id)
+                                                            setTokenCount((tokenCount) => {
+                                                                let newTokenCount = tokenCount;
+                                                                if (item.id == 1) {
+                                                                    newTokenCount = tokenCount - 10
+                                                                }
+                                                                if (item.id == 2) {
+                                                                    newTokenCount = tokenCount - 20
+                                                                }
+                                                                if (item.id == 3) {
+                                                                    newTokenCount = tokenCount - 30
+                                                                }
+                                                                if (item.id == 4) {
+                                                                    newTokenCount = tokenCount - 80
+                                                                }
+                                                                return newTokenCount
+                                                            })
+                                                        }}
+                                                        variant="outline"
+                                                        size="icon"
+                                                        className="h-8 w-8 border-purple-500 bg-purple-700 hover:bg-purple-900"
+                                                    >
+                                                        <Minus className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            </li>
                                         </div>
-                                    </ul>
-                                )}
-                            </CardContent>
-                            <CardFooter className="flex justify-between items-center text-white bg-white  rounded-md ">
-                                <div className="flex items-center mt-5 font-semibold text-gray-800">Total:</div>
-                                <div className="flex items-center mt-5 font-semibold text-gray-800">₹{totalPrice?.toString()}</div>
-                            </CardFooter>
-                        </Card>
-                        <Button
-                            onClick={displayRazorpay}
-                            disabled={totalPrice == 0 ? true : false}
-                            className={`w-full mt-4 ${totalPrice == 0 ? "bg-gray-500 " : "bg-purple-600"} hover:bg-purple-700" onClick={displayRazorpay`} >
-                            Checkout ₹{totalPrice?.toString()} ({TokenCount} {" "} Tokens)
-                        </Button>
-                    </div>
+                                    ))}
+                                    <div className="flex justify-end text-sm text-purple-400 underline cursor-pointer"
+                                        onClick={() => {
+                                            setCart([])
+                                            setTotalPrice(0)
+                                            setTokenCount(0)
+                                        }}
+                                    >
+                                        clear all
+                                    </div>
+                                </ul>
+                            )}
+                        </CardContent>
+                        <CardFooter className="flex justify-between items-center text-white bg-white  rounded-md ">
+                            <div className="flex items-center mt-5 font-semibold text-gray-800">Total:</div>
+                            <div className="flex items-center mt-5 font-semibold text-gray-800">₹{totalPrice?.toString()}</div>
+                        </CardFooter>
+                    </Card>
+                    <Button
+                        onClick={displayRazorpay}
+                        disabled={totalPrice == 0 ? true : false}
+                        className={`w-full mt-4 ${totalPrice == 0 ? "bg-gray-500 " : "bg-purple-600"} hover:bg-purple-700" `} >
+                        Checkout ₹{totalPrice?.toString()} ({TokenCount} {" "} Tokens)
+                    </Button>
                 </div>
             </div>
         </div>

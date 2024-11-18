@@ -75,8 +75,8 @@ model Likes {
 
 model FalAIModel {
   id        String   @id @default(uuid())
-  requestID String
-  status    String
+  requestID String   @unique
+  status    String? //
   userEmail String
   useremail User     @relation(fields: [userEmail], references: [email])
   createdAt DateTime @default(now())

@@ -1,23 +1,19 @@
 import { useState } from "react"
 import ImagesComponent from "../ImagesComponent"
+import ExploreModels from "./ExploreModels"
 
-export type active = "MyModels" | "MyImages" | "Dashboard" | "TrainModels"
+export type active = "MyModels" | "MyImages" | "TrainModels"
 const Dashboard = () => {
 
-    const [ActiveComponent, setActiveComponent] = useState<active>("MyImages")
+    const [ActiveComponent, setActiveComponent] = useState<active>("TrainModels")
 
     return (
         <div className=" min-h-screen w-screen bg-black font-sans text-white ">
-            <div className="flex justify-start gap-5 p-4 m-3  border border-purple-700 border-opacity-40  mt-16 text-purple-400 " >
-                <div className={`p-4 cursor-pointer ${ActiveComponent == "Dashboard" && 'text-white bg-purple-700'}  hover:bg-purple-700 hover:text-white  `}
-                    onClick={() => setActiveComponent("Dashboard")}
-                >
-                    Dashboard
-                </div>
+            <div className="flex justify-start gap-5 p-4 my-3  border border-purple-700 border-opacity-40  mt-16 text-purple-400 max-w-[1600px] m-auto" >
                 <div className={`p-4 cursor-pointer ${ActiveComponent == "TrainModels" && 'text-white bg-purple-700'}  hover:bg-purple-700 hover:text-white  `}
                     onClick={() => setActiveComponent("TrainModels")}
                 >
-                    Train Model
+                    Explore Models
                 </div>
                 <div className={`p-4 cursor-pointer ${ActiveComponent == "MyModels" && 'text-white bg-purple-700'}  hover:bg-purple-700 hover:text-white  `}
                     onClick={() => setActiveComponent("MyModels")}
@@ -30,11 +26,11 @@ const Dashboard = () => {
                 </div>
             </div>
             <div>
+                {ActiveComponent == "MyImages" ?
+                    <ImagesComponent /> : null}
                 {
-                    ActiveComponent == "MyImages" ?
-                        <ImagesComponent />
-                        :
-                        null
+                    ActiveComponent == "TrainModels" ?
+                        <ExploreModels /> : null
                 }
             </div>
         </div>

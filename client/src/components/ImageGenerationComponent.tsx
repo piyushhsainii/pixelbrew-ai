@@ -143,7 +143,6 @@ const ImageGenerationComponent = () => {
                             title: data.error,
                             variant: "destructive",
                             className: "bg-primmaryColor text-white font-sans border-gray-800 border",
-
                         });
                     }
                     autoResizeTextarea()
