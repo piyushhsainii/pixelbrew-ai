@@ -13,6 +13,7 @@ const ExploreModels = () => {
             ],
             modelType: "text-to-image",
             url: "https://res.cloudinary.com/dzow59kgu/image/upload/v1731848448/flux-pro-11-ultra_r8adub.webp",
+            requires_training: false
 
         },
         {
@@ -21,12 +22,13 @@ const ExploreModels = () => {
             AI images. Generates highly realistic results.
             `,
             how_it_works: [
-                { steps: "Requires 5-10 images of yourself with clear face.", },
-                { steps: "One time Model training fees - 249", },
+                { steps: "Requires 4 images of yourself with clear face.", },
+                { steps: "Only one time Model training fees", },
                 { steps: "Then, you are only charged per-image generation", },
             ],
             modelType: "text-to-image",
             url: "https://res.cloudinary.com/dzow59kgu/image/upload/v1731848442/flux-lora-fast-training_be31zu.webp",
+            requires_training: true
 
         },
     ]

@@ -155,7 +155,7 @@ export default function AddToCart() {
                 </h1>
                 <div className="">
                     <h2 className="text-2xl font-semibold mb-4  text-white">Available Tokens</h2>
-                    <div className="grid grid-cols-2 gap-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         {availableTokens.map((token) => (
                             <Card key={token.id} className=" bg-gray-900 border-purple-600 shadow-purple-700  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
                                 <CardHeader>

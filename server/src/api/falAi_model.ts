@@ -35,6 +35,16 @@ router.post('/generateImg', async (req: Request, res: Response) => {
 router.post('/trainModel', async (req: Request, res: Response) => {
     const email = req.body.email
     try {
+        const updateBalance = await prisma.user.findUnique({
+            where: { email: email },
+        })
+        if (updateBalance.balance < 80) {
+            res.json({ error: "Low balance" }).status(400)
+        }
+        const deductMoney = await prisma.user.update({
+            where: { email: email },
+            data: { balance: { decrement: 80 } }
+        })
         fal.config({ credentials: process.env.FAL_AI });
         const result = await fal.subscribe("fal-ai/flux-lora-fast-training", {
             input: { images_data_url: "" },
