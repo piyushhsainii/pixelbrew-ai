@@ -24,6 +24,19 @@ app.use('/', paymentApi)
 app.use('/', FalAI)
 app.use('/', modelApi)
 
+app.post('/addData', async (req: Request, res: Response) => {
+    await prisma.prompt.create({
+        data: {
+            prompt: req.body.prompt,
+            url: req.body.url,
+            isPublic: true,
+            model: "Flux",
+            userEmail: "piyushsainii230@gmail.com"
+        }
+    })
+    res.json({ true: true })
+})
+
 app.post('/uploadToCloud', upload.single('file'), async (req: Request, res: any) => {
     try {
         const result = await cloudinary.uploader

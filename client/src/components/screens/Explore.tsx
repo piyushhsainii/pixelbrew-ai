@@ -42,8 +42,20 @@ const Explore = () => {
     return (
         <div className="relative min-h-screen w-full bg-black">
             <div className="relative z-10   py-8">
-                <div className="text-white font-sans text-3xl text-pretty text-center">
+                <div className="text-white font-sans text-3xl text-pretty text-center mt-12">
                     EXPLORE IMAGES BREWED BY PIXEL BREW AI
+                </div>
+                <div className="flex justify-center gap-5 mt-3">
+                    <Link to={'/generate'}>
+                        <div className="px-4 py-2 max-w-[200px] shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
+                            Try PixelBrew AI now!
+                        </div>
+                    </Link>
+                    <Link to={'/dashboard'}>
+                        <div className="px-4 py-2 max-w-[200px] shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
+                            Explore Models
+                        </div>
+                    </Link>
                 </div>
                 {isLoading ? (
                     <div className="flex justify-center items-center min-h-[200px]">
@@ -69,11 +81,7 @@ const Explore = () => {
                 <h2 className="text-white text-2xl md:text-4xl font-bold font-sans text-center mb-4 select-none" >
                     UNLEASH YOUR CREATIVITY!
                 </h2>
-                <Link to={'/generate'}>
-                    <div className="px-4 py-2 max-w-[200px] shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
-                        Try PixelBrew AI now!
-                    </div>
-                </Link>
+
             </div>
         </div>
     )

@@ -34,6 +34,18 @@ app.use('/auth', auth_1.default); //handles the google auth
 app.use('/', payment_1.default);
 app.use('/', falAi_model_1.default);
 app.use('/', model_1.default);
+app.post('/addData', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield db_1.default.prompt.create({
+        data: {
+            prompt: req.body.prompt,
+            url: req.body.url,
+            isPublic: true,
+            model: "Flux",
+            userEmail: "piyushsainii230@gmail.com"
+        }
+    });
+    res.json({ true: true });
+}));
 app.post('/uploadToCloud', upload.single('file'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield cloudinary_1.v2.uploader

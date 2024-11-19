@@ -6,6 +6,7 @@ import prisma from "../db";
 
 const router = Router()
 
+// standard model
 router.post('/generateImg', async (req: Request, res: Response) => {
     const prompt = req.body.image
     try {
@@ -32,9 +33,33 @@ router.post('/generateImg', async (req: Request, res: Response) => {
     }
 })
 
+router.post('/customModel', async (req: Request, res: Response) => {
+    const prompt = req.body.prompt
+    try {
+        fal.subscribe('fal-ai/flux-lora', {
+            input: {
+                loras: [{
+                    path: "https://storage.googleapis.com/fal-flux-lora/c659b28089b5431a81e341b899e26a37_pytorch_lora_weights.safetensors",
+                    scale: 1
+                }],
+                prompt: prompt
+            }
+        })
+    } catch (error) {
+
+    }
+})
+
+
 router.post('/trainModel', async (req: Request, res: Response) => {
     const email = req.body.email
+    const imgUrl = req.body.imgUrl
+    const isStyle = req.body.style
+    const modelname = req.body.modelName
     try {
+        if (imgUrl == "" || imgUrl == null) {
+            res.json({ error: "error" }).status(400)
+        }
         const updateBalance = await prisma.user.findUnique({
             where: { email: email },
         })
@@ -46,35 +71,80 @@ router.post('/trainModel', async (req: Request, res: Response) => {
             data: { balance: { decrement: 80 } }
         })
         fal.config({ credentials: process.env.FAL_AI });
+        let updatedStatus = 0
+        const updateProgress = async (update) => {
+            const updateprogress = await prisma.falAIModel.create({
+                data: {
+                    modelName: modelname,
+                    status: update.status,
+                    requestID: update.request_id,
+                    userEmail: email
+                }
+            })
+        }
+        const completeProgress = async (update) => {
+            const updateprogress = await prisma.falAIModel.update({
+                where: {
+                    requestID: update.request_id
+                },
+                data: {
+                    status: update.status,
+                    requestID: update.request_id,
+                    userEmail: email
+                }
+            })
+        }
         const result = await fal.subscribe("fal-ai/flux-lora-fast-training", {
-            input: { images_data_url: "" },
+            input: {
+                images_data_url: imgUrl,
+                steps: 1000,
+                is_style: isStyle
+            },
             logs: true,
             onQueueUpdate: (update) => {
                 if (update.status == "IN_QUEUE") {
-                    const addRequestID = prisma.falAIModel.create({
-                        data: { requestID: result.requestId, userEmail: email, status: "IN_QUEUE" }
-                    })
+                    console.log("IN QUEUE")
                 }
                 if (update.status === "IN_PROGRESS") {
-                    const updateRequest = prisma.falAIModel.update({
-                        where: { requestID: result.requestId },
-                        data: { status: "IN_PROGRESS" }
-                    })
+                    if (updatedStatus == 0) {
+                        updatedStatus = 1
+                        updateProgress(update)
+                    }
                 }
                 if (update.status === "COMPLETED") {
-                    const updateRequest = prisma.falAIModel.update({
-                        where: { requestID: result.requestId },
-                        data: { status: "COMPLETED" }
-                    })
+                    if (updatedStatus == 1) {
+                        updatedStatus = 2
+                        updateProgress(update)
+                    }
                 }
             },
-            webhookUrl: `${BACKEND_URL}/api/webhook`
+            webhookUrl: `${BACKEND_URL}/falAI/webhook`
         });
 
         console.log(result.data);
         console.log(result.requestId);
+        const addEntry = await prisma.falAIModel.upsert({
+            where: {
+                requestID: result.requestId
+            },
+            create: {
+                requestID: result.requestId,
+                lora: result.data.config_file.url,
+                isDataSet: isStyle,
+                status: "completed",
+                userEmail: email,
+            },
+            update: {
+                requestID: result.requestId,
+                lora: result.data.config_file.url,
+                isDataSet: isStyle,
+                status: "completed",
+                userEmail: email,
+            }
+        })
+        res.json(result).status(200)
     } catch (error) {
-
+        res.json(error).status(400)
     }
 })
 
@@ -82,28 +152,20 @@ router.post('/trainModel', async (req: Request, res: Response) => {
 router.post('/getStatus', async (req: Request, res: Response) => {
     const ID = req.body.requestID
     try {
-        const getFalAIdetails = await prisma.falAIModel.findUnique({ where: { id: ID } })
-        const getStatus = await axios.get(`https://queue.fal.run/fal-ai/fast-sdxl/requests/${getFalAIdetails.requestID}/status`)
-        res.json({ status: getStatus.status }).status(200)
+        // const getFalAIdetails = await prisma.falAIModel.findUnique({ where: { id: ID } })
+        const result = await fal.queue.result("fal-ai/flux-lora-general-training", {
+            requestId: "834d5ba5-8f1b-4e3f-ad05-5dfc530976e0"
+        });
+        res.json({ result: result }).status(200)
     } catch (error) {
         res.json(error).status(400)
     }
 })
 
-router.post(`api/webhook`, async (req: Request, res: Response) => {
-    console.log(req.body)
-    // const url = `https://queue.fal.run/fal-ai/flux/dev?fal_webhook=https://${BACKEND_URL}/api/webhook`;
-    // const falKey = process.env.FAL_AI; // Replace with your actual FAL_KEY
-
-    // axios.post(url, { prompt: 'Photo of a cute dog', },
-    //     { headers: { Authorization: `Key ${falKey}`, 'Content-Type': 'application/json', }, })
-    //     .then(response => {
-    //         console.log('Response:', response.data);
-    //     })
-    //     .catch(error => {
-    //         console.error('Error:', error.response ? error.response.data : error.message);
-    //     });
-
+router.post(`/falAI/webhook`, async (req: Request, res: Response) => {
+    console.log(req.body, "req.body")
+    console.log(req.body.event, "req.event")
+    console.log(req.body.payload, "req.payload")
 })
 
 export default router

@@ -57,14 +57,14 @@ export function HighlightedPosts({ topPosts, recentPosts }: { topPosts: TopPosts
                         TOP POSTS
                     </div>
                     <BlurFade inView className="mt-5">
-                        <Marquee reverse className="[--duration:35s]">
+                        <Marquee reverse className="[--duration:35s] border border-gray-800">
                             {topPosts?.map((review) => (
                                 <TopPostCard key={review.id} body={review.url} img={review.user.avatar_url} name={review.user.name} username={review.Likes.toString()} />
                             ))}
                         </Marquee>
                         {
                             recentPosts &&
-                            <Marquee className="[--duration:35s]">
+                            <Marquee className="[--duration:35s] border border-gray-800">
                                 {recentPosts?.map((review) => (
                                     <TopPostCard key={review.id} body={review.url} img={review.user.avatar_url} name={review.user.name} username={review.Likes.toString()} />
                                 ))}

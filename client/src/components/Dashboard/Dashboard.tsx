@@ -1,14 +1,15 @@
 import { useState } from "react"
 import ImagesComponent from "../ImagesComponent"
 import ExploreModels from "./ExploreModels"
+import MyModels from "./MyModels"
 
 export type active = "MyModels" | "MyImages" | "TrainModels"
 const Dashboard = () => {
 
-    const [ActiveComponent, setActiveComponent] = useState<active>("TrainModels")
+    const [ActiveComponent, setActiveComponent] = useState<active>("MyModels")
 
     return (
-        <div className=" min-h-screen w-screen bg-black font-sans text-white ">
+        <div className=" min-h-screen h-auto w-screen bg-black font-sans text-white ">
             <div className="flex justify-start gap-5 p-4 my-3  border border-purple-700 border-opacity-40  mt-16 text-purple-400 max-w-[1600px] m-auto" >
                 <div className={`p-4 cursor-pointer ${ActiveComponent == "TrainModels" && 'text-white bg-purple-700'}  hover:bg-purple-700 hover:text-white  `}
                     onClick={() => setActiveComponent("TrainModels")}
@@ -31,6 +32,10 @@ const Dashboard = () => {
                 {
                     ActiveComponent == "TrainModels" ?
                         <ExploreModels /> : null
+                }
+                {
+                    ActiveComponent == "MyModels" ?
+                        <MyModels /> : null
                 }
             </div>
         </div>
