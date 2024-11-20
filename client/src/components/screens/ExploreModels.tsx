@@ -1,4 +1,5 @@
-import ModelCard from "./ModelCard"
+import DashboardNavbar from "../Dashboard/DashboardNavbar"
+import ModelCard from "../Dashboard/ModelCard"
 
 const ExploreModels = () => {
 
@@ -46,11 +47,15 @@ const ExploreModels = () => {
         },
     ]
     return (
-        <div className="max-w-[1600px] m-auto flex justify-center flex-wrap gap-5 pb-2">
-            {data && data.map((data) => (
-                <ModelCard img={data.url} data={data} />
-            ))}
+        <div className=" min-h-screen h-auto w-screen bg-black font-sans text-white ">
+            <DashboardNavbar />
+            <div className="max-w-[1600px] flex justify-center gap-5 flex-wrap pb-2">
+                {data && data.map((data) => (
+                    <ModelCard img={data.url} data={data} />
+                ))}
+            </div>
         </div>
+
     )
 }
 

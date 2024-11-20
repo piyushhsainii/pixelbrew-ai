@@ -33,24 +33,49 @@ router.post('/generateImg', async (req: Request, res: Response) => {
     }
 })
 
-router.post('/customModel', async (req: Request, res: Response) => {
+// API FOR FAL AI TRAINED MODEL
+
+router.post('/trainedModel', async (req: Request, res: Response) => {
     const prompt = req.body.prompt
+    const path1 = req.body.path1
     try {
-        fal.subscribe('fal-ai/flux-lora', {
+        const result = await fal.subscribe('fal-ai/flux-lora', {
             input: {
-                loras: [{
-                    path: "https://storage.googleapis.com/fal-flux-lora/c659b28089b5431a81e341b899e26a37_pytorch_lora_weights.safetensors",
-                    scale: 1
-                }],
+                loras: [
+                    { path: path1, scale: 1 },
+                ],
                 prompt: prompt
             }
         })
+        res.json(result).status(200)
     } catch (error) {
-
+        res.json(error).status(400)
     }
 })
 
 
+// API FOR COMBINING MODEL
+router.post('/customModel', async (req: Request, res: Response) => {
+    const prompt = req.body.prompt
+    const path1 = req.body.path1
+    const path2 = req.body.path2
+    try {
+        const result = await fal.subscribe('fal-ai/flux-lora', {
+            input: {
+                loras: [
+                    { path: path1, scale: 1 },
+                    { path: path2, scale: 1 }
+                ],
+                prompt: prompt
+            }
+        })
+        res.json(result).status(200)
+    } catch (error) {
+        res.json(error).status(400)
+    }
+})
+
+// API FOR MODEL TRAINING
 router.post('/trainModel', async (req: Request, res: Response) => {
     const email = req.body.email
     const imgUrl = req.body.imgUrl
@@ -114,7 +139,7 @@ router.post('/trainModel', async (req: Request, res: Response) => {
                 if (update.status === "COMPLETED") {
                     if (updatedStatus == 1) {
                         updatedStatus = 2
-                        updateProgress(update)
+                        completeProgress(update)
                     }
                 }
             },

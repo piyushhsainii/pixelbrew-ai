@@ -130,9 +130,8 @@ app.post('/getUserDetails', (req, res) => __awaiter(void 0, void 0, void 0, func
                 Payments: true,
                 Prompt: true,
                 Reviews: true,
-                Likes: {
-                    select: { isLiked: true, postID: true, userEmail: true, url: true }
-                }
+                Likes: { select: { isLiked: true, postID: true, userEmail: true, url: true } },
+                FalAI: true
             }
         });
         res.json({

@@ -66,7 +66,7 @@ const ImageCard = (
                         className='h-[100%] object-cover '
                     />
                 </DialogTrigger>
-                <DialogContent className='bg-black flex flex-col  rounded-lg border-none text-white font-sans h-[84vh] md:h-[75vh] w-[90vw] md:w-[70vw]'>
+                <DialogContent className='bg-black flex flex-col  rounded-lg border-none text-white font-sans h-[84vh] md:h-[90vh] w-[90vw] md:w-[90vw] mt-10'>
                     <div className='overflow-y-scroll' >
                         <DialogTitle>
                             <div className='flex  items-center gap-3 select-none'>
@@ -76,15 +76,15 @@ const ImageCard = (
                         </DialogTitle>
                         <DialogDescription>
                             <div className='flex flex-col md:flex-row justify-center items-center  '>
-                                <div className='max-h-[20rem]  w-full md:w-[50%] border-purple-700 cursor-pointer m-10'>
+                                <div className='max-h-[25rem]  w-full md:w-[70%] border-purple-700  cursor-pointer m-10'>
                                     <img
                                         src={url}
                                         alt=""
-                                        className='rounded-2xl object-fill border-purple-700 border-2'
+                                        className='rounded-2xl object-fill border-purple-700 border-2 border-opacity-35'
                                     />
                                 </div>
-                                <div className=' flex flex-col text-white items-start text-left w-full md:w-[50%] border-purple-700 border-2 p-5 rounded-xl'>
-                                    <div className='text-pretty text-sm flex  justify-center items-center  m-3 rounded-lg '>
+                                <div className=' flex flex-col text-white items-start text-left w-full md:w-[50%] p-5 rounded-xl'>
+                                    <div className='text-pretty text-sm flex  justify-center items-center  m-3 rounded-lg tracking-wider'>
                                         {image.prompt}
                                     </div>
                                     <div className="flex justify-between w-full bg-gray-900 rounded-2xl px-3">

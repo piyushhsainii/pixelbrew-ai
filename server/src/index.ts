@@ -36,7 +36,6 @@ app.post('/addData', async (req: Request, res: Response) => {
     })
     res.json({ true: true })
 })
-
 app.post('/uploadToCloud', upload.single('file'), async (req: Request, res: any) => {
     try {
         const result = await cloudinary.uploader
@@ -118,9 +117,8 @@ app.post('/getUserDetails', async (req: Request, res: Response) => {
                 Payments: true,
                 Prompt: true,
                 Reviews: true,
-                Likes: {
-                    select: { isLiked: true, postID: true, userEmail: true, url: true }
-                }
+                Likes: { select: { isLiked: true, postID: true, userEmail: true, url: true } },
+                FalAI: true
             }
         })
         res.json({

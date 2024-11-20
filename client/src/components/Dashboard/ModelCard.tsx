@@ -14,7 +14,7 @@ import { QuestionMarkCircledIcon } from "@radix-ui/react-icons"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 
 
-const ModelCard = ({ img, data }: { img: string, data }) => {
+const ModelCard = ({ img, data, }: { img: string, data: any, }) => {
     const [userInfo, setuserInfo] = useRecoilState(userCompleteInfo)
     const [Images, setImages] = useState<any>(null)
     const [mageUploading, setisImageUploading] = useState(false)
@@ -84,12 +84,12 @@ const ModelCard = ({ img, data }: { img: string, data }) => {
     }
 
     return (
-        <div className="h-80">
-            <div className="w-[50vw] border border-white max-w-[600px] py-3 flex items-center px-2 mb-3 gap-5 rounded-md border-opacity-20 overflow-y-auto">
-                <div className="w-[50%] flex justify-center items-center">
+        <div className=" h-auto md:h-80 ">
+            <div className="w-[50vw] min-w-[350px] border border-white max-w-[600px] py-3 flex flex-col md:flex-row  items-center px-2 mb-3 gap-5 rounded-md border-opacity-20 overflow-y-auto">
+                <div className="w-full md:w-[50%] flex  justify-center items-center">
                     <img src={img} alt="x" className="h-full w-full rounded-md border border-purple-600 border-opacity-35" />
                 </div>
-                <div className="w-[50%] flex flex-col gap-2">
+                <div className=" w-full md:w-[50%] flex flex-col gap-2">
                     <div className="text-2xl "> {data.modelName} </div>
                     <div className="text-muted text-pretty text-sm text-gray-400"> {data.description} </div>
                     <div className="text-sm bg-purple-700 w-[100px] text-center rounded-md"> {data.modelType} </div>

@@ -39,7 +39,7 @@ const SearchBar = ({
                                 />
                             </div>
                         </TooltipTrigger>
-                        <TooltipContent className="h-[90px] w-[180px] bg-slate-100 border-white border border-opacity-30">
+                        <TooltipContent className="h-[90px] w-[180px] bg-slate-100 border-white border border-opacity-30 mt-10 mr-8">
                             <div className="text-primmaryColor font-sans text-center font-bold text-[0.900rem]"> MAGIC PROMPT </div>
                             <div className="text-primmaryColor font-sans text-center my-2 mb-4">
                                 turning this on will enhance your prompt with <span className="font-mono">pixelbrew AI</span>

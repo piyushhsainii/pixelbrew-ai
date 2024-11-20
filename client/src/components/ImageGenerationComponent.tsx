@@ -14,16 +14,19 @@ import SearchBar from "./ImageGeneration/SearchBar"
 import Filter from "./ImageGeneration/Filter"
 import MobileFilter from "./ImageGeneration/MobileFilter"
 import { fal } from "@fal-ai/client"
+import AdvancedResponse from "./ImageGeneration/AdvancedResponse"
 
 export type MagicPrompt = "ON" | "OFF" | "AUTO"
-export type Model = "FAL_AI" | "Ideogram"
+export type Model = "FAL_AI" | "Ideogram" | "Advanced" | "Custom"
 
 const ImageGenerationComponent = () => {
 
     const [Input, setInput] = useState<string>("")
     const [styleType, setstyleType] = useState<string>('REALISTIC')
     const [ModelVersion, setModelVersion] = useState<string>('V_2')
-    const [Model, setModel] = useState<Model>('FAL_AI')
+    const [Model, setModel] = useState<Model>('FAL_AI')     //MODEL TYPE
+    const [SubjectModel, setSubjectModel] = useState<string | null>(null)
+    const [StyleModel, setStyleModel] = useState<string | null>(null)
     const [AspectRatio, setAspectRatio] = useState<string>('ASPECT_16_9')
     const [isMagicPromptOn, setIsMagicPromptOn] = useState<MagicPrompt>('OFF')
     const [isLoading, setisLoading] = useState(false)
@@ -36,6 +39,8 @@ const ImageGenerationComponent = () => {
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
     const [Response, setResponse] = useState<ApiResponse | null>(null)
     const [FalAIResponse, setFalAIResponse] = useState<FalAIResponse | null>(null)
+    const [trainedModelResponse, settrainedModelResponse] = useState(null)
+    const [CustomResponse, setCustomResponse] = useState(null)
     const { toast } = useToast()
     const navigate = useNavigate();
 
@@ -161,6 +166,27 @@ const ImageGenerationComponent = () => {
                     setisLoading(false)
                 }
                 break;
+            case "Custom":
+                if (SubjectModel == null) {
+                    return toast({
+                        title: "Select Style Model to continue",
+                        variant: "destructive",
+                        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                    });
+                }
+                if (StyleModel == null) {
+                    return toast({
+                        title: "Select Subject Model to continue",
+                        variant: "destructive",
+                        className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+                    });
+                }
+                try {
+
+                } catch (error) {
+
+                }
+                break;
             default:
                 break;
         }
@@ -211,6 +237,7 @@ const ImageGenerationComponent = () => {
         }
     }
 
+
     useEffect(() => {
         autoResizeTextarea(); // Initialize resize on mount
     }, [Input]);
@@ -218,12 +245,11 @@ const ImageGenerationComponent = () => {
         setInput(e.target.value);
         autoResizeTextarea();
     };
-    console.log(FalAIResponse)
     useEffect(() => {
         getUserDetails()
     }, [Response])
     return (
-        <div className='flex justify-stretch bg-black min-h-[100vh] h-full  w-screen font-sans mt-14'>
+        <div className='flex justify-stretch bg-black min-h-[100vh] h-full  w-screen font-sans mt-28 md:mt-18 lg:mt-14'>
             <Filter
                 styleType={styleType}
                 setstyleType={setstyleType}
@@ -233,6 +259,8 @@ const ImageGenerationComponent = () => {
                 setAspectRatio={setAspectRatio}
                 Model={Model}
                 setModel={setModel}
+                setSubjectModel={setSubjectModel}
+                setStyleModel={setStyleModel}
             />
             <div className="text-white bg-black fixed right-4 mt-5 md:hidden">
                 <MobileFilter
@@ -263,7 +291,7 @@ const ImageGenerationComponent = () => {
                     </>)}
                 {isLoading &&
                     <div className="flex justify-center items-center h-[60vh]" >
-                        <HashLoader className="w-20 " color="#152243" size={150} />
+                        <HashLoader className="w-20" color="#7e22ce" size={150} />
                     </div>}
                 {Response?.data && !isLoading &&
                     <div className="flex flex-col md:flex-row flex-wrap justify-evenly  p-5 bg-primmaryColor ">
@@ -333,62 +361,10 @@ const ImageGenerationComponent = () => {
                         </div>
                     </div>
                 }
+                {FalAIResponse && !isLoading &&
+                    <AdvancedResponse FalAIResponse={FalAIResponse} createdAt={createdAt} />}
                 {
-                    FalAIResponse && !isLoading &&
-                    <div className="flex flex-col md:flex-row flex-wrap  justify-evenly  p-5  ">
-                        <div className="max-w-[600px] max-h-[450px] ">
-                            <img
-                                src={FalAIResponse.url}
-                                alt="img"
-                                className="border-2 border-white " />
-                        </div>
-                        <div className="md:w-[70%]">
-                            <div className="flex flex-col gap-4 mt-3 ">
-                                <div>
-                                    <div className="flex">
-                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%] " >
-                                            Dimensions
-                                        </div>
-                                        <div className="bg-purple-700 bg-opacity-40 p-2 text-gray-300 w-[50%] text-sm flex items-center ">
-                                            {FalAIResponse?.result?.data.images[0].height.toString()} X  {FalAIResponse?.result?.data?.images[0].width.toString()}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="flex ">
-                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%]" >
-                                            Prompt
-                                        </div>
-                                        <div className="bg-purple-700 bg-opacity-40 p-2 font-sans  tracking-tight text-gray-300 w-[50%] flex items-center text-sm">
-                                            {FalAIResponse?.prompt}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="flex">
-                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%]" >
-                                            Date created
-                                        </div>
-                                        <div className="bg-purple-700  bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center text-sm">
-                                            {createdAt.toLocaleString()}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href={FalAIResponse.url} download={FalAIResponse.url} target="blank">
-                                <div >
-                                    <DownloadButton
-                                        url={FalAIResponse.url}
-                                        data={FalAIResponse.url}
-                                        filename="pixelbrew_ai.jpeg"
-                                        className="bg-green-700   text-center text-white rounded-md p-4 py-2 m-3 ml-0 flex items-center justify-evenly gap-1
-                                        cursor-pointer hover:scale-110 transition-all duration-200 active:scale-90
-                                        "
-                                    />
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+
                 }
             </div>
         </div >
