@@ -38,6 +38,7 @@ router.post('/generateImg', async (req: Request, res: Response) => {
 router.post('/trainedModel', async (req: Request, res: Response) => {
     const prompt = req.body.prompt
     const path1 = req.body.path1
+    fal.config({ credentials: process.env.FAL_AI });
     try {
         const result = await fal.subscribe('fal-ai/flux-lora', {
             input: {
@@ -154,14 +155,14 @@ router.post('/trainModel', async (req: Request, res: Response) => {
             },
             create: {
                 requestID: result.requestId,
-                lora: result.data.config_file.url,
+                lora: result.data.diffusers_lora_file.url,
                 isDataSet: isStyle,
                 status: "completed",
                 userEmail: email,
             },
             update: {
                 requestID: result.requestId,
-                lora: result.data.config_file.url,
+                lora: result.data.diffusers_lora_file.url,
                 isDataSet: isStyle,
                 status: "completed",
                 userEmail: email,

@@ -15,9 +15,9 @@ const MyModels = () => {
                     <TableCaption   >A list of your recent invoices.</TableCaption>
                     <TableHeader >
                         <TableRow className="text-white border-purple-700 border border-opacity-30 ">
-                            <TableHead className=" text-white">ID</TableHead>
-                            <TableHead className=" text-white">Name</TableHead>
-                            <TableHead className="text-white ">Status</TableHead>
+                            <TableHead className=" w-[30%] text-white">ID</TableHead>
+                            <TableHead className=" text-white">Model name</TableHead>
+                            <TableHead className="text-white ">Training Status</TableHead>
                             <TableHead className="text-white ">Style Mode</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -26,7 +26,7 @@ const MyModels = () => {
                             <TableRow className="text-white" >
                                 <TableCell className="font-sans text-base  text-white">{data?.id}</TableCell>
                                 <TableCell className="font-sans text-base  text-white">{data?.modelName}</TableCell>
-                                <TableCell className={`font-sans text-base  text-white ${data.status == 'COMPLETED' ? "text-green-400" : ""}`}>
+                                <TableCell className={`font-sans text-base  text-white ${data.status == 'completed' ? "text-green-400" : ""}`}>
                                     {data?.status}
                                 </TableCell>
                                 <TableCell className="font-sans text-base text-white font-light" >

@@ -31,7 +31,7 @@ model Prompt {
   prompt    String
   url       String
   isPublic  Boolean  @default(false)
-  model     String   @default("Ideogram") //Ideogram || Flux || Custom
+  model     String   @default("Ideogram") //Ideogram || Flux || Advanced || Custom
   Likes     Int      @default(0)
   userEmail String
   createdAt DateTime @default(now())

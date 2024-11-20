@@ -13,6 +13,7 @@ import axios from "axios";
 import { AllReviews, TopPosts } from "../../lib/interface";
 import Testimonials from "../Testimonials";
 import WhyPixelBrewAI from "../WhyPixelBrew";
+import FAQ from "../FAQ";
 
 export function LandingPage() {
     const [user, setUser] = useRecoilState(authUser)
@@ -57,7 +58,7 @@ export function LandingPage() {
                         className="text-white text-4xl md:text-6xl font-bold text-center font-sans select-none bg-gradient-to-t from-gray-400 to-white text-transparent bg-clip-text "
                     />
                     <p className="text-white text-lg md:text-2xl max-w-xl mt-4 text-center font-sans select-none tracking-tighter ">
-                        Pixel Perfect Thumbnails, Brewed by AI.
+                        Pixel Perfect Images, Brewed by AI.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 relative">
                         <Link to={'/explore'}>
@@ -77,8 +78,9 @@ export function LandingPage() {
             </div>
             <HighlightedPosts topPosts={topPosts} recentPosts={ReverseMap} />
             <HowItWorks />
-            <WhyPixelBrewAI />
             <Testimonials reviews={reviews} />
+            <WhyPixelBrewAI />
+            <FAQ />
             <ReviewComponent user={user} />
         </>
     );

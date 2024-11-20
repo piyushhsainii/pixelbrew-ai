@@ -1,10 +1,4 @@
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons"
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "../../components/ui/accordion"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { useRecoilState } from "recoil"
 import { userCompleteInfo } from "../../atoms/atoms"
@@ -19,7 +13,9 @@ const Filter = ({
     Model,
     setModel,
     setSubjectModel,
-    setStyleModel
+    setStyleModel,
+    trainedModel,
+    settrainedModel
 }: {
     styleType: string
     setstyleType: React.Dispatch<React.SetStateAction<string>>
@@ -31,6 +27,8 @@ const Filter = ({
     setModel: React.Dispatch<React.SetStateAction<string>>
     setSubjectModel: React.Dispatch<React.SetStateAction<string>>
     setStyleModel: React.Dispatch<React.SetStateAction<string>>
+    trainedModel: string
+    settrainedModel: React.Dispatch<React.SetStateAction<string>>
 }) => {
 
     const [userInfo, setuserInfo] = useRecoilState(userCompleteInfo)
@@ -134,15 +132,13 @@ const Filter = ({
                     <div>
                         <div className="m-2 flex items-center justify-center gap-2">MY MODELS</div>
                         <select
-                            name="" id="" value={Model}
-                            onChange={(e) => setModel(e.target.value)}
+                            name="" id="" value={trainedModel}
+                            onChange={(e) => settrainedModel(e.target.value)}
                             className="p-2 bg-primmaryColor mt-2  relative active:outline-none focus:outline-none shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm"
                         >
-                            {
-                                userInfo.user.FalAI.map((data) => (
-                                    <option value="Advanced" className=" py-3"> {data.modelName} </option>
-                                ))
-                            }
+                            {userInfo.user.FalAI.map((data) => (
+                                <option key={data.id} value={data.lora} className=" py-3"> {data.modelName} </option>
+                            ))}
                         </select>
                     </div>
                 }{
@@ -182,10 +178,7 @@ const Filter = ({
                 {/* </AccordionContent>
                     </AccordionItem>
                 </Accordion> */}
-
             </div>
-
-
         </div>
     )
 }

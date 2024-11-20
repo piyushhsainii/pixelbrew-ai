@@ -1,10 +1,5 @@
-import { useEffect } from "react";
-import { cn } from "../lib/utils";
 import { Marquee } from "./ui/Marquee";
-import axios from "axios";
-import { BACKEND_URL } from "../lib/url";
-import { AllReviews, TopPosts } from "../lib/interface";
-import { ReviewCard } from "./ReviewsCards/ReviewCard";
+import { TopPosts } from "../lib/interface";
 import { TopPostCard } from "./ReviewsCards/TopPostCard";
 import BlurFade from "./ui/blur-fade";
 
@@ -62,20 +57,17 @@ export function HighlightedPosts({ topPosts, recentPosts }: { topPosts: TopPosts
                                 <TopPostCard key={review.id} body={review.url} img={review.user.avatar_url} name={review.user.name} username={review.Likes.toString()} />
                             ))}
                         </Marquee>
-                        {
-                            recentPosts &&
+                        {recentPosts &&
                             <Marquee className="[--duration:35s] border border-gray-800">
                                 {recentPosts?.map((review) => (
                                     <TopPostCard key={review.id} body={review.url} img={review.user.avatar_url} name={review.user.name} username={review.Likes.toString()} />
                                 ))}
-                            </Marquee>
-                        }
+                            </Marquee>}
                     </BlurFade>
                 </div>
             }
             <div className="max-w-[1400px] pointer-events-none absolute inset-y-0 left-0 w-[25%] bg-gradient-to-r from-black"></div>
             <div className="max-w-[1400px] pointer-events-none absolute inset-y-0 right-0 w-[25%] bg-gradient-to-l from-black"></div>
         </div>
-
     );
 }

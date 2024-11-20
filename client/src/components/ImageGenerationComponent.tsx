@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
-import { ApiResponse, FalAIResponse } from "../lib/interface"
+import { AdvancedResponseModel, ApiResponse, FalAIResponse } from "../lib/interface"
 import { Copy, Download, Info, SlidersHorizontal } from "lucide-react"
 import { HashLoader } from "react-spinners"
 import { useRecoilState } from "recoil"
@@ -15,6 +15,7 @@ import Filter from "./ImageGeneration/Filter"
 import MobileFilter from "./ImageGeneration/MobileFilter"
 import { fal } from "@fal-ai/client"
 import AdvancedResponse from "./ImageGeneration/AdvancedResponse"
+import TrainedModelResponse from "./ImageGeneration/TrainedModelResponse"
 
 export type MagicPrompt = "ON" | "OFF" | "AUTO"
 export type Model = "FAL_AI" | "Ideogram" | "Advanced" | "Custom"
@@ -26,6 +27,7 @@ const ImageGenerationComponent = () => {
     const [ModelVersion, setModelVersion] = useState<string>('V_2')
     const [Model, setModel] = useState<Model>('FAL_AI')     //MODEL TYPE
     const [SubjectModel, setSubjectModel] = useState<string | null>(null)
+    const [trainedModel, settrainedModel] = useState<string>(null)
     const [StyleModel, setStyleModel] = useState<string | null>(null)
     const [AspectRatio, setAspectRatio] = useState<string>('ASPECT_16_9')
     const [isMagicPromptOn, setIsMagicPromptOn] = useState<MagicPrompt>('OFF')
@@ -39,7 +41,27 @@ const ImageGenerationComponent = () => {
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
     const [Response, setResponse] = useState<ApiResponse | null>(null)
     const [FalAIResponse, setFalAIResponse] = useState<FalAIResponse | null>(null)
-    const [trainedModelResponse, settrainedModelResponse] = useState(null)
+    const [trainedModelResponse, settrainedModelResponse] = useState<AdvancedResponseModel | null>({
+        "data": {
+            "images": [
+                {
+                    "url": "https://fal.media/files/rabbit/Bq7x3JAsFdpL4xBn2y_c-_21b8f79d2af34fcd97fe21e3baa91e20.jpg",
+                    "width": 1024,
+                    "height": 768,
+                    "content_type": "image/jpeg"
+                }
+            ],
+            "timings": {
+                "inference": 6.995699153281748
+            },
+            "seed": 12820568198716680000,
+            "has_nsfw_concepts": [
+                false
+            ],
+            "prompt": "A dramatic, cinematic close-up of a muscular me walking confidently toward the camera in a dimly lit urban alleyway. He has a sharp, intense expression, wearing a black leather jacket over a white tank top that highlights his toned muscles. A lit cigarette dangles casually from his lips, with a faint trail of smoke swirling around his face. The alley is gritty, with graffiti-covered brick walls and faint neon lights reflecting off puddles on the ground. The lighting is moody, with shadows accentuating the man’s chiseled features and the atmospheric vibe of the scene, creating a powerful, intimidating gangster aesthetic."
+        },
+        "requestId": "6c6aac97-d168-4336-bcdc-b744efc2702a"
+    })
     const [CustomResponse, setCustomResponse] = useState(null)
     const { toast } = useToast()
     const navigate = useNavigate();
@@ -87,7 +109,7 @@ const ImageGenerationComponent = () => {
             });
         }
     }
-
+    console.log(trainedModel)
     const generateImage = async () => {
         switch (Model) {
             case "FAL_AI":
@@ -182,7 +204,23 @@ const ImageGenerationComponent = () => {
                     });
                 }
                 try {
+                    const { data } = await axios.post(`${BACKEND_URL}/customModel`, {
+                        prompt: Input,
+                        path1: SubjectModel,
+                        path2: StyleModel,
+                    })
+                    settrainedModelResponse(data)
+                } catch (error) {
 
+                }
+                break;
+            case "Advanced":
+                try {
+                    const { data } = await axios.post(`${BACKEND_URL}/trainedModel`, {
+                        prompt: Input,
+                        path1: trainedModel
+                    })
+                    settrainedModelResponse(data)
                 } catch (error) {
 
                 }
@@ -261,6 +299,8 @@ const ImageGenerationComponent = () => {
                 setModel={setModel}
                 setSubjectModel={setSubjectModel}
                 setStyleModel={setStyleModel}
+                settrainedModel={settrainedModel}
+                trainedModel={trainedModel}
             />
             <div className="text-white bg-black fixed right-4 mt-5 md:hidden">
                 <MobileFilter
@@ -282,7 +322,7 @@ const ImageGenerationComponent = () => {
                     Input={Input}
                     isMagicPromptOn={isMagicPromptOn}
                 />
-                {!isLoading && !Response?.data && !FalAIResponse &&
+                {!isLoading && !Response?.data && !FalAIResponse && !trainedModelResponse &&
                     (<>
                         <div className="text-purple-400 text-sm flex justify-center mb-1 tracking-tight">
                             not sure how to prompt? try these!
@@ -364,7 +404,8 @@ const ImageGenerationComponent = () => {
                 {FalAIResponse && !isLoading &&
                     <AdvancedResponse FalAIResponse={FalAIResponse} createdAt={createdAt} />}
                 {
-
+                    trainedModelResponse && !isLoading &&
+                    <TrainedModelResponse trainedModel={trainedModelResponse} />
                 }
             </div>
         </div >

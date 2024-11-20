@@ -19,9 +19,9 @@ const ModelCard = ({ img, data, }: { img: string, data: any, }) => {
     const [Images, setImages] = useState<any>(null)
     const [mageUploading, setisImageUploading] = useState(false)
     const { toast } = useToast()
+    const navigate = useNavigate()
     const [modelName, setModelname] = useState<string | null>(null)
     const [isStyle, setisStyle] = useState(false)
-    const navigate = useNavigate()
     console.log(Images)
 
     const zipFiles = async () => {
@@ -73,7 +73,15 @@ const ModelCard = ({ img, data, }: { img: string, data: any, }) => {
         const imageUrl = await uploadToCloudinary(zippedFile) // STEP2
         console.log(imageUrl)
         try {
-            const { data } = await axios.post(`${BACKEND_URL}/trainModel`, { email: userInfo.user.email, imgUrl: imageUrl, style: isStyle })
+            toast({
+                title: "Model Training has been started!",
+                variant: "default",
+                className: "bg-primmaryColor text-white font-sans border-gray-800 border",
+            });
+            setTimeout(() => {
+                navigate('/dashboard/myModels')
+            }, 3000)
+            const { data } = await axios.post(`${BACKEND_URL}/trainModel`, { email: userInfo.user.email, imgUrl: imageUrl, style: isStyle, modelName: modelName })
         } catch (error) {
             toast({
                 title: "Low balance to start training" + error,

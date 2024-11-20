@@ -37,6 +37,26 @@ export interface FalAIResponse {
     url: string
 }
 
+export interface AdvancedResponseModel {
+    data: {
+        images: [
+            {
+                url: string,
+                width: number,
+                height: number,
+                content_type: string
+            }
+        ],
+        timings: {
+            inference: number
+        },
+        seed: number,
+        has_nsfw_concepts: any,
+        prompt: string
+    },
+    requestId: string
+}
+
 export interface AllImages {
     id: string,
     prompt: string,
