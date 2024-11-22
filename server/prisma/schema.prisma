@@ -30,6 +30,7 @@ model Prompt {
   id        String   @id @default(uuid())
   prompt    String
   url       String
+  url2      String   @default("")
   isPublic  Boolean  @default(false)
   model     String   @default("Ideogram") //Ideogram || Flux || Advanced || Custom
   Likes     Int      @default(0)

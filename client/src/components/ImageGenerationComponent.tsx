@@ -13,7 +13,6 @@ import SuggestionCard from "./SuggestionCard"
 import SearchBar from "./ImageGeneration/SearchBar"
 import Filter from "./ImageGeneration/Filter"
 import MobileFilter from "./ImageGeneration/MobileFilter"
-import { fal } from "@fal-ai/client"
 import AdvancedResponse from "./ImageGeneration/AdvancedResponse"
 import TrainedModelResponse from "./ImageGeneration/TrainedModelResponse"
 
