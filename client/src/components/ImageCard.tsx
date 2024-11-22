@@ -58,12 +58,12 @@ const ImageCard = (
     const formattedDate = new Date(image.createdAt).toLocaleString()
     return (
         <Dialog >
-            <div className='h-72 min-w-[300px] duration-300 hover:bg-slate-900 cursor-pointer transition-all max-w-[400px] shadow-[3px_7px_12px_[0.5]px_rgba(2,1,1,0.2)] shadow-purple-700 border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
+            <div className='h-72 min-w-[300px]  max-h-[400px] duration-300 hover:bg-slate-900 cursor-pointer transition-all max-w-[400px] shadow-[3px_7px_12px_[0.5]px_rgba(2,1,1,0.2)] shadow-purple-700 border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
                 <DialogTrigger className='cursor-pointer'>
                     <img
                         src={url}
                         alt=""
-                        className='h-[100%] object-cover '
+                        className='  max-w-[400px] max-h-[240px] object-cover '
                     />
                 </DialogTrigger>
                 <DialogContent className='bg-black flex flex-col  rounded-lg border-none text-white font-sans h-[84vh] md:h-[90vh] w-[90vw] md:w-[90vw] mt-10'>

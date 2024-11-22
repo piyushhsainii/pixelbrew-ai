@@ -15,7 +15,10 @@ const Filter = ({
     setSubjectModel,
     setStyleModel,
     trainedModel,
-    settrainedModel
+    settrainedModel,
+    setResponse,
+    setFalAIResponse,
+    settrainedModelResponse
 }: {
     styleType: string
     setstyleType: React.Dispatch<React.SetStateAction<string>>
@@ -28,7 +31,10 @@ const Filter = ({
     setSubjectModel: React.Dispatch<React.SetStateAction<string>>
     setStyleModel: React.Dispatch<React.SetStateAction<string>>
     trainedModel: string
-    settrainedModel: React.Dispatch<React.SetStateAction<string>>
+    settrainedModel: React.Dispatch<React.SetStateAction<string>>,
+    setResponse: any
+    setFalAIResponse: any
+    settrainedModelResponse: any
 }) => {
 
     const [userInfo, setuserInfo] = useRecoilState(userCompleteInfo)
@@ -39,10 +45,6 @@ const Filter = ({
                 MODIFY PARAMETERS
             </div>
             <div className="text-gray-300 font-sans text-base text-center " >
-                {/* <Accordion type="single" collapsible>
-                    <AccordionItem value="item-1">
-                        <AccordionTrigger className=""> SELECT MODEL</AccordionTrigger>
-                        <AccordionContent> */}
                 <div className="m-3 flex items-center justify-center gap-2 pl-2">SELECT MODEL
                     <TooltipProvider>
                         <Tooltip delayDuration={200}>
@@ -53,19 +55,28 @@ const Filter = ({
                         </Tooltip>
                     </TooltipProvider>
                 </div>
-                <select
-                    name="" id="" value={Model}
-                    onChange={(e) => setModel(e.target.value)}
-                    className="p-2 bg-primmaryColor my-2  relative active:outline-none focus:outline-none shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm"
-                >
-                    <option value="FAL_AI" >Fal AI</option>
-                    <option value="Ideogram"> Ideogram </option>
-                    <option value="Advanced"> Advanced </option>
-                    <option value="Custom"> Custom </option>
-                </select>
-                {
+                <div className="relative">
+                    <select
+                        name="" id="" value={Model}
+                        onChange={(e) => {
+                            setModel(e.target.value)
+                            setResponse(null)
+                            setFalAIResponse(null)
+                            settrainedModelResponse(null)
+                        }}
+                        className="p-2 bg-primmaryColor my-2  active:outline-none focus:outline-none shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm"
+                    >
+                        <option value="FAL_AI" >Fal AI</option>
+                        <option value="Ideogram"> Ideogram </option>
+                        <option value="Advanced"> Advanced </option>
+                        <option value="Custom"> Custom </option>
 
-                    <div className={`${Model == "Advanced" && ""} text-green-500  px-1 rounded-2xl border bg-opacity-20 bg-green-500 border-green-500 border-opacity-40 absolute bottom-[24rem] text-[0.550rem] left-28`}>
+                    </select>
+                </div>
+                {
+                    <div className={`${Model == "Advanced" && ""}
+                        text-green-500  px-1 rounded-2xl border bg-opacity-20 bg-green-500 border-green-500 
+                        border-opacity-40 absolute left-[7.5rem] top-[12rem]  text-[0.550rem] `}>
                         {
                             Model == "Advanced" ? "Recommended" :
                                 Model == "FAL_AI" ? "For general users" :

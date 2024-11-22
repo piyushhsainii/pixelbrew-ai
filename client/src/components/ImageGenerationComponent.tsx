@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { AdvancedResponseModel, ApiResponse, FalAIResponse } from "../lib/interface"
-import { Copy, Download, Info, SlidersHorizontal } from "lucide-react"
+import { Copy } from "lucide-react"
 import { HashLoader } from "react-spinners"
 import { useRecoilState } from "recoil"
 import { authUser, Balance, userImageLink } from "../atoms/atoms"
@@ -15,6 +15,7 @@ import Filter from "./ImageGeneration/Filter"
 import MobileFilter from "./ImageGeneration/MobileFilter"
 import AdvancedResponse from "./ImageGeneration/AdvancedResponse"
 import TrainedModelResponse from "./ImageGeneration/TrainedModelResponse"
+import IdeogramResponse from "./ImageGeneration/IdeogramResponse"
 
 export type MagicPrompt = "ON" | "OFF" | "AUTO"
 export type Model = "FAL_AI" | "Ideogram" | "Advanced" | "Custom"
@@ -38,8 +39,43 @@ const ImageGenerationComponent = () => {
     const [isCopied, setisCopied] = useState(false)
     const [savingDataToDb, setsavingDataToDb] = useState(false)
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
-    const [Response, setResponse] = useState<ApiResponse | null>(null)
-    const [FalAIResponse, setFalAIResponse] = useState<FalAIResponse | null>(null)
+    const [Response, setResponse] = useState<ApiResponse | null>({
+        "created": "2024-11-22T20:21:27.062171+00:00",
+        "data": [
+            {
+                "is_image_safe": true,
+                "prompt": "I'm an indian brown girl who loves to code and play chess. Loves playing with AI. But is not a nerd. Doesn't wear glasses. Mid length hair. generate a youtube thumbnail for me for my coding tutorial youtube video, the title of the video is 'Build Chess with me' and it should be vibrant and flashy and i should be in center with highlights to make me popout of the thubmnail.",
+                "resolution": "1312x736",
+                "seed": 1589726500,
+                "style_type": "REALISTIC",
+                "url": "https://replicate.delivery/yhqm/dHOPShAVJvbqNtawvNoco1jsu8nDx4McdooZ7jeRqoaC005JA/1732306948.jpg"
+            }
+        ]
+    })
+    const [FalAIResponse, setFalAIResponse] = useState<FalAIResponse | null>({
+        "success": true,
+        "result": {
+            "data": {
+                "images": [
+                    {
+                        "url": "https://fal.media/files/lion/UMJD6FHHmxgQvagXXoBep_5c293afdf17047f78f8b0d353c9979eb.jpg",
+                        "width": 2752,
+                        "height": 1536,
+                        "content_type": "image/jpeg"
+                    }
+                ],
+                "timings": {},
+                "seed": 1568825282,
+                "has_nsfw_concepts": [
+                    false
+                ],
+                "prompt": "Intense gaze of a male hacker, late 20s, wearing a black hoodie with hood partially up. Green lines of code reflected in her determined eyes and on skin. Dark room lit by multiple screens. Overlay: 'CYBER ADDICTION EXPOSED' in glowing red and white text that appears to be burning through the image. Faint silhouette of another person in background."
+            },
+            "requestId": "7cf7d4a2-2724-4b50-8772-a38f48c24dc4"
+        },
+        "prompt": "Intense gaze of a male hacker, late 20s, wearing a black hoodie with hood partially up. Green lines of code reflected in her determined eyes and on skin. Dark room lit by multiple screens. Overlay: 'CYBER ADDICTION EXPOSED' in glowing red and white text that appears to be burning through the image. Faint silhouette of another person in background.",
+        "url": "https://fal.media/files/lion/UMJD6FHHmxgQvagXXoBep_5c293afdf17047f78f8b0d353c9979eb.jpg"
+    })
     const [trainedModelResponse, settrainedModelResponse] = useState<AdvancedResponseModel | null>({
         "data": {
             "images": [
@@ -108,8 +144,10 @@ const ImageGenerationComponent = () => {
             });
         }
     }
-    console.log(trainedModel)
     const generateImage = async () => {
+        setResponse(null)
+        setFalAIResponse(null)
+        settrainedModelResponse(null)
         switch (Model) {
             case "FAL_AI":
                 if (Input == "") {
@@ -273,8 +311,6 @@ const ImageGenerationComponent = () => {
             });
         }
     }
-
-
     useEffect(() => {
         autoResizeTextarea(); // Initialize resize on mount
     }, [Input]);
@@ -300,6 +336,9 @@ const ImageGenerationComponent = () => {
                 setStyleModel={setStyleModel}
                 settrainedModel={settrainedModel}
                 trainedModel={trainedModel}
+                setResponse={setResponse}
+                setFalAIResponse={setFalAIResponse}
+                settrainedModelResponse={settrainedModelResponse}
             />
             <div className="text-white bg-black fixed right-4 mt-5 md:hidden">
                 <MobileFilter
@@ -309,6 +348,15 @@ const ImageGenerationComponent = () => {
                     setModelVersion={setModelVersion}
                     AspectRatio={AspectRatio}
                     setAspectRatio={setAspectRatio}
+                    Model={Model}
+                    setModel={setModel}
+                    setSubjectModel={setSubjectModel}
+                    setStyleModel={setStyleModel}
+                    settrainedModel={settrainedModel}
+                    trainedModel={trainedModel}
+                    setResponse={setResponse}
+                    setFalAIResponse={setFalAIResponse}
+                    settrainedModelResponse={settrainedModelResponse}
                 />
             </div>
             <div className='bg-black w-[100%] p-4  '>
@@ -320,6 +368,7 @@ const ImageGenerationComponent = () => {
                     isLoading={isLoading}
                     Input={Input}
                     isMagicPromptOn={isMagicPromptOn}
+                    Model={Model}
                 />
                 {!isLoading && !Response?.data && !FalAIResponse && !trainedModelResponse &&
                     (<>
@@ -333,72 +382,7 @@ const ImageGenerationComponent = () => {
                         <HashLoader className="w-20" color="#7e22ce" size={150} />
                     </div>}
                 {Response?.data && !isLoading &&
-                    <div className="flex flex-col md:flex-row flex-wrap justify-evenly  p-5 bg-primmaryColor ">
-                        <div className="max-w-[600px] max-h-[450px]">
-                            <img
-                                src={Response.data[0].url}
-                                alt="img"
-                                className="border-2 border-white " />
-                        </div>
-                        <div className="text-gray-300 font-sans w-[100%] md:w-[40%] flex flex-col border border-gray-700 border-opacity-40 p-2">
-                            <div>
-                                <div className="flex justify-between bg-purple-700 bg-opacity-80 items-center px-2 ">
-                                    <div className="p-2 font-semibold" > Prompt </div>
-                                    {/* @ts-ignore */}
-                                    <div className="mr-2 cursor-pointer" onClick={() => copyPrompt(Response.data[0].prompt as string)} >
-                                        {isCopied ? 'Text copied!' : <Copy width={17} className="hover:scale-105" />}
-                                    </div>
-                                </div>
-                                <div className="bg-purple-700 bg-opacity-40 p-4 text-gray-200  tracking-tight text-sm ">
-                                    {Response.data[0].prompt}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-4 mt-3 ">
-                                <div>
-                                    <div className="flex">
-                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%] " >
-                                            Resolution
-                                        </div>
-                                        <div className="bg-purple-700 bg-opacity-40 p-2 text-gray-300 w-[50%] text-sm flex items-center ">
-                                            {Response?.data[0].resolution}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="flex ">
-                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%]" >
-                                            Style Type
-                                        </div>
-                                        <div className="bg-purple-700 bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center text-sm">
-                                            {Response?.data[0].style_type}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="flex">
-                                        <div className="bg-purple-700 bg-opacity-80 p-2 font-semibold w-[50%]" >
-                                            Date created
-                                        </div>
-                                        <div className="bg-purple-700  bg-opacity-40 p-2 text-gray-300 w-[50%] flex items-center text-sm">
-                                            {createdAt.toLocaleString()}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href={Response.data[0].url} download={Response.data[0].url} target="blank">
-                                <div >
-                                    <DownloadButton
-                                        url={Response.data[0].url}
-                                        data={Response.data[0].url}
-                                        filename="pixelbrew_ai.jpeg"
-                                        className="bg-green-700   text-center text-white rounded-md p-4 py-2 m-3 ml-0 flex items-center justify-evenly gap-1
-                                        cursor-pointer hover:scale-110 transition-all duration-200 active:scale-90
-                                        "
-                                    />
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                    <IdeogramResponse Response={Response} isCopied={isCopied} createdAt={createdAt} />
                 }
                 {FalAIResponse && !isLoading &&
                     <AdvancedResponse FalAIResponse={FalAIResponse} createdAt={createdAt} />}

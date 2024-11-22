@@ -125,10 +125,10 @@ const ModelCard = ({ img, data, }: { img: string, data: any, }) => {
                                     </div>
                                 </DialogTrigger>
                                 <DialogContent className="w-[90vw] h-[85vh] mt-6 bg-black text-white border-purple-700 border-opacity-45">
-                                    <div>
+                                    <div className="overflow-y-scroll">
                                         <div className="text-2xl font-sans pl-2 m-4 mt-0 ml-0"> {data.modelName} </div>
-                                        <div className="flex font-sans gap-5">
-                                            <label htmlFor="add-images" className="flex items-center text-sm border border-gray-500 p-1 px-3 ml-2 border-opacity-50 cursor-pointer">
+                                        <div className="flex flex-col  lg:flex-row font-sans gap-5">
+                                            <label htmlFor="add-images" className="flex items-center w-[130px] text-sm border border-gray-500 p-1 px-3 ml-2 border-opacity-50 cursor-pointer">
                                                 <ImagePlus size={18} />  Add Images
                                             </label>
                                             <input
@@ -143,7 +143,7 @@ const ModelCard = ({ img, data, }: { img: string, data: any, }) => {
                                                 Upload images with clear face of yours. Try to upload in portrait mode for better results
                                             </div>
                                         </div>
-                                        <div className="flex items-center m-2 ml-0">
+                                        <div className="flex flex-wrap items-center m-2 ml-0">
                                             <div className="p-5 bg-gray-900 w-48 h-48 m-3 bg-opacity-60 flex items-center justify-center">
                                                 {Images ?
                                                     <img className="h-full w-full object-cover" src={URL.createObjectURL(Images[0])} /> :
@@ -174,11 +174,12 @@ const ModelCard = ({ img, data, }: { img: string, data: any, }) => {
                                                         <TooltipTrigger>
                                                             <QuestionMarkCircledIcon />
                                                         </TooltipTrigger>
-                                                        <TooltipContent className="p-3 text-base font-sans tracking-tight">
+                                                        <TooltipContent className="p-3 text-base font-sans tracking-tight flex flex-col">
                                                             <div>
                                                                 Subject - The AI model is trained on the subject (you), your face, your expressions.
                                                                 <span className="text-green-500">Recommended</span> for general users.
                                                             </div>
+                                                            <div className="sm:hidden"> <br></br> </div>
                                                             <div>
                                                                 Style - The AI model is trained on the style of the images you have provided, like the format ,
                                                                 the ratio , colors etc. Preferred if you want to generate images to be in a specific format.

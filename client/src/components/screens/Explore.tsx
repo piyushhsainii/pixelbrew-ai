@@ -51,7 +51,7 @@ const Explore = () => {
                             Try PixelBrew AI now!
                         </div>
                     </Link>
-                    <Link to={'/dashboard'}>
+                    <Link to={'/dashboard/exploreModels'}>
                         <div className="px-4 py-2 max-w-[200px] shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
                             Explore Models
                         </div>
