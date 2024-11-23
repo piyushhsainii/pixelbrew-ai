@@ -4,10 +4,11 @@ import { BACKEND_URL } from "../../lib/url"
 import axios from "axios"
 import { useToast } from "../../hooks/use-toast"
 import { AllImages, userLikes } from "../../lib/interface"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import Loader from "../Loader"
 import { useRecoilState } from "recoil"
 import { authUser } from "../../atoms/atoms"
+import FilterAndSort from "../FilterAndSort"
 
 const Explore = () => {
     const { toast } = useToast()
@@ -16,6 +17,7 @@ const Explore = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [refresh, setRefresh] = useState<any>()
     const [userInfo, setUserInfo] = useRecoilState(authUser)
+    const [FilteredModels, setFilteredModels] = useState([])
 
     const getPublicImages = async () => {
         try {
@@ -57,12 +59,16 @@ const Explore = () => {
                         </div>
                     </Link>
                 </div>
+                <FilterAndSort
+                    FilteredModels={FilteredModels}
+                    setFilteredModels={setFilteredModels}
+                />
                 {isLoading ? (
                     <div className="flex justify-center items-center min-h-[200px]">
                         <Loader />
                     </div>
                 ) : (
-                    <div className="flex justify-center  flex-wrap gap-7 md:gap-3 my-10 w-[80%] md:w-[100%] max-w-[1600px] m-auto ">
+                    <div className="flex justify-center  flex-wrap gap-7 md:gap-3 my-10 mt-5 w-[80%] md:w-[100%] max-w-[1600px] m-auto ">
                         {images?.map((image, index) => (
                             <div key={index} className="relative">
                                 <ImageCard
