@@ -80,7 +80,7 @@ const DownloadButton = ({
             {url && data && (
                 <Button
                     variant={"default"}
-                    className={`flex items-center gap-2 hover:bg-green-700 ${className}`}
+                    className={`flex items-center gap-2 hover:bg-black ${className}`}
                     onClick={handleFetchDownload}
                 >
                     <Download className="" size={19} />

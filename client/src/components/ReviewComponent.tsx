@@ -46,16 +46,16 @@ const ReviewComponent = ({ user }: { user: any }) => {
         <form onSubmit={addReview}>
             <section className=" py-5 h-[45vh]  flex flex-col md:flex-row w-full px-10 bg-black justify-evenly items-center">
 
-                <div className="flex flex-col text-white items-center justify-center font-sans text-pretty">
+                <div className="flex flex-col text-gray-300 items-center justify-center tracking-wide font-sans text-pretty">
                     <div className="">
-                        <div className=' font-sans p-2 tracking-tighter'> LET US KNOW WHAT YOU THINK ABOUT PIXEL BREW AI? </div>
+                        <div className=' font-sans p-2 '>Let us know what you think about Pixel Brew AI? </div>
                         <Textarea
                             required={true}
                             placeholder='Let us know what you think about PixelBrew AI '
                             onChange={(e) => setReview(e.target.value)}
-                            className="bg-black border max-w-[500px] hover:scale-100 text-white border-purple-800 resize-none rounded-2xl"
+                            className="bg-black border max-w-[500px] hover:scale-100 text-gray-300 border-purple-800 resize-none rounded-2xl"
                         />
-                        <div className=' font-sans p-2 tracking-tighter'> HOW CAN WE MAKE IT BETTER? </div>
+                        <div className=' font-sans p-2 '>How can we make it better? </div>
                         <Textarea
                             onChange={(e) => setReview2(e.target.value)}
                             className="bg-black border max-w-[500px] hover:scale-100 text-white border-purple-800 resize-none rounded-2xl"
@@ -65,10 +65,10 @@ const ReviewComponent = ({ user }: { user: any }) => {
                     </div>
                 </div>
                 <div className=' flex justify-center flex-col items-center my-4'>
-                    <div className="text-white bg-black flex justify-center items-center  text-center  text-pretty text-2xl font-sans"> YOUR FEEDBACK TRULY MATTERS TO US </div>
+                    <div className="text-gray-300 bg-black flex justify-center items-center  text-center  text-pretty text-2xl font-sans"> YOUR FEEDBACK TRULY MATTERS TO US </div>
                     <button
                         type='submit'
-                        className={`px-4 py-2 ${Review == null || Review == "" ? "bg-gray-600" : "bg-purple-700"}  flex justify-center m-auto items-center my-5 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white shadow-white  shadow-[2px_2px_2px_[-25]px_rgba(2,4,4,0.4)] hover:border`}>
+                        className={`px-4 py-2 ${Review == null || Review == "" ? "bg-gray-600" : "bg-purple-700"}  flex justify-center m-auto items-center my-5 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white `}>
                         ADD MY REVIEW
                     </button>
                 </div>

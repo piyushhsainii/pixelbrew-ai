@@ -31,16 +31,16 @@ const FAQ = () => {
     ]
 
     return (
-        <div className="font-sans bg-black text-white py-7">
+        <div className="font-sans bg-black text-gray-300 py-7">
             <div className=" text-center font-sans text-2xl"> GENERAL FAQ </div>
             <div className="w-[90%] m-auto">
                 <Accordion type="single" collapsible>
                     {
                         FAQ.map((data, index) => (
-                            <AccordionItem value={`item-${index}`} className="border-purple-600">
+                            <AccordionItem value={`item-${index}`} className="border-gray-700">
                                 <AccordionTrigger className="font-normal text-base">{data.question}</AccordionTrigger>
                                 <AccordionContent >
-                                    <div className="text-white">
+                                    <div className="text-gray-400">
                                         {data.answer}
                                     </div>
                                 </AccordionContent>

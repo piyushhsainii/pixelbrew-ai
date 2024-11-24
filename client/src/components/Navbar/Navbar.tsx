@@ -4,13 +4,14 @@ import { authUser, userCompleteInfo } from "../../atoms/atoms"
 import { supabase } from "../../lib/supabase"
 import { useToast } from "../../hooks/use-toast"
 import Balance from "../BalanceComponent"
-import { Globe, Image, IndianRupee, MenuIcon, Zap } from "lucide-react"
+import { Globe, Image, IndianRupee, Info, MenuIcon, Zap } from "lucide-react"
 import { DashboardIcon, QuestionMarkIcon } from "@radix-ui/react-icons"
 import AvatarComponent from "./AvatarComponent"
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog"
 import HowItWorksDialog from "../how_it_works_dialog"
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
 import { useState } from "react"
+import AboutPage from "../About"
 
 const Navbar = ({ balance }: { balance: Number }) => {
     const navigate = useNavigate()
@@ -58,7 +59,7 @@ const Navbar = ({ balance }: { balance: Number }) => {
                             <IndianRupee color="purple" width={18} />  Pricing
                         </div>
                     </Link>
-                    <Dialog >
+                    {/* <Dialog >
                         <DialogTrigger className="hidden md:block">
                             <div className="text-white font-sans tracking-wider flex gap-1 items-center cursor-pointer hover:text-purple-400">
                                 <QuestionMarkIcon color="purple" width={20} />  How it Works?
@@ -67,13 +68,23 @@ const Navbar = ({ balance }: { balance: Number }) => {
                         <DialogContent className="w-[90vw]  h-auto md:h-[60vh] bg-black border-purple-700 border text-white overflow-y-auto md:overflow-y-hidden">
                             <HowItWorksDialog />
                         </DialogContent>
-                    </Dialog>
+                    </Dialog> */}
+                    <Link to={'/how-it-works'}>
+                        <div className="text-white font-sans tracking-wider flex gap-1 items-center cursor-pointer hover:text-purple-400">
+                            <QuestionMarkIcon color="purple" width={20} />  How it Works?
+                        </div>
+                    </Link>
                     {userInfo !== null &&
                         <Link to={'/dashboard'} className="hidden md:block" >
                             <div className="text-white font-sans  flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
                                 <DashboardIcon color="purple" width={18} /> Dashboard
                             </div>
                         </Link>}
+                    <Link to={'about-us'}>
+                        <div className="text-white font-sans  flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
+                            <Info color="purple" width={18} /> About Us
+                        </div>
+                    </Link>
                 </div>
                 <div className=" flex items-center justify-center">
                     <div className=" flex items-center md:hidden ">

@@ -22,6 +22,7 @@ const db_1 = __importDefault(require("./db"));
 const payment_1 = __importDefault(require("./api/payment"));
 const model_1 = __importDefault(require("./api/model"));
 const falAi_model_1 = __importDefault(require("./api/falAi_model"));
+const prompts_1 = __importDefault(require("./api/prompts"));
 const multer = require('multer');
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
@@ -34,6 +35,7 @@ app.use('/auth', auth_1.default); //handles the google auth
 app.use('/', payment_1.default);
 app.use('/', falAi_model_1.default);
 app.use('/', model_1.default);
+app.use('/', prompts_1.default);
 app.post('/addData', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield db_1.default.prompt.create({
         data: {
@@ -204,6 +206,7 @@ app.post('/savePrompts', (req, res) => __awaiter(void 0, void 0, void 0, functio
             include: { user: true },
         });
         res.json({
+            id: saveDataToPromptTable.id,
             saveDataToPromptTable
         }).status(200);
     }

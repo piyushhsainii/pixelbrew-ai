@@ -5,7 +5,7 @@ import { useState } from "react"
 import ShadowBtn from "../ShadowBtn"
 import { TestImageEditor } from "./ImageEditor"
 
-const IdeogramResponse = ({ Response, isCopied, createdAt }: { Response: ApiResponse, isCopied: boolean, createdAt: any }) => {
+const IdeogramResponse = ({ Response, isCopied, createdAt, postID }: { Response: ApiResponse, isCopied: boolean, createdAt: any, postID: string }) => {
     const [editMode, seteditMode] = useState(false)
 
     return (
@@ -83,7 +83,12 @@ const IdeogramResponse = ({ Response, isCopied, createdAt }: { Response: ApiResp
             {<div className="w-[84 %]  m-auto">
                 {
                     editMode &&
-                    <TestImageEditor editMode={editMode} setEditMode={seteditMode} />
+                    <TestImageEditor
+                        editMode={editMode}
+                        setEditMode={seteditMode}
+                        id={postID}
+                        url={Response.data[0].url}
+                    />
                 }
             </div>}
         </>

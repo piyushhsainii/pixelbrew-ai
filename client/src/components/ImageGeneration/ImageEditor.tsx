@@ -5,7 +5,17 @@ import { BACKEND_URL } from "../../lib/url";
 import { userCompleteInfo } from "../../atoms/atoms";
 import { useRecoilState } from "recoil";
 
-export const TestImageEditor = ({ editMode, setEditMode }: { editMode: boolean, setEditMode: any }) => {
+export const TestImageEditor = ({
+    editMode,
+    setEditMode,
+    id,
+    url
+}: {
+    editMode: boolean,
+    setEditMode: any,
+    id: string,
+    url: string
+}) => {
     const editorContainerRef = useRef(null); // Reference to the container
     const [isEditorLoaded, setIsEditorLoaded] = useState(false); // Track script loading
     const [isEditorInitialized, setIsEditorInitialized] = useState(false); // Track editor initialization
@@ -26,7 +36,7 @@ export const TestImageEditor = ({ editMode, setEditMode }: { editMode: boolean, 
             );
             if (response) {
                 const { data, status } = await axios.post(`${BACKEND_URL}/updateModifiedURL`, {
-                    email: email,
+                    id: id,
                     url: response.data.secure_url,
 
                 })
@@ -81,7 +91,7 @@ export const TestImageEditor = ({ editMode, setEditMode }: { editMode: boolean, 
         const config = {
             previewPixelRatio: 9,
             savingPixelRatio: 20,
-            source: "https://fal.media/files/rabbit/Bq7x3JAsFdpL4xBn2y_c-_21b8f79d2af34fcd97fe21e3baa91e20.jpg",
+            source: url,
             onSave: (editedImageObject, designState) => {
                 console.log("Saved Image Object:", editedImageObject);
                 console.log("Design State:", designState);

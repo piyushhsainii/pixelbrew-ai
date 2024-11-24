@@ -8,7 +8,7 @@ import prisma from "./db";
 import paymentApi from "./api/payment"
 import modelApi from "./api/model"
 import FalAI from "./api/falAi_model"
-
+import prompts from "./api/prompts"
 const multer = require('multer')
 const app = express()
 app.use(cors({
@@ -23,6 +23,7 @@ app.use('/auth', auth)             //handles the google auth
 app.use('/', paymentApi)
 app.use('/', FalAI)
 app.use('/', modelApi)
+app.use('/', prompts)
 
 app.post('/addData', async (req: Request, res: Response) => {
     await prisma.prompt.create({
@@ -188,6 +189,7 @@ app.post('/savePrompts', async (req: Request, res: Response) => {
             include: { user: true },
         })
         res.json({
+            id: saveDataToPromptTable.id,
             saveDataToPromptTable
         }).status(200)
     } catch (error) {

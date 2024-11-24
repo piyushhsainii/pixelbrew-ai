@@ -21,10 +21,12 @@ router.post(`/getPromptDetails`, async (req: Request, res: Response) => {
 
 router.post('/updateModifiedURL', async (req: Request, res: Response) => {
     const url = req.body.url
-    const email = req.body.email
+    const id = req.body.id
     try {
         const updatedURL = await prisma.prompt.update({
-            where: email,
+            where: {
+                id: id
+            },
             data: {
                 url2: url
             }

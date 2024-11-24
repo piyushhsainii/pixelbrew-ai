@@ -26,6 +26,8 @@ import Announcement from './components/Announcement'
 import ExploreModels from './components/screens/ExploreModels'
 import MyModels from './components/screens/MyModels'
 import DashboardNavbar from './components/Dashboard/DashboardNavbar'
+import AboutPage from './components/About'
+import HowItWorks from './components/HowItWorks'
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -81,9 +83,10 @@ function App() {
           <Route path='/dashboard/myImages' element={<MyImagesPage />} />
         </Route>
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/about-us' element={<AboutPage />} />
+        <Route path='/how-it-works' element={<HowItWorks />} />
         <Route path='/explore' element={<Explore />} />
         <Route path='/purchases' element={<AllPurchases />} />
-        <Route path='/about-us' element={<AboutUs />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />

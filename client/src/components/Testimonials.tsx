@@ -9,7 +9,7 @@ const Testimonials = ({ reviews }: { reviews: AllReviews[] }) => {
         <div className='bg-black flex flex-col items-center justify-center   m-auto '>
             {reviews &&
                 <div className='max-w-[1200px] w-[100%]  overflow-hidden'>
-                    <div className="text-white font-sans text-xl font-semibold py-5 text-center ">
+                    <div className="text-gray-300 font-sans text-3xl font-semibold py-5 text-center ">
                         TESTIMONIALS
                     </div>
                     <BlurFade inView className="" >

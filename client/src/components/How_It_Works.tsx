@@ -4,7 +4,7 @@ import BlurFade from "./ui/blur-fade"
 
 export default function HowItWorks() {
     return (
-        <div className="bg-black min-h-[60vh] font-sans selection:select-none" id="how-it-works" >
+        <div className="bg-black min-h-[60vh] font-sans " id="how-it-works" >
             <BlurFade blur="" inView className="bg-black " >
                 <div className="container mx-auto px-4 py-16">
                     <h1 className="text-3xl font-semibold text-center mb-12 text-white">HOW IT WORKS</h1>

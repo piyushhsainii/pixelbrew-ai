@@ -92,8 +92,8 @@ const ModelCard = ({ img, data, }: { img: string, data: any, }) => {
     }
 
     return (
-        <div className=" h-auto md:h-80 ">
-            <div className="w-[50vw] min-w-[350px] border border-white max-w-[600px] py-3 flex flex-col md:flex-row  items-center px-2 mb-3 gap-5 rounded-md border-opacity-20 overflow-y-auto">
+        <div className="">
+            <div className="w-[50vw] min-w-[350px] h-[21rem] border border-white max-w-[600px] py-3 flex flex-col md:flex-row  items-center px-2 mb-3 gap-5 rounded-md border-opacity-20 overflow-y-auto">
                 <div className="w-full md:w-[50%] flex  justify-center items-center">
                     <img src={img} alt="x" className="h-full w-full rounded-md border border-purple-600 border-opacity-35" />
                 </div>

@@ -36,67 +36,59 @@ const ImageGenerationComponent = () => {
     const textareaRef = useRef(null);
     const [balance, setBalance] = useRecoilState(Balance)
     const [user, setUser] = useRecoilState(authUser)
+    const [postID, setpostID] = useState<string | null>(null)
     const [isCopied, setisCopied] = useState(false)
     const [savingDataToDb, setsavingDataToDb] = useState(false)
     const [ImageLink, setImageLink] = useRecoilState(userImageLink)
-    const [Response, setResponse] = useState<ApiResponse | null>({
-        "created": "2024-11-22T20:21:27.062171+00:00",
-        "data": [
-            {
-                "is_image_safe": true,
-                "prompt": "I'm an indian brown girl who loves to code and play chess. Loves playing with AI. But is not a nerd. Doesn't wear glasses. Mid length hair. generate a youtube thumbnail for me for my coding tutorial youtube video, the title of the video is 'Build Chess with me' and it should be vibrant and flashy and i should be in center with highlights to make me popout of the thubmnail.",
-                "resolution": "1312x736",
-                "seed": 1589726500,
-                "style_type": "REALISTIC",
-                "url": "https://replicate.delivery/yhqm/dHOPShAVJvbqNtawvNoco1jsu8nDx4McdooZ7jeRqoaC005JA/1732306948.jpg"
-            }
-        ]
-    })
+    const [Response, setResponse] = useState<ApiResponse | null>(null)
     const [FalAIResponse, setFalAIResponse] = useState<FalAIResponse | null>({
         "success": true,
         "result": {
             "data": {
                 "images": [
                     {
-                        "url": "https://fal.media/files/lion/UMJD6FHHmxgQvagXXoBep_5c293afdf17047f78f8b0d353c9979eb.jpg",
+                        "url": "https://fal.media/files/koala/oAFb0zj9gvx7Xo_47jWr1_c6d28cd2d317417e86d2322ad6eb47fd.jpg",
                         "width": 2752,
                         "height": 1536,
                         "content_type": "image/jpeg"
                     }
                 ],
                 "timings": {},
-                "seed": 1568825282,
+                "seed": 882454695,
                 "has_nsfw_concepts": [
                     false
                 ],
-                "prompt": "Intense gaze of a male hacker, late 20s, wearing a black hoodie with hood partially up. Green lines of code reflected in her determined eyes and on skin. Dark room lit by multiple screens. Overlay: 'CYBER ADDICTION EXPOSED' in glowing red and white text that appears to be burning through the image. Faint silhouette of another person in background."
+                "prompt": "Generate a photo of me as a gangster, sunny side of an alley, indian vibes"
             },
-            "requestId": "7cf7d4a2-2724-4b50-8772-a38f48c24dc4"
+            "requestId": "88619763-7e90-418d-879c-f2030442993e"
         },
-        "prompt": "Intense gaze of a male hacker, late 20s, wearing a black hoodie with hood partially up. Green lines of code reflected in her determined eyes and on skin. Dark room lit by multiple screens. Overlay: 'CYBER ADDICTION EXPOSED' in glowing red and white text that appears to be burning through the image. Faint silhouette of another person in background.",
-        "url": "https://fal.media/files/lion/UMJD6FHHmxgQvagXXoBep_5c293afdf17047f78f8b0d353c9979eb.jpg"
+        "prompt": "Generate a photo of me as a gangster, sunny side of an alley, indian vibes",
+        "url": "https://fal.media/files/koala/oAFb0zj9gvx7Xo_47jWr1_c6d28cd2d317417e86d2322ad6eb47fd.jpg"
     })
-    const [trainedModelResponse, settrainedModelResponse] = useState<AdvancedResponseModel | null>({
-        "data": {
-            "images": [
-                {
-                    "url": "https://fal.media/files/rabbit/Bq7x3JAsFdpL4xBn2y_c-_21b8f79d2af34fcd97fe21e3baa91e20.jpg",
-                    "width": 1024,
-                    "height": 768,
-                    "content_type": "image/jpeg"
-                }
-            ],
-            "timings": {
-                "inference": 6.995699153281748
-            },
-            "seed": 12820568198716680000,
-            "has_nsfw_concepts": [
-                false
-            ],
-            "prompt": "A dramatic, cinematic close-up of a muscular me walking confidently toward the camera in a dimly lit urban alleyway. He has a sharp, intense expression, wearing a black leather jacket over a white tank top that highlights his toned muscles. A lit cigarette dangles casually from his lips, with a faint trail of smoke swirling around his face. The alley is gritty, with graffiti-covered brick walls and faint neon lights reflecting off puddles on the ground. The lighting is moody, with shadows accentuating the man’s chiseled features and the atmospheric vibe of the scene, creating a powerful, intimidating gangster aesthetic."
-        },
-        "requestId": "6c6aac97-d168-4336-bcdc-b744efc2702a"
-    })
+    const [trainedModelResponse, settrainedModelResponse] = useState<AdvancedResponseModel | null>(
+        // {
+
+        //     "data": {
+        //         "images": [
+        //             {
+        //                 "url": "https://fal.media/files/rabbit/Bq7x3JAsFdpL4xBn2y_c-_21b8f79d2af34fcd97fe21e3baa91e20.jpg",
+        //                 "width": 1024,
+        //                 "height": 768,
+        //                 "content_type": "image/jpeg"
+        //             }
+        //         ],
+        //         "timings": {
+        //             "inference": 6.995699153281748
+        //         },
+        //         "seed": 12820568198716680000,
+        //         "has_nsfw_concepts": [
+        //             false
+        //         ],
+        //         "prompt": "A dramatic, cinematic close-up of a muscular me walking confidently toward the camera in a dimly lit urban alleyway. He has a sharp, intense expression, wearing a black leather jacket over a white tank top that highlights his toned muscles. A lit cigarette dangles casually from his lips, with a faint trail of smoke swirling around his face. The alley is gritty, with graffiti-covered brick walls and faint neon lights reflecting off puddles on the ground. The lighting is moody, with shadows accentuating the man’s chiseled features and the atmospheric vibe of the scene, creating a powerful, intimidating gangster aesthetic."
+        //     },
+        //     "requestId": "6c6aac97-d168-4336-bcdc-b744efc2702a"
+        // }
+    )
     const [CustomResponse, setCustomResponse] = useState(null)
     const { toast } = useToast()
     const navigate = useNavigate();
@@ -127,6 +119,9 @@ const ImageGenerationComponent = () => {
                     email: user.email,
                     model: Model
                 })
+                if (data) {
+                    setpostID(data.id)
+                }
             }
             toast({
                 title: "Added the Image to Gallery",
@@ -321,6 +316,7 @@ const ImageGenerationComponent = () => {
     useEffect(() => {
         getUserDetails()
     }, [Response])
+
     return (
         <div className='flex justify-stretch bg-black min-h-[100vh] h-full  w-screen font-sans mt-28 md:mt-18 lg:mt-14'>
             <Filter
@@ -382,13 +378,13 @@ const ImageGenerationComponent = () => {
                         <HashLoader className="w-20" color="#7e22ce" size={150} />
                     </div>}
                 {Response?.data && !isLoading &&
-                    <IdeogramResponse Response={Response} isCopied={isCopied} createdAt={createdAt} />
+                    <IdeogramResponse Response={Response} isCopied={isCopied} createdAt={createdAt} postID={postID} />
                 }
                 {FalAIResponse && !isLoading &&
-                    <AdvancedResponse FalAIResponse={FalAIResponse} createdAt={createdAt} />}
+                    <AdvancedResponse FalAIResponse={FalAIResponse} createdAt={createdAt} postID={postID} />}
                 {
                     trainedModelResponse && !isLoading &&
-                    <TrainedModelResponse trainedModel={trainedModelResponse} />
+                    <TrainedModelResponse trainedModel={trainedModelResponse} postID={postID} />
                 }
             </div>
         </div >

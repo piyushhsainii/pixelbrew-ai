@@ -48,7 +48,7 @@ export function LandingPage() {
     }, [])
     return (
         <>
-            <div className="w-full h-[85vh] md:h-[90vh] overflow-hidden ">
+            <div className="w-full h-[85vh] md:h-[95vh] overflow-hidden ">
                 <Vortex
                     backgroundColor="black"
                     className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full"
