@@ -59,8 +59,8 @@ const DownloadButton = ({
                     className={`flex items-center gap-2 ${className}`}
                     onClick={handleUrlDownload}
                 >
-                    <Download className="h-4 w-4" />
-                    Download
+                    <Download className="" />
+
                 </Button>
             )}
 
@@ -72,8 +72,7 @@ const DownloadButton = ({
                     className={`flex items-center gap-2 ${className}`}
                     onClick={handleDataDownload}
                 >
-                    <Download className="h-4 w-4" />
-                    Download
+                    <Download className="" />
                 </Button>
             )}
 
@@ -81,10 +80,10 @@ const DownloadButton = ({
             {url && data && (
                 <Button
                     variant={"default"}
-                    className={`flex items-center gap-2 ${className}`}
+                    className={`flex items-center gap-2 hover:bg-black ${className}`}
                     onClick={handleFetchDownload}
                 >
-                    <Download className="h-4 w-4" />
+                    <Download className="" size={19} />
                     Download
                 </Button>
             )}

@@ -19,14 +19,25 @@ const BalanceComponent = ({ balance }: { balance: Number }) => {
                         </div>
                     </div>
                 </TooltipTrigger>
-                <TooltipContent className="h-[90px] w-[190px] bg-purple-300 border-white border border-opacity-30">
+                <TooltipContent className="h-[130px] w-[190px] bg-purple-300 border-white border border-opacity-30 select-none">
                     <div className="text-black font-sans text-center font-bold text-[0.900rem]"> CREDITS </div>
                     <div className="text-black font-sans text-left my-2 mt-1 mb-4">
                         <span className='font-semibold'>Pixel Brew AI</span> credits lets you generate images <br></br>
-                        <div className='flex items-center justify-evenly'>
-                            <div className=''>  3</div>
-                            <div><Zap color="#d84dff" size={14} /></div>
-                            <div>is charged per image</div>
+                        <div className='flex items-center justify-start gap-2'>
+                            <div className=''>  2</div><div><Zap color="#d84dff" size={14} /></div>
+                            <div>per image (FAL AI)</div>
+                        </div>
+                        <div className='flex items-center  justify-start gap-2'>
+                            <div className=''>  3</div><div><Zap color="#d84dff" size={14} /></div>
+                            <div>per image (Ideogram)</div>
+                        </div>
+                        <div className='flex items-center  justify-start gap-2'>
+                            <div className=''>  3</div><div><Zap color="#d84dff" size={14} /></div>
+                            <div>per image (Advanced)</div>
+                        </div>
+                        <div className='flex items-center  justify-start gap-2'>
+                            <div className=''>  3</div><div><Zap color="#d84dff" size={14} /></div>
+                            <div>per image (Custom)</div>
                         </div>
                     </div>
                 </TooltipContent>

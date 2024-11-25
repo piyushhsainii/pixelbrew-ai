@@ -21,6 +21,8 @@ const auth_1 = __importDefault(require("./auth"));
 const db_1 = __importDefault(require("./db"));
 const payment_1 = __importDefault(require("./api/payment"));
 const model_1 = __importDefault(require("./api/model"));
+const falAi_model_1 = __importDefault(require("./api/falAi_model"));
+const prompts_1 = __importDefault(require("./api/prompts"));
 const multer = require('multer');
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
@@ -31,7 +33,21 @@ app.use(express_1.default.urlencoded({ extended: true }));
 const upload = multer({ dest: 'uploads/' });
 app.use('/auth', auth_1.default); //handles the google auth
 app.use('/', payment_1.default);
+app.use('/', falAi_model_1.default);
 app.use('/', model_1.default);
+app.use('/', prompts_1.default);
+app.post('/addData', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield db_1.default.prompt.create({
+        data: {
+            prompt: req.body.prompt,
+            url: req.body.url,
+            isPublic: true,
+            model: "Flux",
+            userEmail: "piyushsainii230@gmail.com"
+        }
+    });
+    res.json({ true: true });
+}));
 app.post('/uploadToCloud', upload.single('file'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield cloudinary_1.v2.uploader
@@ -116,9 +132,8 @@ app.post('/getUserDetails', (req, res) => __awaiter(void 0, void 0, void 0, func
                 Payments: true,
                 Prompt: true,
                 Reviews: true,
-                Likes: {
-                    select: { isLiked: true, postID: true, userEmail: true, url: true }
-                }
+                Likes: { select: { isLiked: true, postID: true, userEmail: true, url: true } },
+                FalAI: true
             }
         });
         res.json({
@@ -179,16 +194,19 @@ app.post('/savePrompts', (req, res) => __awaiter(void 0, void 0, void 0, functio
     const prompt = req.body.prompt;
     const ImageUrl = req.body.image;
     const userEmail = req.body.email;
+    const model = req.body.model;
     try {
         const saveDataToPromptTable = yield db_1.default.prompt.create({
             data: {
                 prompt: prompt,
                 url: ImageUrl,
+                model: model,
                 user: { connect: { email: userEmail } }
             },
             include: { user: true },
         });
         res.json({
+            id: saveDataToPromptTable.id,
             saveDataToPromptTable
         }).status(200);
     }

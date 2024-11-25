@@ -126,6 +126,7 @@ router.post('/fetchPaymentandAddToken', async (req: Request, res: Response) => {
 // WEBHOOK API
 router.post("/api/webhook", async (req: Request, res: Response) => {
     const signature = req.headers["x-razorpay-signature"];
+    if (!signature) res.json("couldnt find headers").status(400)
     const isValid = await validateWebhookSignature(
         JSON.stringify(req.body),
         signature as string,
@@ -194,7 +195,6 @@ router.post("/api/webhook", async (req: Request, res: Response) => {
         }
     }
     res.status(200).send();
-
 })
 
 

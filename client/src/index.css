@@ -11,24 +11,24 @@ html {
 
 /* Hide scrollbar by default but maintain functionality */
 ::-webkit-scrollbar {
-  @apply bg-transparent transition-all duration-300 w-[10px];
+  @apply bg-transparent transition-all duration-300 w-[5px];
 
 }
 
 /* Show scrollbar on hover and while scrolling */
 :hover::-webkit-scrollbar,
 ::-webkit-scrollbar {
-  @apply bg-black w-[10px];
+  @apply bg-black w-[5px] ;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-purple-100 w-[10px] bg-purple-700 rounded-full opacity-0 transition-opacity duration-300;
+  @apply  w-[5px] bg-purple-700 rounded-full opacity-0 transition-opacity duration-300;
 }
 
 /* Show thumb on hover and while scrolling */
 :hover::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb:hover {
-  @apply opacity-100 w-2;
+  @apply opacity-100 w-1;
 }
 
 

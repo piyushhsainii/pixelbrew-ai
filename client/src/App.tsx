@@ -23,6 +23,11 @@ import AllPurchases from './components/razorpay/AllPurchases'
 import AboutUs from './components/AboutUs'
 import { Analytics } from "@vercel/analytics/react"
 import Announcement from './components/Announcement'
+import ExploreModels from './components/screens/ExploreModels'
+import MyModels from './components/screens/MyModels'
+import DashboardNavbar from './components/Dashboard/DashboardNavbar'
+import AboutPage from './components/About'
+import HowItWorks from './components/HowItWorks'
 
 function App() {
   const [user, setUser] = useRecoilState(authUser)
@@ -72,11 +77,16 @@ function App() {
           <Route path='/profile' element={<MyAccount />} />
           <Route path='/myImages' element={<MyImagesPage />} />
           <Route path='/shop' element={<PayButton />} />
+          <Route path='/dashboard/myModels' element={<MyModels />} />
+          <Route path='/dashboard/myImages' element={<MyImagesPage />} />
         </Route>
+        <Route path='/dashboard' element={<DashboardNavbar />} />
+        <Route path='/dashboard/exploreModels' element={<ExploreModels />} />
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/about-us' element={<AboutPage />} />
+        <Route path='/how-it-works' element={<HowItWorks />} />
         <Route path='/explore' element={<Explore />} />
         <Route path='/purchases' element={<AllPurchases />} />
-        <Route path='/about-us' element={<AboutUs />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />

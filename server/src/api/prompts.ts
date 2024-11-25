@@ -19,4 +19,22 @@ router.post(`/getPromptDetails`, async (req: Request, res: Response) => {
     }
 })
 
+router.post('/updateModifiedURL', async (req: Request, res: Response) => {
+    const url = req.body.url
+    const id = req.body.id
+    try {
+        const updatedURL = await prisma.prompt.update({
+            where: {
+                id: id
+            },
+            data: {
+                url2: url
+            }
+        })
+        res.json(updatedURL).status(200)
+    } catch (error) {
+        res.json(error).status(400)
+    }
+})
+
 export default router
