@@ -190,7 +190,7 @@ export default function AddToCart() {
                                                 return newTokenCount
                                             })
                                         }}
-                                        className="w-full bg-purple-600 hover:bg-purple-700  active:scale-95
+                                        className="w-full bg-white text-black hover:bg-purple-600 active:scale-95
                                         hover:scale-110 transition-all duration-200
                                         ">
                                         <Plus className="mr-2 h-4 w-4" /> Add to Cart

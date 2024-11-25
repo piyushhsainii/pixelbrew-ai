@@ -45,7 +45,7 @@ const Filter = ({
                 MODIFY PARAMETERS
             </div>
             <div className="text-gray-300 font-sans text-base text-center " >
-                <div className="m-3 flex items-center justify-center gap-2 pl-2">SELECT MODEL
+                <div className="m-3 flex items-center justify-center gap-2 pl-2">Select Model
                     <TooltipProvider>
                         <Tooltip delayDuration={200}>
                             <TooltipTrigger> <QuestionMarkCircledIcon />  </TooltipTrigger>
@@ -64,7 +64,7 @@ const Filter = ({
                             setFalAIResponse(null)
                             settrainedModelResponse(null)
                         }}
-                        className="p-2 bg-primmaryColor my-2  active:outline-none focus:outline-none shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm"
+                        className="p-2 bg-primmaryColor  my-2  active:outline-none focus:outline-none shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm"
                     >
                         <option value="FAL_AI" >Fal AI</option>
                         <option value="Ideogram"> Ideogram </option>
@@ -75,7 +75,7 @@ const Filter = ({
                 </div>
                 {
                     <div className={`${Model == "Advanced" && ""}
-                        text-green-500  px-1 rounded-2xl border bg-opacity-20 bg-green-500 border-green-500 
+                        text-green-500  px-1 rounded-2xl border bg-opacity-20 opacity-35 hover:opacity-80 bg-green-500 border-green-500 
                         border-opacity-40 absolute left-[7.5rem] top-[12rem]  text-[0.550rem] `}>
                         {
                             Model == "Advanced" ? "Recommended" :
@@ -90,7 +90,7 @@ const Filter = ({
                     <>
                         <div className="text-gray-300 font-sans text-base text-center mt-7 ">
                             <div className="my-1  flex items-center justify-center gap-2">
-                                CONFIGURE IMAGE
+                                Configure Image
                             </div>
                             <select
                                 className='p-2 m-3 bg-primmaryColor shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
@@ -105,7 +105,7 @@ const Filter = ({
                             </select>
                         </div>
                         <div className="text-gray-300 font-sans text-base text-center my-5">
-                            <div className="my-1 flex justify-center items-center gap-2 " >SELECT MODEL <QuestionMarkCircledIcon /></div>
+                            <div className="my-1 flex justify-center items-center gap-2 " >Select Model <QuestionMarkCircledIcon /></div>
                             <select
                                 className='p-2 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 bg-primmaryColor text-gray-300 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
                                 value={ModelVersion}
@@ -118,7 +118,7 @@ const Filter = ({
                             </select>
                         </div>
                         <div className="text-gray-300 font-sans text-base text-center my-5">
-                            <div className="my-1 flex justify-center items-center gap-2">ASPECT RATIO <QuestionMarkCircledIcon /></div>
+                            <div className="my-1 flex justify-center items-center gap-2">Aspect Ratio <QuestionMarkCircledIcon /></div>
                             <select
                                 className='p-2 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-purple-700 bg-primmaryColor text-gray-200 border border-secondaryColor border-opacity-40 rounded-xl px-2 pl-4 font-sans text-sm'
                                 value={AspectRatio}
@@ -155,10 +155,10 @@ const Filter = ({
                 }{
                     Model == "Custom" &&
                     <div>
-                        <div className="m-2 my-4 text-sm flex items-center justify-center gap-2 border border-white rounded-lg border-opacity-30">
-                            COMBINE TWO MODELS
+                        <div className="m-1 my-4 text-sm flex items-center justify-center gap-2 border border-white rounded-lg border-opacity-30">
+                            Combine Two Models
                         </div>
-                        <div> SUBJECT MODELS </div>
+                        <div> Subject Models </div>
                         <select
                             name="" id="" value={null}
                             onChange={(e) => setSubjectModel(e.target.value)}
@@ -171,7 +171,7 @@ const Filter = ({
                                 ))
                             }
                         </select>
-                        <div className="mt-6"> STYLE MODELS </div>
+                        <div className="mt-6"> Style Models </div>
                         <select
                             name="" id="" value={null}
                             onChange={(e) => setStyleModel(e.target.value)}

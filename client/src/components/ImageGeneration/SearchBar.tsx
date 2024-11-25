@@ -32,12 +32,12 @@ const SearchBar = ({
                         <Tooltip delayDuration={200}>
                             <TooltipTrigger>
                                 <div className="text-[0.77rem] flex gap-1 items-baseline text-gray-400 
-                          absolute left-[-2rem] top-[-3.9rem] md:left-[-7.7rem] md:top-0
-                          "
+                                absolute left-[-2rem] top-[-3.9rem] md:left-[-7.7rem] md:top-0
+                                "
                                     onClick={toggleMagicPromptState}>
                                     <AnimatedSubscribeButton
-                                        initialText={"Magic Prompt is OFF"}
-                                        changeText={"Magic Prompt is ON"}
+                                        initialText={"Magic Prompt OFF"}
+                                        changeText={"Magic Prompt ON"}
                                         buttonColor="#6b21a8"
                                         subscribeStatus={isMagicPromptOn == "ON" ? true : false}
                                     />
@@ -55,7 +55,7 @@ const SearchBar = ({
             }
             <textarea
                 className='bg-black  w-[100%]  rounded-3xl font-sans focus:outline-none active:outline-none text-gray-300
-                p-3 resize-none'
+                p-3 resize-none  '
                 ref={textareaRef}
                 placeholder='Describe what you want to see...'
                 value={Input}

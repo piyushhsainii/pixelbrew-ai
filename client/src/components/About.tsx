@@ -14,7 +14,7 @@ export default function AboutPage() {
                     </h1>
                     <div className="relative w-full aspect-[16/9] max-w-5xl mx-auto transform rotate-[-4deg]">
                         <img
-                            src="/placeholder.svg?height=800&width=1200"
+                            src="https://res.cloudinary.com/dzow59kgu/image/upload/v1732482803/combined_htrgsk.png"
                             alt="PixelBrew AI Interface"
                             width={1200}
                             height={800}
@@ -51,7 +51,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Team Section */}
+            {/* Team Section
             <section className="py-24 px-4 sm:px-6 lg:px-8 bg-black/50">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -82,7 +82,7 @@ export default function AboutPage() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
         </div>
 
     )

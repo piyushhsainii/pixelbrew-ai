@@ -1,13 +1,12 @@
 import { ArrowDown, ArrowDownUp, ArrowUp } from 'lucide-react'
-import React from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 
 const FilterAndSort = ({ FilteredModels, setFilteredModels }: { FilteredModels: any, setFilteredModels: any }) => {
     return (
         <div className=' w-[80vw]  m-auto mt-7 font-sans text-white flex justify-between'>
-            <div className=' bg-purple-700 px-4 py-1 rounded-2xl font-semibold cursor-pointer'>
+            <div className='  px-4 py-1 rounded-2xl font-semibold cursor-pointer'>
                 <DropdownMenu>
-                    <DropdownMenuTrigger className='flex items-center  gap-2'>
+                    <DropdownMenuTrigger className='flex items-center  gap-2 outline-none'>
                         Category<ArrowDownUp size={18} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='font-sans bg-black text-white border-none '>
@@ -27,8 +26,8 @@ const FilterAndSort = ({ FilteredModels, setFilteredModels }: { FilteredModels: 
                 </DropdownMenu>
             </div>
             <DropdownMenu>
-                <DropdownMenuTrigger className='flex items-center  gap-2'>
-                    <div className='flex items-center gap-2 bg-purple-700 px-4  py-1 rounded-2xl font-semibold cursor-pointer'>
+                <DropdownMenuTrigger className='flex items-center  gap-2 outline-none'>
+                    <div className='flex items-center gap-2  px-4  py-1 rounded-2xl font-semibold cursor-pointer'>
                         Sort By <ArrowDownUp size={18} /> </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='font-sans bg-black text-white border-none '>

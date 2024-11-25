@@ -35,9 +35,9 @@ const Navbar = ({ balance }: { balance: Number }) => {
     return (
         <>
             <div className=' flex justify-between w-full border-b border-secondaryColor border-opacity-40 bg-black fixed top-0 z-[100]'>
-                <div className="flex items-center gap-10" >
+                <div className="flex items-center gap-4 lg:gap-7" >
                     <Link to={'/'}>
-                        <div className="text-white p-4 font-normal md:text-xl lg:text-xl select-none font-sans tracking-wider">
+                        <div className="text-white p-2 font-normal md:text-xl lg:text-xl select-none font-sans tracking-wider">
                             <span className="inline-block transition-all duration-300 hover:shadow-[0_0_20px_rgba(125,34,190,0.6)]">
                                 Pixel Brew AI
                             </span>
@@ -59,35 +59,25 @@ const Navbar = ({ balance }: { balance: Number }) => {
                             <IndianRupee color="purple" width={18} />  Pricing
                         </div>
                     </Link>
-                    {/* <Dialog >
-                        <DialogTrigger className="hidden md:block">
-                            <div className="text-white font-sans tracking-wider flex gap-1 items-center cursor-pointer hover:text-purple-400">
-                                <QuestionMarkIcon color="purple" width={20} />  How it Works?
-                            </div>
-                        </DialogTrigger>
-                        <DialogContent className="w-[90vw]  h-auto md:h-[60vh] bg-black border-purple-700 border text-white overflow-y-auto md:overflow-y-hidden">
-                            <HowItWorksDialog />
-                        </DialogContent>
-                    </Dialog> */}
                     <Link to={'/how-it-works'}>
-                        <div className="text-white font-sans tracking-wider flex gap-1 items-center cursor-pointer hover:text-purple-400">
+                        <div className="hidden  text-white font-sans tracking-wider md:flex gap-1 items-center cursor-pointer hover:text-purple-400">
                             <QuestionMarkIcon color="purple" width={20} />  How it Works?
                         </div>
                     </Link>
                     {userInfo !== null &&
-                        <Link to={'/dashboard'} className="hidden md:block" >
+                        <Link to={'/dashboard/exploreModels'} className="hidden lg:block" >
                             <div className="text-white font-sans  flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
                                 <DashboardIcon color="purple" width={18} /> Dashboard
                             </div>
                         </Link>}
                     <Link to={'about-us'}>
-                        <div className="text-white font-sans  flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
+                        <div className="text-white font-sans hidden lg:flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
                             <Info color="purple" width={18} /> About Us
                         </div>
                     </Link>
                 </div>
                 <div className=" flex items-center justify-center">
-                    <div className=" flex items-center md:hidden ">
+                    <div className=" flex items-center lg:hidden ">
                         <Sheet onOpenChange={() => setSheetOpen((v) => !v)} >
                             <SheetTrigger onClick={() => setSheetOpen((v) => !v)}>
                                 <MenuIcon color="purple" className="mr-2" />
@@ -126,16 +116,16 @@ const Navbar = ({ balance }: { balance: Number }) => {
                                                 <IndianRupee color="purple" width={18} />  Pricing
                                             </div>
                                         </a>
-                                        <Dialog >
-                                            <DialogTrigger className="" onClick={() => setSheetOpen((v) => !v)}>
-                                                <div className="text-white font-sans tracking-wider flex gap-1 items-center cursor-pointer hover:text-purple-400">
-                                                    <QuestionMarkIcon color="purple" width={20} />  How it Works?
-                                                </div>
-                                            </DialogTrigger>
-                                            <DialogContent className="w-[90vw]  h-auto md:h-[60vh] bg-black border-purple-700 border text-white overflow-y-auto md:overflow-y-hidden">
-                                                <HowItWorksDialog />
-                                            </DialogContent>
-                                        </Dialog>
+                                        <Link to={'/dashboard/exploreModels'}  >
+                                            <div className="text-white font-sans  flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
+                                                <DashboardIcon color="purple" width={18} /> Dashboard
+                                            </div>
+                                        </Link>
+                                        <Link to={'/how-it-works'}  >
+                                            <div className="text-white font-sans  flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
+                                                <QuestionMarkIcon color="purple" width={20} />  How it Works?
+                                            </div>
+                                        </Link>
                                     </div>
                                 </div>
                             </SheetContent>

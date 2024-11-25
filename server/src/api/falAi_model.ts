@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
 import { fal } from "@fal-ai/client"
 import { BACKEND_URL } from "../lib/url";
-import axios from "axios";
 import prisma from "../db";
 
 const router = Router()
@@ -9,10 +8,19 @@ const router = Router()
 // standard model
 router.post('/generateImg', async (req: Request, res: Response) => {
     const prompt = req.body.image
+    const email = req.body.email
     try {
         fal.config({
             credentials: process.env.FAL_AI
         });
+        const { balance } = await prisma.user.findUnique({
+            where: { email: email },
+            select: { balance: true }
+        })
+        if (balance < 2) {
+            res.json({ error: "Balance not enough" }).status(400)
+        }
+        if (balance < 2) return;
         const result = await fal.subscribe("fal-ai/flux-pro/v1.1-ultra", {
             input: { prompt: prompt },
             logs: true,
@@ -22,6 +30,12 @@ router.post('/generateImg', async (req: Request, res: Response) => {
                 }
             },
         });
+        if (result) {
+            await prisma.user.update({
+                where: { email: email },
+                data: { balance: { decrement: 2 } }
+            })
+        }
         res.json({
             success: true,
             result,
@@ -34,12 +48,20 @@ router.post('/generateImg', async (req: Request, res: Response) => {
 })
 
 // API FOR FAL AI TRAINED MODEL
-
 router.post('/trainedModel', async (req: Request, res: Response) => {
     const prompt = req.body.prompt
     const path1 = req.body.path1
+    const email = req.body.email
     fal.config({ credentials: process.env.FAL_AI });
     try {
+        const { balance } = await prisma.user.findUnique({
+            where: { email: email },
+            select: { balance: true }
+        })
+        if (balance < 3) {
+            res.json({ error: "Balance not enough" }).status(400)
+        }
+        if (balance < 3) return;
         const result = await fal.subscribe('fal-ai/flux-lora', {
             input: {
                 loras: [
@@ -48,19 +70,33 @@ router.post('/trainedModel', async (req: Request, res: Response) => {
                 prompt: prompt
             }
         })
+        if (result) {
+            await prisma.user.update({
+                where: { email: email },
+                data: { balance: { decrement: 3 } }
+            })
+        }
         res.json(result).status(200)
     } catch (error) {
         res.json(error).status(400)
     }
 })
 
-
 // API FOR COMBINING MODEL
 router.post('/customModel', async (req: Request, res: Response) => {
     const prompt = req.body.prompt
     const path1 = req.body.path1
     const path2 = req.body.path2
+    const email = req.body.email
     try {
+        const { balance } = await prisma.user.findUnique({
+            where: { email: email },
+            select: { balance: true }
+        })
+        if (balance < 3) {
+            res.json({ error: "Balance not enough" }).status(400)
+        }
+        if (balance < 3) return;
         const result = await fal.subscribe('fal-ai/flux-lora', {
             input: {
                 loras: [
@@ -70,6 +106,12 @@ router.post('/customModel', async (req: Request, res: Response) => {
                 prompt: prompt
             }
         })
+        if (result) {
+            await prisma.user.update({
+                where: { email: email },
+                data: { balance: { decrement: 3 } }
+            })
+        }
         res.json(result).status(200)
     } catch (error) {
         res.json(error).status(400)

@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import DownloadButton from '../DownloadBtn'
 import { FalAIResponse } from '../../lib/interface'
-import ShadowBtn from '../ShadowBtn'
 import { TestImageEditor } from './ImageEditor'
 
-const AdvancedResponse = ({ FalAIResponse, createdAt, postID }: { FalAIResponse: FalAIResponse, createdAt: any, postID: string }) => {
+const AdvancedResponse = ({ FalAIResponse, postID }: { FalAIResponse: FalAIResponse, createdAt: any, postID: string }) => {
     const [editMode, seteditMode] = useState(false)
     console.log(FalAIResponse)
     return (
         <>
-            {
-                !editMode &&
+            {!editMode &&
                 <div className="flex flex-col lg:flex-row  gap-3  justify-evenly item  p-5   border border-gray-600 border-opacity-40 rounded-md">
                     <div className="max-w-[600px] max-h-[450px] ">
                         <img
