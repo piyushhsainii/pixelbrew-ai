@@ -22,7 +22,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply  w-[5px] bg-purple-700 rounded-full opacity-0 transition-opacity duration-300;
+  @apply  w-[5px] bg-gray-800 rounded-full opacity-0 transition-opacity duration-300;
 }
 
 /* Show thumb on hover and while scrolling */

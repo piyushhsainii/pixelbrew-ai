@@ -48,8 +48,8 @@ export function HighlightedPosts({ topPosts, recentPosts }: { topPosts: TopPosts
             {
                 topPosts &&
                 <div className="">
-                    <div className="text-white font-sans text-3xl font-semibold my-4 tracking-tight text-center">
-                        TOP POSTS
+                    <div className="text-white font-sans text-3xl font-extralight my-4 mb-12 tracking-wider text-center">
+                        HIGHLIGHTS
                     </div>
                     <BlurFade inView className="mt-5">
                         <Marquee reverse className="[--duration:35s] border border-gray-800">

@@ -6,10 +6,10 @@ import { AllReviews } from "../lib/interface";
 
 const Testimonials = ({ reviews }: { reviews: AllReviews[] }) => {
     return (
-        <div className='bg-black flex flex-col items-center justify-center   m-auto '>
+        <div className='bg-[#090c14] flex flex-col items-center justify-center   m-auto pb-16'>
             {reviews &&
-                <div className='max-w-[1200px] w-[100%]  overflow-hidden'>
-                    <div className="text-gray-300 font-sans text-3xl font-semibold py-5 text-center ">
+                <div className='w-[100%] max-w-[1600px]  overflow-hidden'>
+                    <div className="text-gray-300 font-sans text-3xl font-extralight py-12  tracking-wider text-center ">
                         TESTIMONIALS
                     </div>
                     <BlurFade inView className="" >

@@ -5,12 +5,12 @@ import { announcement } from './Data/data'
 
 const Announcement = () => {
     return (
-        <div className='fixed left-4 bottom-4 z-[100]'>
+        <div className='fixed right-4 bottom-4 z-[100]'>
             <Dialog>
                 <DialogTrigger>
                     <PartyPopper
                         color='purple'
-                        size={50}
+                        size={42}
                         className='m-2 border border-purple-700 p-2  rounded-full hover:bg-purple-700 hover:bg-opacity-40 cursor-pointer'
                     />
                 </DialogTrigger>

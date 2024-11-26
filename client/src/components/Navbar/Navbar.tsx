@@ -64,12 +64,11 @@ const Navbar = ({ balance }: { balance: Number }) => {
                             <QuestionMarkIcon color="purple" width={20} />  How it Works?
                         </div>
                     </Link>
-                    {userInfo !== null &&
-                        <Link to={'/dashboard/exploreModels'} className="hidden lg:block" >
-                            <div className="text-white font-sans  flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
-                                <DashboardIcon color="purple" width={18} /> Dashboard
-                            </div>
-                        </Link>}
+                    <Link to={'/dashboard/exploreModels'} className="hidden lg:block" >
+                        <div className="text-white font-sans  flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
+                            <DashboardIcon color="purple" width={18} /> Dashboard
+                        </div>
+                    </Link>
                     <Link to={'about-us'}>
                         <div className="text-white font-sans hidden lg:flex items-center tracking-wider  gap-1 cursor-pointer hover:text-purple-400">
                             <Info color="purple" width={18} /> About Us
