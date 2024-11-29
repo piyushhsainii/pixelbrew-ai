@@ -68,7 +68,7 @@ export function LandingPage() {
                         </Link>
                         <Link to={'/generate'}>
                             <button className="px-4 py-2  bg-gradient-to-r from-blue-500 to-purple-700 hover:from-purple-700 hover:to-blue-600 transition-all duration-300  font-semibold font-sans rounded-lg text-white ">
-                                Try it now
+                                Try now
                             </button>
                         </Link>
                     </div>
