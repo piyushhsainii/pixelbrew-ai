@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Edit, IndianRupee, LogOut, ShoppingCart, User } from "lucide-react"
+import { useRecoilState } from "recoil"
+import { userCompleteInfo } from "../../atoms/atoms"
 
 const AvatarComponent = ({ logoutHandler }: { logoutHandler: () => Promise<void> }) => {
+
+    const [userInfo, setuserInfo] = useRecoilState(userCompleteInfo)
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger className=" border-none outline-none ">
                 <div className="cursor-pointer  duration-150 transition-all ">
-                    <img src="https://github.com/shadcn.png" alt=""
+                    <img src={userInfo?.user.trainingImg} alt=""
                         className='w-6 h-6 m-5 rounded-full hover:scale-125 hover:border hover:border-purple-700 transition-all duration-150' />
                 </div>
             </DropdownMenuTrigger>
