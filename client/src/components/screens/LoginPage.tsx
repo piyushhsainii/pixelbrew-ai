@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { Button } from '../ui/button'
 import { LogIn } from 'lucide-react'
+import { Spotlight } from '../ui/spotlight'
 
 const LoginPage = () => {
 
@@ -25,18 +26,16 @@ const LoginPage = () => {
         getSession()
     }, [])
     return (
-        <div className="grid h-screen  grid-cols-1 md:grid-cols-2">
-            <div className="flex items-center justify-center bg-[radial-gradient(circle,_black_60%,_purple_99%)] h-[50vh] md:h-screen">
-                <div className="text-center">
-                    <h1 className="mb-4 text-5xl font-bold font-mono text-white">PixelBrew AI</h1>
-                    <p className=" text-white opacity-80 font-sans text-base font-semibold">Pixel Perfect Thumbnails, Brewed by AI.</p>
-                </div>
-            </div>
-            <div className="flex items-center justify-center bg-gray-100 h-[50vh] md:h-screen">
+        <div className=" h-screen  bg-black">
+            <Spotlight
+                className="-top-40 left-0 md:left-60 md:-top-20"
+                fill="purple"
+            />
+            <div className="flex items-center justify-center bg-black h-full md:h-screen">
                 <div className="w-full max-w-md space-y-8 px-4">
                     <div className="text-center">
-                        <h2 className="mt-6 text-5xl font-bold text-gray-900 font-sans">Welcome back</h2>
-                        <p className="mt-2 text-base text-gray-600 font-sans font-semibold">Please sign in to your account</p>
+                        <h2 className="mt-6 text-5xl font-light tracking-widest text-gray-200 font-sans">PixelBrew AI</h2>
+                        <p className="mt-2 text-base text-gray-200 font-sans ">Please sign in to your account</p>
                     </div>
                     <div className="mt-8  border-opacity-30 rounded-lg flex flex-col gap-5">
                         <Button

@@ -58,15 +58,15 @@ const ImageCard = (
     const formattedDate = new Date(image.createdAt).toLocaleString()
     return (
         <Dialog >
-            <div className='h-72 min-w-[300px]  max-h-[400px] duration-300 hover:bg-slate-900 cursor-pointer transition-all max-w-[400px] shadow-[1px_1px_4px_[0.5]px_rgba(2,1,1,0.1)] shadow-purple-700 border-purple-700 border-opacity-35 border m-4 rounded-lg my-1 mx-1  select-none' >
+            <div className='h-60 min-w-[300px] relative max-h-[350px] duration-300 cursor-pointer transition-all max-w-[400px] m-4 rounded-lg my-1 mx-1 select-none group '  >
                 <DialogTrigger className='cursor-pointer'>
                     <img
                         src={url}
                         alt=""
-                        className='  max-w-[400px] max-h-[240px] object-cover '
+                        className='max-w-[400px] mt-2 object-cover max-h-[320px] duration-200 transition-all bg-opacity-30 bg-gradient-to-r from-transparent via-purple-700 to-transparent'
                     />
                 </DialogTrigger>
-                <DialogContent className='bg-black flex flex-col  rounded-lg border-none text-white font-sans h-[84vh] md:h-[90vh] w-[90vw] md:w-[90vw] mt-10'>
+                <DialogContent className='bg-black flex flex-col   rounded-lg border-none text-white font-sans h-[84vh] md:h-[90vh] w-[90vw] md:w-[90vw] mt-10'>
                     <div className='overflow-y-scroll' >
                         <DialogTitle>
                             <div className='flex  items-center gap-3 select-none'>
@@ -102,22 +102,24 @@ const ImageCard = (
                     </div>
                 </DialogContent>
 
-                <div className='flex justify-between items-center p-1 m-1'>
+                <div className='hidden group-hover:flex justify-between  duration-200 transition-all items-center p-1 m-1 absolute top-0 pb-2 bg-gray-700 bg-opacity-35 w-full'>
                     <div className='flex items-center gap-3 select-none'>
                         <img src={userInfo.trainingImg} className='h-6 w-6 rounded-xl select-none selection:select-none' />
                         <div className='font-mono text-sm text-white pt-1'> {userInfo.name} </div>
                     </div>
-                    <div className=' flex items-center  gap-2 cursor-pointer font-mono text-white'>
+                    <div className='flex items-center gap-2 cursor-pointer font-mono text-white'>
                         <span className='text-base'> {image.Likes}</span>
                         <span>
                             <Heart
                                 onClick={() => updateLikeCount(image, likes)}
                                 size={17}
                                 color={` red `}
-                                className={`mt-[0.1rem]  duration-150 transition-all ${email && isPostLiked.length > 0 ? 'fill-red-600' : ''} hover:fill-red-600 hover:scale-105 active:scale-90 `} />
+                                className={`mt-[0.1rem] duration-150 transition-all ${email && isPostLiked.length > 0 ? 'fill-red-600' : ''} hover:fill-red-600 hover:scale-105 active:scale-90`}
+                            />
                         </span>
                     </div>
                 </div>
+                {/*  */}
             </div>
         </Dialog>
 

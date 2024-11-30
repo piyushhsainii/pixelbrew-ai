@@ -7,7 +7,7 @@ export default function AboutPage() {
             {/* Hero Section */}
             <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
-                    <h1 className="text-4xl md:text-5xl  font-semibold text-center leading-tight mb-16">
+                    <h1 className="text-4xl md:text-5xl  font-light text-center leading-tight mb-16">
                         PixelBrew AI
                         <br />
                         Elevating Creativity with Custom AI Imagery

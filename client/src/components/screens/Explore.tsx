@@ -18,6 +18,9 @@ const Explore = () => {
     const [refresh, setRefresh] = useState<any>()
     const [userInfo, setUserInfo] = useRecoilState(authUser)
     const [FilteredModels, setFilteredModels] = useState([])
+    const [Model, setModel] = useState([])
+
+    console.log(images)
 
     const getPublicImages = async () => {
         try {
@@ -42,9 +45,9 @@ const Explore = () => {
     }, [refresh, userInfo])
 
     return (
-        <div className="relative min-h-screen w-full bg-black">
-            <div className="relative z-10   py-8">
-                <div className="text-white font-sans tracking-wide text-3xl text-pretty text-center mt-20  lg:mt-14">
+        <div className="relative min-h-screen w-full bg-black ">
+            <div className="relative z-10   py-8 ">
+                <div className="text-white font-sans font-light tracking-wide text-3xl text-pretty text-center mt-20  lg:mt-14">
                     Explore Images brewed by Pixel Brew AI
                 </div>
                 <div className="flex justify-center gap-5 mt-3">
@@ -70,21 +73,29 @@ const Explore = () => {
                         <Loader />
                     </div>
                 ) : (
-                    <div className="flex justify-center  flex-wrap gap-7 md:gap-1 my-10 mt-5 w-[80%] md:w-[100%] max-w-[1600px] m-auto ">
-                        {images?.map((image, index) => (
-                            <div key={index} className="relative">
-                                <ImageCard
-                                    image={image}
-                                    url={image.url}
-                                    userInfo={image.user}
-                                    likes={image.likes}
-                                    email={userInfo?.email ?? null}
-                                    setRefresh={setRefresh}
-                                    myLikes={userLikes}
-                                />
-                            </div>
-                        ))}
+                    <div className="flex justify-center flex-wrap gap-7 md:gap-1 my-10 mt-5 w-[80%] md:w-[100%] max-w-[1600px] m-auto">
+                        {
+                            images
+                                ?.filter((image) =>
+                                    // @ts-ignore
+                                    FilteredModels.length === 0 || FilteredModels.includes(image?.model!)
+                                )
+                                .map((image, index) => (
+                                    <div key={index} className="relative p-[0.05rem] rounded-xl">
+                                        <ImageCard
+                                            image={image}
+                                            url={image.url}
+                                            userInfo={image.user}
+                                            likes={image.likes}
+                                            email={userInfo?.email ?? null}
+                                            setRefresh={setRefresh}
+                                            myLikes={userLikes}
+                                        />
+                                    </div>
+                                ))
+                        }
                     </div>
+
                 )}
                 <h2 className="text-white text-2xl md:text-4xl font-bold font-sans text-center mb-4 select-none" >
                     UNLEASH YOUR CREATIVITY!

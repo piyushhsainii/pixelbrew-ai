@@ -1,5 +1,3 @@
-import { Info } from "lucide-react"
-import { Switch } from "../ui/switch"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { AnimatedSubscribeButton } from "../ui/animated-subscribe-button"
 import { MagicPrompt, Model } from "../ImageGenerationComponent"
@@ -36,8 +34,8 @@ const SearchBar = ({
                                 "
                                     onClick={toggleMagicPromptState}>
                                     <AnimatedSubscribeButton
-                                        initialText={"Magic Prompt OFF"}
-                                        changeText={"Magic Prompt ON"}
+                                        initialText={"Magic Prompt "}
+                                        changeText={"Magic Prompt "}
                                         buttonColor="#6b21a8"
                                         subscribeStatus={isMagicPromptOn == "ON" ? true : false}
                                     />

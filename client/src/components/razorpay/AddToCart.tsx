@@ -26,10 +26,10 @@ interface CartItem extends Token {
     quantity: number
 }
 const availableTokens: Token[] = [
-    { id: 1, name: "BASIC", price: 39, tokenAmt: 10, description: "Ideal for trying out our platform." },
-    { id: 2, name: "STANDARD", price: 69, tokenAmt: 20, description: "Perfect for moderate usage, offering better value for professionals or teams with consistent needs." },
-    { id: 3, name: "SUPER SAVER", price: 99, tokenAmt: 30, description: "Designed to provide great savings and more flexibility for larger projects." },
-    { id: 4, name: "MODEL TRAINING CARD", price: 249, tokenAmt: 80, description: "Best for intensive usage like model training or enterprise-level tasks. Maximum value for power users or larger teams." },
+    { id: 1, name: "Basic", price: 39, tokenAmt: 10, description: "Ideal for trying out our platform." },
+    { id: 2, name: "Standard", price: 69, tokenAmt: 20, description: "Perfect for moderate usage, offering better value for professionals or teams with consistent needs." },
+    { id: 3, name: "Super Saver", price: 99, tokenAmt: 30, description: "Designed to provide great savings and more flexibility for larger projects." },
+    { id: 4, name: "Training Card", price: 249, tokenAmt: 80, description: "Best for intensive usage like model training or enterprise-level tasks. Maximum value for power users or larger teams." },
 ]
 
 export default function AddToCart() {
@@ -97,7 +97,7 @@ export default function AddToCart() {
                 currency: "INR",
                 name: "Pixel Brew AI",
                 description: TokenCount + " " + "Tokens Purchased:",
-                image: "https://example.com/your_logo",
+                image: "https://res.cloudinary.com/dzow59kgu/image/upload/v1731608964/Screenshot_2024-11-14_235851_tqvdhi.png",
                 app_name: "PixelBrew AI",
                 order_id: data.response.id, // Use the order ID from your backend response
                 handler: async function (response) {                //Handler Response
@@ -149,24 +149,25 @@ export default function AddToCart() {
     }, [cart])
     return (
         <div className="min-h-screen bg-black text-white p-8 font-sans">
-            <div className="max-w-4xl mx-auto">
-                <h1 className="text-3xl font-bold mb-2 text-purple-600">
+            <div className="max-w-6xl mx-auto">
+                <h1 className="text-3xl font-bold mb-2 mt-8 text-purple-600">
                     Token Purchase
                 </h1>
                 <div className="">
                     <h2 className="text-2xl font-semibold mb-4  text-white">Available Tokens</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="flex items-end justify-evenly flex-wrap h-full w-full gap-3">
                         {availableTokens.map((token) => (
-                            <Card key={token.id} className=" bg-gray-900 border-purple-600 shadow-purple-700  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
+                            <Card key={token.id} className="flex flex-col justify-between bg-gray-900 border-purple-600 h-[22rem] w-[17rem] p-2 shadow-purple-700  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
                                 <CardHeader>
-                                    <CardTitle className="text-white flex items-center text-xl">
+                                    <CardTitle className="text-gray-300 flex items-center  text-center text-xl">
                                         {token.name} {'('} {token.tokenAmt} <Zap color="#9333ea " size={14} className="mx-1" />  {')'}
                                     </CardTitle>
-                                    <div className="text-sm text-white text-pretty"> {token.description} </div>
+                                    <div className="flex text-2xl">
+                                        <p className="text-gray-300 font-semibold" > ₹{token.price}</p>
+                                    </div>
                                 </CardHeader>
-                                <CardContent className="flex justify-between">
-                                    <p className="text-gray-300 font-semibold">Price:</p>
-                                    <p className="text-gray-300 font-semibold" > ₹{token.price}</p>
+                                <CardContent className="flex flex-col justify-between">
+                                    <div className="text-sm text-white text-pretty"> {token.description} </div>
                                 </CardContent>
                                 <CardFooter>
                                     <Button
