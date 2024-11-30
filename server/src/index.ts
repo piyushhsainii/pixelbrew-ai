@@ -31,7 +31,7 @@ app.post('/addData', async (req: Request, res: Response) => {
             prompt: req.body.prompt,
             url: req.body.url,
             isPublic: true,
-            model: "Flux",
+            model: "FAL_AI",
             userEmail: "piyushsainii230@gmail.com"
         }
     })

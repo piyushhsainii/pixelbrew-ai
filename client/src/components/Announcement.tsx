@@ -6,7 +6,7 @@ import { announcement } from './Data/data'
 const Announcement = () => {
     return (
         <div className='fixed right-4 bottom-4 z-[100]'>
-            <Dialog>
+            {/* <Dialog>
                 <DialogTrigger>
                     <PartyPopper
                         color='purple'
@@ -35,7 +35,7 @@ const Announcement = () => {
                         </div>
                     </div>
                 </DialogContent>
-            </Dialog>
+            </Dialog> */}
         </div>
     )
 }

@@ -32,7 +32,7 @@ export default function Page() {
                             <img
                                 src="https://res.cloudinary.com/dzow59kgu/image/upload/v1732433916/localhost_5173_dashboard_exploreModels_rmb3at.png"
                                 alt="Input: Existing docs, Codebase, Integrations"
-                                className="h-auto rounded-xl object-cover max-w-[400px]"
+                                className="h-auto rounded-xl object-cover max-w-[400px] border border-gray-700"
                             />
                         </div>
                     </div>
@@ -57,7 +57,7 @@ export default function Page() {
                                 autoPlay
                                 muted
                                 src="https://res.cloudinary.com/dzow59kgu/video/upload/v1732441625/ImageGenerationEditedCompressed_ayzslb.mp4"
-                                className="max-w-[400px] h-auto rounded-xl object-cover w-[80%]"
+                                className="max-w-[400px] h-auto rounded-xl object-cover w-[80%]  border border-gray-700"
                             />
                         </div>
                     </div>
@@ -83,7 +83,7 @@ export default function Page() {
                                 autoPlay
                                 muted
                                 src="https://res.cloudinary.com/dzow59kgu/video/upload/v1732435654/Training_tbzjga.mp4"
-                                className="max-w-[400px] h-auto rounded-xl object-cover w-[80%]"
+                                className="max-w-[400px] h-auto rounded-xl object-cover w-[80%]  border border-gray-700"
                             />
                         </div>
                     </div>
@@ -108,7 +108,7 @@ export default function Page() {
                                 autoPlay
                                 muted
                                 src="https://res.cloudinary.com/dzow59kgu/video/upload/v1732450387/CustomisationCompressed_eci6cd.mp4"
-                                className="max-w-[400px] h-auto rounded-xl object-cover w-[80%]"
+                                className="max-w-[400px] h-auto rounded-xl object-cover w-[80%]  border border-gray-700"
                             />
                         </div>
                     </div>

@@ -28,7 +28,7 @@ export default function AboutPage() {
             <section className="py-24 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-start">
                     <div>
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-8">
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extralight leading-tight mb-8">
                             Crafting the Ultimate Tool for Personalized AI Imagery
                         </h2>
                     </div>

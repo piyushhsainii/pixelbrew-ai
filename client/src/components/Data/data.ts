@@ -19,12 +19,10 @@ export const announcement = {
                     }
                 ]
             },
-            // {
-            //     heading: "Why Upgrade?",
-            //     description: "With PixelBrew AI V2, you’re no longer limited by generic models. Instead, you have a tool that’s as unique as you are—ready to produce images that truly stand out. Whether you’re a brand seeking consistency, an artist craving customization, or someone with a unique creative vision, V2 offers endless possibilities."
-            // }
         ],
-        closing: "Get ready to bring your ideas to life like never before. Stay tuned as we roll out PixelBrew AI V2, and prepare to see yourself, your brand, and your ideas in an entirely new light! Thank you for being a part of the PixelBrew AI community—we can’t wait to see what you create.",
+        closing: `Get ready to bring your ideas to life like never before. Stay tuned as we roll out PixelBrew AI V2, and prepare to see 
+        yourself, your brand, and your ideas in an entirely new light! Thank you for being a part of the PixelBrew AI community—we can’t 
+        wait to see what you create.`,
         tagline: "Elevate your creativity. Elevate your imagery. Welcome to PixelBrew AI V2."
     }
 }

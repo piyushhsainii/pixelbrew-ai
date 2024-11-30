@@ -15,7 +15,7 @@ const MyAccount = () => {
         <>
             {userInfo &&
                 <div className='bg-black min-h-screen flex justify-center items-center mt-16  max-h-[1800px]'>
-                    <div className='bg-black border-2 hover:border-purple-700 my-5 border-black  w-[70vw]  max-w-[1400px] rounded-2xl relative min-w-[375px]  shadow-[10px_12px_23px_[0.5]px_rgba(2,1,1,0.5)] shadow-purple-500 hover:shadow-purple-700 duration-200 transition-all'>
+                    <div className='bg-black border-2 hover:border-purple-700 my-5 border-black  w-[70vw]  max-w-[1400px] rounded-2xl relative min-w-[375px]  shadow-[2px_2px_6px_[0.5]px_rgba(2,1,1,0.5)] shadow-purple-500 hover:shadow-purple-700 duration-200 transition-all'>
                         <div className='w-36 h-36 rounded-[100%]  m-auto   '>
                             <img
                                 src={userInfo?.user?.trainingImg}
@@ -24,21 +24,21 @@ const MyAccount = () => {
                         </div>
                         <div className='px-3 text-base flex gap-4 justify-center sm:justify-end my-5 bg-green font-sans bg-black rounded-t-2xl'>
                             <Link to={'/shop'}>
-                                <button className=' bg-purple-700 border-2 border-black px-3 py-1 text-white font-semibold rounded-lg my-2
-                    hover:scale-105 transition-all duration-200 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-white'>
+                                <button className='  border-2 border-black px-3 py-1 text-white font-light rounded-lg my-2
+                    hover:scale-105 transition-all duration-200 '>
                                     RECHARGE TOKENS
                                 </button>
                             </Link>
                             <Link to={'/profileSetup'}>
-                                <button className=' bg-purple-700 border-2 border-black px-3 py-1 text-white font-semibold rounded-lg my-2
-                    hover:scale-105 transition-all duration-200 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-white'>
+                                <button className='  border-2 border-black px-3 py-1 text-white font-light rounded-lg my-2
+                    hover:scale-105 transition-all duration-200  '>
                                     UPDATE PROFILE
                                 </button>
                             </Link>
                         </div>
                         <div className='bg-black'>
 
-                            <div className=' w-full text-white px-6 text-2xl font-mono  ' >
+                            <div className=' w-full text-white px-6 text-2xl font-sans font-light uppercase  ' >
                                 <span className=' px-4 rounded-md py-1 '>
                                     {userInfo?.user?.name}
                                 </span>
@@ -52,15 +52,15 @@ const MyAccount = () => {
                         {
                             userInfo?.user.Likes.length > 0 &&
                             <div className=' '>
-                                <button className='font-sans flex items-center gap-2 ml-5 bg-purple-700 border-2 border-black px-3 py-1 text-white font-semibold rounded-lg my-2
-                    hover:scale-105 transition-all duration-200 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-white'>
+                                <button className='font-sans flex items-center gap-2 ml-5  border-2 border-black px-3 py-1 text-white font-light rounded-lg my-2
+                    hover:scale-105 transition-all duration-200  '>
                                     LIKED POSTS
                                     <Heart fill='red' color='red' size={16} className='border-red-700 text-red mt-[3px]' />
 
                                 </button>
 
                                 <div className='w-[90%] mx-auto my-10 mt-4 flex justify-center items-center '>
-                                    <Carousel className='mx-3 bg-purple-700 rounded-lg p-3 '>
+                                    <Carousel className='mx-3 bg-primmaryColor rounded-lg p-3 '>
                                         <CarouselPrevious />
                                         <CarouselContent className="">
                                             {userInfo?.user?.Likes.map((likedImgs) => (

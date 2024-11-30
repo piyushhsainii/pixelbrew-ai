@@ -36,7 +36,7 @@ export default function ProfileSetup() {
     const { toast } = useToast()
 
     const navigate = useNavigate()
-
+    console.log(UserInfo?.user)
     const uploadToCloudinary = async (file) => {
         if (file) {
             setisImageUploading(true)
@@ -190,7 +190,7 @@ export default function ProfileSetup() {
                 email: user.user_metadata.email,
                 username: name,
                 about: about,
-                trainingImg: image,
+                trainingImg: image ?? UserInfo.user.trainingImg,
             })
             if (updateProfile) {
                 setUsername(updateProfile.data.updateProfie.name)
@@ -245,33 +245,33 @@ export default function ProfileSetup() {
     return (
         <>
             <div className="flex items-stretch md:items-start justify-center bg-primmaryColor font-sans min-h-screen p-4 pb-0 mt-16">
-                <Card className="w-full max-w-4xl bg-purple-700 bg-opacity-50 text-white border border-white border-opacity-40 shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] shadow-white overflow-hidden flex flex-col justify-evenly">
+                <Card className="w-full max-w-4xl bg-primmaryColor bg-opacity-50 text-white border-2 border-black border-opacity-40  overflow-hidden flex flex-col justify-evenly">
                     <CardHeader className="flex-shrink-0 bg-black text-white">
-                        <CardTitle className="text-3xl font-bold ">Profile</CardTitle>
-                        <CardDescription className=" text-base font-sans text-gray-100 font-semibold">
-                            {username == null ? "Setup" : 'Update'} your profile
+                        <CardTitle className="text-3xl font-light tracking-wider ">Profile</CardTitle>
+                        <CardDescription className=" text-base font-sans text-gray-100 font-light">
+                            {UserInfo?.user == null ? "Setup" : 'Update'} your profile
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col md:flex-row justify-between md:items-start gap-6 md:gap-10 p-6">
                         <form className="space-y-6 md:space-y-4 flex-grow">
                             <div className="space-y-1">
-                                <Label htmlFor="name" className="text-white">Name</Label>
+                                <Label htmlFor="name" className="text-white font-light">Name</Label>
                                 <Input
                                     id="name"
                                     placeholder="Enter your name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="bg-[#0c0f1a] border-1 text-white rounded-xl  "
+                                    className="bg-black border-1 text-white rounded-xl  "
                                 />
                             </div>
                             <div className="space-y-1">
-                                <Label htmlFor="about" className="text-white">About</Label>
+                                <Label htmlFor="about" className="text-white font-light">About</Label>
                                 <Textarea
                                     id="about"
                                     placeholder="Tell us about yourself"
                                     value={about}
                                     onChange={(e) => setAbout(e.target.value)}
-                                    className="bg-[#0c0f1a] border-0 text-white min-h-[100px] rounded-2xl resize-none"
+                                    className="bg-black border-0 text-white min-h-[100px] rounded-2xl resize-none"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -332,7 +332,7 @@ export default function ProfileSetup() {
                                 }
                             </div>
                             {
-                                ImageLink == null ?
+                                UserInfo?.user == null ?
                                     <Button onClick={handleSubmit} className="w-full bg-[#0c0f1a] hover:bg-opacity-80 text-white rounded-xl">
                                         {updatingProfile ? "Saving your Profile" : " Save Profile"}
                                     </Button>
@@ -344,7 +344,7 @@ export default function ProfileSetup() {
                         </form>
                         <div className="flex flex-col gap-4 justify-center items-center">
                             {isSetModeOn ?
-                                <Carousel className='mx-3 bg-purple-700 rounded-lg p-3 mr-7'>
+                                <Carousel className='mx-3 bg-black rounded-lg p-3 mr-7'>
                                     <CarouselPrevious />
                                     <CarouselContent className="w-[150px]">
                                         {UserInfo?.user?.trainingImages.map((likedImgs, index) => (
@@ -352,7 +352,7 @@ export default function ProfileSetup() {
                                                 <img src={likedImgs} alt="" className="w-full h-full object-cover rounded-3xl" />
                                                 <div
                                                     onClick={() => setActiveImageHandler(likedImgs, index)}
-                                                    className="px-3 py-2 mt-2 text-sm cursor-pointer  border-2 border-black flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
+                                                    className="px-3 py-2 mt-2 text-sm cursor-pointer  border-2 border-black flex justify-center m-auto bg-black font-semibold font-sans transition duration-200 rounded-lg text-white ">
                                                     SET ACTIVE IMG
                                                 </div>
                                             </CarouselItem>
@@ -374,7 +374,7 @@ export default function ProfileSetup() {
                                 UserInfo?.user.trainingImg &&
                                 <div
                                     onClick={() => setisSetModeOn((e) => !e)}
-                                    className="px-4 py-2 text-sm cursor-pointer shadow-[3px_3px_3px_[1]px_rgba(2,4,4,0.2)] border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto bg-purple-700 hover:bg-purple-800 font-semibold font-sans transition duration-200 rounded-lg text-white ">
+                                    className="px-4 py-2 text-sm cursor-pointer  border-2 border-black hover:scale-110  shadow-white flex justify-center m-auto  font-light font-sans transition duration-200 rounded-lg text-white ">
                                     {isSetModeOn ?
                                         " CANCEL" : " SET ACTIVE IMG"
                                     }

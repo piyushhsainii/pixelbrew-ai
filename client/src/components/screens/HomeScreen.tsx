@@ -57,9 +57,9 @@ export function LandingPage() {
                 >
                     <BlurIn
                         word="PixelBrew AI"
-                        className="text-white text-4xl md:text-6xl font-light tracking-wide text-center font-sans select-none bg-gradient-to-t from-gray-700 via-gray-300 to-white text-transparent bg-clip-text "
+                        className="text-white text-4xl md:text-6xl font-light tracking-widest text-center font-sans select-none bg-gradient-to-t from-gray-700 via-gray-300 to-white text-transparent bg-clip-text "
                     />
-                    <p className="text-white text-lg md:text-2xl max-w-xl mt-4  font-extralight text-center font-sans select-none tracking-tighter ">
+                    <p className="text-white text-lg md:text-xl max-w-xl mt-1  font-extralight text-center font-sans select-none tracking-wide ">
                         Pixel Perfect Images, Brewed by AI
                     </p>
                     <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 relative">
