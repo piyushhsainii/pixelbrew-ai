@@ -8,7 +8,6 @@ import { TestImageEditor } from "./ImageEditor";
 const TrainedModelResponse = ({ trainedModel, postID }: { trainedModel: AdvancedResponseModel, postID: string }) => {
     const [editMode, seteditMode] = useState(false)
     const url = trainedModel.data.images[0].url
-    console.log(url)
 
     return (
         <>

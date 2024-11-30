@@ -82,28 +82,28 @@ const ImageGenerationComponent = () => {
         // }
     )
     const [trainedModelResponse, settrainedModelResponse] = useState<AdvancedResponseModel | null>(
-        {
+        // {
 
-            "data": {
-                "images": [
-                    {
-                        "url": "https://fal.media/files/rabbit/Bq7x3JAsFdpL4xBn2y_c-_21b8f79d2af34fcd97fe21e3baa91e20.jpg",
-                        "width": 1024,
-                        "height": 768,
-                        "content_type": "image/jpeg"
-                    }
-                ],
-                "timings": {
-                    "inference": 6.995699153281748
-                },
-                "seed": 12820568198716680000,
-                "has_nsfw_concepts": [
-                    false
-                ],
-                "prompt": "A dramatic, cinematic close-up of a muscular me walking confidently toward the camera in a dimly lit urban alleyway. He has a sharp, intense expression, wearing a black leather jacket over a white tank top that highlights his toned muscles. A lit cigarette dangles casually from his lips, with a faint trail of smoke swirling around his face. The alley is gritty, with graffiti-covered brick walls and faint neon lights reflecting off puddles on the ground. The lighting is moody, with shadows accentuating the man’s chiseled features and the atmospheric vibe of the scene, creating a powerful, intimidating gangster aesthetic."
-            },
-            "requestId": "6c6aac97-d168-4336-bcdc-b744efc2702a"
-        }
+        //     "data": {
+        //         "images": [
+        //             {
+        //                 "url": "https://fal.media/files/rabbit/Bq7x3JAsFdpL4xBn2y_c-_21b8f79d2af34fcd97fe21e3baa91e20.jpg",
+        //                 "width": 1024,
+        //                 "height": 768,
+        //                 "content_type": "image/jpeg"
+        //             }
+        //         ],
+        //         "timings": {
+        //             "inference": 6.995699153281748
+        //         },
+        //         "seed": 12820568198716680000,
+        //         "has_nsfw_concepts": [
+        //             false
+        //         ],
+        //         "prompt": "A dramatic, cinematic close-up of a muscular me walking confidently toward the camera in a dimly lit urban alleyway. He has a sharp, intense expression, wearing a black leather jacket over a white tank top that highlights his toned muscles. A lit cigarette dangles casually from his lips, with a faint trail of smoke swirling around his face. The alley is gritty, with graffiti-covered brick walls and faint neon lights reflecting off puddles on the ground. The lighting is moody, with shadows accentuating the man’s chiseled features and the atmospheric vibe of the scene, creating a powerful, intimidating gangster aesthetic."
+        //     },
+        //     "requestId": "6c6aac97-d168-4336-bcdc-b744efc2702a"
+        // }
     )
     const [CustomResponse, setCustomResponse] = useState(null)
     const { toast } = useToast()
@@ -114,8 +114,6 @@ const ImageGenerationComponent = () => {
         textarea.style.height = 'auto'; // Reset height to auto to recalculate
         textarea.style.height = `${textarea.scrollHeight}px`; // Set height to scrollHeight
     };
-    console.log(user)
-
     const savePromptsToDb = async (imageUrl: string) => {
 
         try {

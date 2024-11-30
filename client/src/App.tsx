@@ -76,10 +76,10 @@ function App() {
           <Route path='/profileSetup' element={<ProfileSetup />} />
           <Route path='/profile' element={<MyAccount />} />
           <Route path='/myImages' element={<MyImagesPage />} />
-          <Route path='/shop' element={<PayButton />} />
           <Route path='/dashboard/myModels' element={<MyModels />} />
           <Route path='/dashboard/myImages' element={<MyImagesPage />} />
         </Route>
+        <Route path='/shop' element={<PayButton />} />
         <Route path='/dashboard' element={<DashboardNavbar />} />
         <Route path='/dashboard/exploreModels' element={<ExploreModels />} />
         <Route path='/login' element={<LoginPage />} />
