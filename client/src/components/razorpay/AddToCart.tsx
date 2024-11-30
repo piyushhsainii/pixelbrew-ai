@@ -157,7 +157,7 @@ export default function AddToCart() {
                     <h2 className="text-2xl font-semibold mb-4  text-white">Available Tokens</h2>
                     <div className="flex items-end justify-evenly flex-wrap h-full w-full gap-3">
                         {availableTokens.map((token) => (
-                            <Card key={token.id} className="flex flex-col justify-between bg-gray-900 border-purple-600 h-[22rem] w-[17rem] p-2 shadow-purple-700  shadow-[3px_2px_1px_[1]px_rgba(2,4,4,0.2)]">
+                            <Card key={token.id} className="flex flex-col justify-between bg-gray-950 border-purple-600 h-[22rem] w-[17rem] p-2 shadow-purple-700  shadow-[1px_1px_1px_[1]px_rgba(2,4,4,0.2)]">
                                 <CardHeader>
                                     <CardTitle className="text-gray-300 flex items-center  text-center text-xl">
                                         {token.name} {'('} {token.tokenAmt} <Zap color="#9333ea " size={14} className="mx-1" />  {')'}
@@ -203,7 +203,7 @@ export default function AddToCart() {
                 </div>
                 <div>
                     <h2 className="text-2xl font-semibold my-4 text-purple-300">Your Cart</h2>
-                    <Card className="bg-gray-900 border-purple-500">
+                    <Card className="bg-gray-950 border-purple-500">
                         <CardHeader>
                             <CardTitle className="flex items-center text-purple-300">
                                 <ShoppingCart className="mr-2" /> Cart Summary
