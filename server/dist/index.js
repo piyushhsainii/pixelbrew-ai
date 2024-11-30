@@ -42,7 +42,7 @@ app.post('/addData', (req, res) => __awaiter(void 0, void 0, void 0, function* (
             prompt: req.body.prompt,
             url: req.body.url,
             isPublic: true,
-            model: "Flux",
+            model: "FAL_AI",
             userEmail: "piyushsainii230@gmail.com"
         }
     });
