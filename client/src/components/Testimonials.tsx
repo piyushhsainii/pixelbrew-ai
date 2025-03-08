@@ -5,6 +5,7 @@ import { ReviewCard } from './ReviewsCards/ReviewCard'
 import { AllReviews } from "../lib/interface";
 
 const Testimonials = ({ reviews }: { reviews: AllReviews[] }) => {
+    console.log(reviews)
     return (
         <div className='bg-[#090c14] flex flex-col items-center justify-center   m-auto pb-16'>
             {reviews &&
